@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 
 import axios from 'axios';
 
-const List = () => {
-  const url = 'http://localhost:4000';
+const List = ({ url }) => {
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
@@ -14,7 +13,18 @@ const List = () => {
       setList(responce.data.data);
       console.log(responce.data.data);
     } else {
-      toast.error('Error');
+      toast.error('Error while fetching the data');
+    }
+  };
+
+  const removeFood = async (foodId) => {
+    const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
+
+    await fetchList();
+    if (response.data.success) {
+      toast.success(response.data.message);
+    } else {
+      toast.error('Error while deleting data');
     }
   };
 
@@ -26,7 +36,7 @@ const List = () => {
     <div className='list add flex-col'>
       <p>All Foods List</p>
       <div className='list-table'>
-        <div className='list-table-format'>
+        <div className='list-table-format title'>
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
@@ -40,7 +50,9 @@ const List = () => {
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>{item.price}</p>
-              <p>X</p>
+              <p className='cursor' onClick={() => removeFood(item._id)}>
+                X
+              </p>
             </div>
           );
         })}
