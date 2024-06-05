@@ -12,7 +12,7 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    return req.json({ success: false, message: 'Error' });
+    return res.json({ success: false, message: 'Error' });
   }
 };
 
