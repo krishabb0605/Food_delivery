@@ -5,7 +5,26 @@ import validator from 'validator';
 
 // login user
 
-const loginUser = async (req, res) => {};
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: 'User does not exist' });
+    }
+
+    const isMatched = await bycrpt.compare(password, user.password);
+    if (!isMatched) {
+      return res.json({ success: false, message: 'Invalid creditials' });
+    }
+
+    const token = createToken(user._id);
+    res.json({ success: true, token });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error });
+  }
+};
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -16,7 +35,6 @@ const createToken = (id) => {
 const registerUser = async (req, res) => {
   const { name, password, email } = req.body;
 
-  console.log('req', req.body);
   try {
     const exists = await userModel.findOne({ email });
     // check if user already exist
@@ -26,12 +44,10 @@ const registerUser = async (req, res) => {
 
     // validating email format and strong password
     if (!validator.isEmail(email)) {
-      console.log('Email is invalid!!!');
       return res.json({ success: false, message: 'Please enter valid email' });
     }
 
-    if (password.lenth < 8) {
-      console.log('less than 8');
+    if (password.length < 8) {
       return res.json({
         success: false,
         message: 'Please enter a strong password',
@@ -49,8 +65,9 @@ const registerUser = async (req, res) => {
     });
 
     const user = await newUser.save();
+
     const token = createToken(user._id);
-    res.json({ success: true }, token);
+    res.json({ success: true, token });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: 'error' });

@@ -8,10 +8,10 @@ const List = ({ url }) => {
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
-    const responce = await axios.get(`${url}/api/food/list`);
-    if (responce.data.success) {
-      setList(responce.data.data);
-      console.log(responce.data.data);
+    const response = await axios.get(`${url}/api/food/list`);
+    if (response.data.success) {
+      setList(response.data.data);
+      console.log(response.data.data);
     } else {
       toast.error('Error while fetching the data');
     }
