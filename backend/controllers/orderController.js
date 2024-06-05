@@ -9,8 +9,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const placeOrder = async (req, res) => {
   const frontend_url = 'http://localhost:5174';
 
-  console.log('Stripe Secret Key:', process.env.STRIPE_SECRET_KEY);
-
   try {
     const newOrder = new orderModel({
       userId: req.body.userId,
@@ -53,7 +51,6 @@ const placeOrder = async (req, res) => {
     });
 
     res.json({ success: true, session_url: session.url });
-    console.log('object');
   } catch (error) {
     console.log(error);
     return res.json({ success: false, message: 'Error' });
@@ -76,4 +73,15 @@ const verifyOrder = async (req, res) => {
   }
 };
 
-export { placeOrder, verifyOrder };
+// user orders for frontend
+const usersOrder = async (req, res) => {
+  try {
+    const orders = await orderModel.find({ userId: req.body.userId });
+    res.json({ success: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: 'Error' });
+  }
+};
+
+export { placeOrder, verifyOrder, usersOrder };
