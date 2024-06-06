@@ -1,9 +1,12 @@
 .add {
-  width: 70%;
+  width:76%;
   margin-left: max(5vw, 25px);
   margin-top: 50px;
   color: #6d6d69;
   font-size: 16px;
+  height: calc(100vh - 150px);
+  overflow: auto;
+  scrollbar-width: thin;
 }
 .add form {
   gap: 20px;
