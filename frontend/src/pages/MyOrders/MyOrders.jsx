@@ -15,7 +15,10 @@ const MyOrders = () => {
       {},
       { headers: { token } }
     );
-    setData(response.data.data);
+    const sortedData = response.data.data.sort((a, b) =>
+      b.date.localeCompare(a.date)
+    );
+    setData(sortedData);
   };
 
   useEffect(() => {
@@ -24,8 +27,6 @@ const MyOrders = () => {
     }
   }, [token]);
 
-  console.log(data && data[0]);
-
   return (
     <div className='my-orders'>
       <h2>My Orders</h2>
@@ -33,7 +34,9 @@ const MyOrders = () => {
         <div className='my-orders-datas'>
           {data &&
             data.map((order, index) => {
-              return <MyOrder index={index} order={order} />;
+              return (
+                <MyOrder index={index} order={order} totalData={data.length} />
+              );
             })}
         </div>
       </div>

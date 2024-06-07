@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { IoMdDownload } from 'react-icons/io';
+import { saveAs } from 'file-saver';
+import { FaShareAlt } from 'react-icons/fa';
+import moment from 'moment';
+import { assets } from '../../assets/assets';
+import { BlobProvider } from '@react-pdf/renderer';
+import Invoice from '../Invoice/Invoice';
 
-const MyOrder = ({ index, order }) => {
+const MyOrder = ({ index, order, totalData }) => {
   const [currentStep, setCurrentStep] = useState(1);
   useEffect(() => {
     if (order.status === 'Food Processing') {
@@ -11,33 +18,72 @@ const MyOrder = ({ index, order }) => {
       setCurrentStep(3);
     }
   }, []);
+  
+  const handleShare = async (blob) => {
+    await saveAs(blob, `invoice.pdf`);
+    window.location.href = `mailto:?subject=${encodeURIComponent(
+      `Invoice`
+    )}&body=${encodeURIComponent(`Kindly find attached invoice`)}`;
+  };
 
   return (
     <div className='my-orders-data' key={index}>
       <div className='my-order-data-header'>
-        <p>Order #123</p>
-        <p>h1</p>
+        <div>
+          <p>
+            <img
+              src={assets.parcel_icon}
+              alt='parcel-icon'
+              style={{ height: '16px' }}
+            />
+            Order #{totalData - index}
+          </p>
+          <p className='order-date'>
+            {moment(order.date).format('D MMM YYYY, h:mm A')}
+          </p>
+        </div>
+        <div className='right-icons'>
+          <BlobProvider document={<Invoice order={order} />}>
+            {({ url, blob }) => (
+              <div>
+                <a
+                  href={url}
+                  target='_blank'
+                  style={{ color: 'tomato', height: 'inherit' }}
+                >
+                  <IoMdDownload />
+                </a>
+              </div>
+            )}
+          </BlobProvider>
+
+          <BlobProvider document={<Invoice order={order} />}>
+            {({ url, blob }) => (
+              <div onClick={() => handleShare(url, blob)}>
+                <FaShareAlt style={{ height: '12px' }} />
+              </div>
+            )}
+          </BlobProvider>
+        </div>
       </div>
       <div className='my-order-data-body'>
-        <div>
+        <div className='order-list'>
           <ul>
             {order.items.map((item, index) => {
-              return (
-                <li key={index}>{(item.name + ' x ' + item.quantity)}</li>
-              );
+              return <li key={index}>{item.name + ' x ' + item.quantity}</li>;
             })}
           </ul>
-          <p>Amount : ${order.amount}</p>
+          <b>Amount : ${order.amount}</b>
         </div>
         <ul className='stepper-vertical'>
           <li className={`step ${currentStep >= 1 ? 'completed' : ''}`}>
-            <div>Food Processing</div>
+            <div className='process-name'>Food Processing</div>
           </li>
           <li className={`step ${currentStep >= 2 ? 'completed' : ''}`}>
-            <div>Out for delivery</div>
+            <div className='process-name'>Out for delivery</div>
           </li>
           <li className={`step ${currentStep >= 3 ? 'completed' : ''}`}>
-            <div>Delivered</div>
+            <div className='process-name'>Delivered</div>
           </li>
         </ul>
       </div>
