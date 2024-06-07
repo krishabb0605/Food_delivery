@@ -35,7 +35,12 @@ const MyOrders = () => {
           {data &&
             data.map((order, index) => {
               return (
-                <MyOrder index={index} order={order} totalData={data.length} />
+                <MyOrder
+                  key={index}
+                  index={index}
+                  order={order}
+                  totalData={data.length}
+                />
               );
             })}
         </div>

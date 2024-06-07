@@ -6,11 +6,13 @@ import { assets } from '../../assets/assets';
 
 const Orders = ({ url }) => {
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchAllOrders = async () => {
     const response = await axios.get(`${url}/api/order/list`);
     if (response.data.success) {
       setOrders(response.data.data);
+      setIsLoading(false);
     } else {
       toast.error('Error while fetching order list');
     }
@@ -27,10 +29,19 @@ const Orders = ({ url }) => {
       toast.error('Error while fetching order list');
     }
   };
+  console.log(isLoading);
 
   useEffect(() => {
     fetchAllOrders();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className='verify'>
+        <div className='spinner'></div>
+      </div>
+    );
+  }
 
   return (
     <div className='order add'>
@@ -42,7 +53,9 @@ const Orders = ({ url }) => {
             <div>
               <p className='order-item-food'>
                 {order.items.map((item, index) => {
-                  return <li>{(item.name += ' x ' + item.quantity)}</li>;
+                  return (
+                    <li key={index}>{(item.name += ' x ' + item.quantity)}</li>
+                  );
                 })}
               </p>
               <p className='order-item-name'>

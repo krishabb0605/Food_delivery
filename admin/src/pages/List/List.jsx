@@ -6,15 +6,19 @@ import axios from 'axios';
 
 const List = ({ url }) => {
   const [list, setList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchList = async () => {
     const response = await axios.get(`${url}/api/food/list`);
     if (response.data.success) {
       setList(response.data.data);
+      setIsLoading(false);
     } else {
       toast.error('Error while fetching the data');
     }
   };
+
+  console.log(isLoading);
 
   const removeFood = async (foodId) => {
     const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
@@ -30,6 +34,14 @@ const List = ({ url }) => {
   useEffect(() => {
     fetchList();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className='verify'>
+        <div className='spinner'></div>
+      </div>
+    );
+  }
 
   return (
     <div className='list add flex-col'>
@@ -59,5 +71,4 @@ const List = ({ url }) => {
     </div>
   );
 };
-import './List.css';
 export default List;
