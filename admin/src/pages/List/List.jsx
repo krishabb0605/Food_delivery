@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './List.css';
 import { toast } from 'react-toastify';
+import { MdDelete } from 'react-icons/md';
 
 import axios from 'axios';
 
@@ -17,8 +18,6 @@ const List = ({ url }) => {
       toast.error('Error while fetching the data');
     }
   };
-
-  console.log(isLoading);
 
   const removeFood = async (foodId) => {
     const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
@@ -62,7 +61,7 @@ const List = ({ url }) => {
               <p>{item.category}</p>
               <p>{item.price}</p>
               <p className='cursor' onClick={() => removeFood(item._id)}>
-                X
+                <MdDelete />
               </p>
             </div>
           );

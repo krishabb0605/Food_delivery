@@ -29,7 +29,6 @@ const Orders = ({ url }) => {
       toast.error('Error while fetching order list');
     }
   };
-  console.log(isLoading);
 
   useEffect(() => {
     fetchAllOrders();

@@ -29,6 +29,7 @@
 
 .order-date {
   font-size: 12px;
+  padding-left: 18px;
 }
 .my-order-data-header {
   background-color: tomato;
@@ -107,4 +108,20 @@
 .step.completed .process-name {
   color: green;
   font-weight: bold;
+}
+.track-order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -16px;
+}
+.track-order-btn button {
+  border: none;
+  color: white;
+  background-color: tomato;
+  width: max(8vw, 100px);
+  padding: 4px 0px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 8px;
 }
