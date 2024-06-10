@@ -7,7 +7,7 @@
   "scripts": {
     "server": "nodemon server.js",
     "deploy": "netlify deploy --prod",
-    "build": "esbuild server.js --outfile=dist/bundle.js"
+    "build": "npx esbuild server.js --outfile=dist/bundle.js"
   },
   "author": "",
   "license": "ISC",

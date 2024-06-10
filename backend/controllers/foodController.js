@@ -1,4 +1,3 @@
-import { error } from 'console';
 import foodModel from '../models/foodModel.js';
 // prebuilt file system in node js
 import fs from 'fs';
@@ -31,7 +30,7 @@ const listFood = async (req, res) => {
   try {
     const foods = await foodModel.find({});
     res.json({ success: true, data: foods });
-  } catch (e) {
+  } catch (error) {
     console.log(error);
     res.json({ success: false, message: 'Error while fetching food list' });
   }
