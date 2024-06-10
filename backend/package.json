@@ -5,6 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "install": "npm install",
     "server": "npx nodemon server.js",
     "deploy": "netlify deploy --prod",
     "build": "npx esbuild server.js --outfile=dist/bundle.js"
