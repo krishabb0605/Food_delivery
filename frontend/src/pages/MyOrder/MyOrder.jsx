@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { IoMdDownload } from 'react-icons/io';
-import { saveAs } from 'file-saver';
 import { FaShareAlt } from 'react-icons/fa';
 import moment from 'moment';
 import { assets } from '../../assets/assets';
@@ -23,27 +22,21 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
   const handleShare = async (blob) => {
     if (navigator.share) {
       try {
-        const blob = await new Promise((resolve) => {
-          const string = `
-            <html>
-              <body>
-                <h1>Invoice</h1>
-                ${renderToString(<Invoice order={order} />)}
-              </body>
-            </html>
-          `;
-          const pdf = jsPDF();
-          pdf.fromHTML(string);
-          const blob = pdf.output('blob');
-          resolve(blob);
-        });
-
-        await navigator.share({
-          title: 'My Invoice',
-          files: [new File([blob], 'invoice.pdf', { type: 'application/pdf' })],
-        });
+        if (blob) {
+          const file = new File([blob], 'invoice.pdf', {
+            type: 'application/pdf',
+          });
+          await navigator.share({
+            title: 'Invoice',
+            text: 'Kindly find attached invoice',
+            files: [file],
+          });
+          toast.success('Invoice shared successfully!');
+        } else {
+          toast.error('No blob available');
+        }
       } catch (error) {
-        toast.error('Error while sharing file');
+        toast.error('Error while sharing ');
       }
     } else {
       toast.error('Web Share API not supported');
@@ -85,7 +78,7 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
             <BlobProvider document={<Invoice order={order} />}>
               {({ url, blob }) => (
                 <div
-                  onClick={() => handleShare(url, blob)}
+                  onClick={() => handleShare(blob)}
                   style={{ cursor: 'pointer' }}
                 >
                   <FaShareAlt style={{ height: '12px' }} />

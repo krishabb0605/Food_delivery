@@ -32,10 +32,28 @@
 }
 .place-order .cart-total button {
   margin-top: 30px;
+  display: grid;
 }
+
 @media (max-width: 700px) {
   .place-order {
     flex-direction: column;
     margin-top: 40px;
+  }
+}
+
+.spinner1 {
+  width: 16px;
+  height: 16px;
+  place-self: center;
+  border: 5px solid white;
+  border-top-color: tomato;
+  border-radius: 50%;
+  animation: rotate 1s infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
   }
 }

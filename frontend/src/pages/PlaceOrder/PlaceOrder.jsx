@@ -5,8 +5,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems, url } =
-    useContext(StoreContext);
+  const { getTotalCartAmount, token, food_list, cartItems, url } = useContext(
+    StoreContext
+  );
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -27,8 +30,11 @@ const PlaceOrder = () => {
 
     setData((data) => ({ ...data, [name]: value }));
   };
+
   const placeOrder = async (event) => {
     event.preventDefault();
+
+    setIsLoading(true);
     let orderItems = [];
     food_list.map((item) => {
       if (cartItems[item._id] > 0) {
@@ -37,11 +43,13 @@ const PlaceOrder = () => {
         orderItems.push(itemInfo);
       }
     });
+
     let orderData = {
       address: data,
       items: orderItems,
       amount: getTotalCartAmount() + 2,
     };
+
     let response = await axios.post(`${url}/api/order/place`, orderData, {
       headers: { token },
     });
@@ -52,6 +60,7 @@ const PlaceOrder = () => {
     } else {
       alert('Error');
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -170,7 +179,9 @@ const PlaceOrder = () => {
               </b>
             </div>
           </div>
-          <button type='submit'>Proceed To Payment</button>
+          <button type='submit'>
+            {isLoading ? <div className='spinner1' /> : 'Proceed To Payment'}
+          </button>
         </div>
       </div>
     </form>
