@@ -9,7 +9,7 @@ import {
 } from '@react-pdf/renderer';
 import { assets } from '../../assets/assets';
 
-const Invoice = ({ order }) => {
+const Invoice = ({ order, url }) => {
   const styles = StyleSheet.create({
     page: {
       fontSize: 11,
@@ -108,7 +108,8 @@ const Invoice = ({ order }) => {
         </View>
         <View style={styles.addressdiv}>
           <Text style={styles.addressTitle}>
-            Address : {order.address.street},{order.address.city},{order.address.state}{' '}
+            Address : {order.address.street},{order.address.city},
+            {order.address.state}{' '}
           </Text>
           <Text style={styles.addressTitle}>{order.address.country}</Text>
           <Text style={styles.addressTitle}>{order.address.zipcode}</Text>
@@ -152,7 +153,7 @@ const Invoice = ({ order }) => {
         >
           <View style={[styles.tbody, styles.tbody2]}>
             <Image
-              src={'http://localhost:4001/images/' + data.image}
+              src={`${url}/images/${data.image}`}
               alt='image'
               style={styles.image}
             />

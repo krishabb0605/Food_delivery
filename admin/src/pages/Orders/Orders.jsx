@@ -11,7 +11,10 @@ const Orders = ({ url }) => {
   const fetchAllOrders = async () => {
     const response = await axios.get(`${url}/api/order/list`);
     if (response.data.success) {
-      setOrders(response.data.data);
+      const sortedData = response.data.data.sort((a, b) =>
+        b.date.localeCompare(a.date)
+      );
+      setOrders(sortedData);
       setIsLoading(false);
     } else {
       toast.error('Error while fetching order list');

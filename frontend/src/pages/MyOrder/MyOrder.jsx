@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IoMdDownload } from 'react-icons/io';
 import { FaShareAlt } from 'react-icons/fa';
 import moment from 'moment';
@@ -6,9 +6,12 @@ import { assets } from '../../assets/assets';
 import { BlobProvider } from '@react-pdf/renderer';
 import Invoice from '../Invoice/Invoice';
 import { toast } from 'react-toastify';
+import { StoreContext } from '../../context/StoreContext';
 
 const MyOrder = ({ index, order, totalData, fetchOrders }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const { url } = useContext(StoreContext);
+
   useEffect(() => {
     if (order.status === 'Food Processing') {
       setCurrentStep(1);
@@ -61,7 +64,7 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
             </p>
           </div>
           <div className='right-icons'>
-            <BlobProvider document={<Invoice order={order} />}>
+            <BlobProvider document={<Invoice order={order} url={url} />}>
               {({ url, blob }) => (
                 <div style={{ cursor: 'pointer' }}>
                   <a
@@ -75,7 +78,7 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
               )}
             </BlobProvider>
 
-            <BlobProvider document={<Invoice order={order} />}>
+            <BlobProvider document={<Invoice order={order} url={url} />}>
               {({ url, blob }) => (
                 <div
                   onClick={() => handleShare(blob)}
