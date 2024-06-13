@@ -7,16 +7,18 @@ import axios from 'axios';
 const LoginPopup = ({ setShowLogin }) => {
   const [currState, setCurrState] = useState('Login');
   const [data, setData] = useState({ name: '', email: '', password: '' });
-  const { url, token, setToken } = useContext(StoreContext);
+  const { url, setToken } = useContext(StoreContext);
+
+  const [isLogin, setIsLogin] = useState(false);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-
     setData((data) => ({ ...data, [name]: value }));
   };
 
   const onLogin = async (event) => {
+    setIsLogin(true);
     event.preventDefault();
 
     let newUrl = url;
@@ -34,6 +36,7 @@ const LoginPopup = ({ setShowLogin }) => {
     } else {
       alert(response.data.message);
     }
+    setIsLogin(false);
   };
 
   return (
@@ -78,7 +81,13 @@ const LoginPopup = ({ setShowLogin }) => {
           />
         </div>
         <button type='submit'>
-          {currState !== 'Login' ? 'Create Account' : 'Login'}
+          {isLogin ? (
+            <div className='spinner1' style={{ margin: '1.5px 0' }}></div>
+          ) : currState !== 'Login' ? (
+            'Create Account'
+          ) : (
+            'Login'
+          )}
         </button>
         <div className='login-popup-condition'>
           <input type='checkbox' required />

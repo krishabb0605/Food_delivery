@@ -48,6 +48,8 @@
   background-color: tomato;
   font-size: 15px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
 }
 
 .login-popup-condition {
