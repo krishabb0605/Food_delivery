@@ -1,0 +1,88 @@
+.entry-page {
+  background: url('/background.jpg') no-repeat;
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.entry-page .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 8px;
+  overflow: auto;
+  box-shadow: 0 0 5px 5px white;
+}
+
+.card .card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card .entry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.entry-form h2 {
+  text-align: center;
+}
+.entry-form .form-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.form-data input {
+  width: 100%;
+  outline: none;
+  border: 1px solid #c9c9c9;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.entry-form button {
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  color: white;
+  background-color: tomato;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+.entry-form .condition {
+  display: flex;
+  gap: 8px;
+}
+
+.condition p {
+  max-width: 300px;
+}
+
+.entry-form p span {
+  color: tomato;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .card img {
+    display: none;
+  }
+  .condition p {
+    max-width: 270px;
+  }
+}

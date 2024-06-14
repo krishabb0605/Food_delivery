@@ -5,6 +5,7 @@ import FoodDisplay from './FoodDisplay/FoodDisplay';
 import Footer from './Footer/Footer';
 import AppDownload from './AppDownload/AppDownload';
 import LoginPopup from './LoginPopup/LoginPopup';
+import EntryPage from './EntryPage/EntryPage';
 export {
   Header,
   Navbar,
@@ -13,4 +14,5 @@ export {
   Footer,
   AppDownload,
   LoginPopup,
+  EntryPage,
 };
