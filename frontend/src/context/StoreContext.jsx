@@ -6,6 +6,7 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [food_list, setFoodList] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   // const url = 'http://localhost:4001';
 
@@ -51,8 +52,10 @@ const StoreContextProvider = (props) => {
   };
 
   const fetchFoodList = async () => {
+    setIsFetching(true);
     const response = await axios.get(`${url}/api/food/list`);
     setFoodList(response.data.data);
+    setIsFetching(false);
   };
 
   const loadCartData = async (token) => {
@@ -87,6 +90,7 @@ const StoreContextProvider = (props) => {
     url,
     token,
     setToken,
+    isFetching,
   };
 
   return (

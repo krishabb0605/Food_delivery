@@ -6,9 +6,11 @@ import MyOrder from '../MyOrder/MyOrder';
 
 const MyOrders = () => {
   const [data, setData] = useState();
+  const [fetchData, setFetchData] = useState(false);
   const { url, token } = useContext(StoreContext);
 
   const fetchOrders = async () => {
+    setFetchData(true);
     const response = await axios.post(
       `${url}/api/order/userOrders`,
       {},
@@ -18,6 +20,7 @@ const MyOrders = () => {
       b.date.localeCompare(a.date)
     );
     setData(sortedData);
+    setFetchData(false);
   };
 
   useEffect(() => {
@@ -25,6 +28,14 @@ const MyOrders = () => {
       fetchOrders();
     }
   }, [token]);
+
+  if (fetchData) {
+    return (
+      <div className='verify'>
+        <div className='spinner' />
+      </div>
+    );
+  }
 
   return (
     <div className='my-orders'>

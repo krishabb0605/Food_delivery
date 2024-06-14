@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Home.css';
 import {
   AppDownload,
@@ -6,9 +6,20 @@ import {
   FoodDisplay,
   Header,
 } from '../../components';
+import { StoreContext } from '../../context/StoreContext';
 
 const Home = () => {
   const [category, setCategory] = useState('All');
+  const { isFetching } = useContext(StoreContext);
+
+  if (isFetching) {
+    return (
+      <div className='verify'>
+        <div className='spinner' />
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header />
