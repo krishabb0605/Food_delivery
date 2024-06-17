@@ -27,7 +27,6 @@ const EntryPage = ({ handleRole }) => {
   };
 
   const onLogin = async (event) => {
-    setIsLogin(true);
     event.preventDefault();
 
     let newUrl = url;
@@ -38,28 +37,30 @@ const EntryPage = ({ handleRole }) => {
       newUrl += '/api/user/register';
     }
     if (data.role === 'user') {
-      handleLoginProcess(newUrl);
+      handleLoginProcess(newUrl, data.role);
     } else {
-      let data = prompt('Please Enter Admin Code :');
-      if (data === 'admin@123') {
-        handleLoginProcess(newUrl);
+      let code = prompt('Please Enter Admin Code :');
+      if (code === 'admin@123') {
+        handleLoginProcess(newUrl, data.role);
       } else {
         toast.error('Enter valid admin code');
       }
     }
-    setIsLogin(false);
   };
 
-  const handleLoginProcess = async (newUrl) => {
+  console.log(data.role);
+
+  const handleLoginProcess = async (newUrl, role) => {
+    setIsLogin(true);
     const response = await axios.post(newUrl, data);
     if (response.data.success) {
       setToken(response.data.token);
       localStorage.setItem('token', response.data.token);
-      handleRole(response.data.user.role);
-      navigate('/', { replace: true });
+      handleRole(role);
     } else {
       alert(response.data.message);
     }
+    setIsLogin(false);
   };
 
   return (
