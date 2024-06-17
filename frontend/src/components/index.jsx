@@ -4,8 +4,9 @@ import ExploreMenu from './ExploreMenu/ExploreMenu';
 import FoodDisplay from './FoodDisplay/FoodDisplay';
 import Footer from './Footer/Footer';
 import AppDownload from './AppDownload/AppDownload';
-import LoginPopup from './LoginPopup/LoginPopup';
 import EntryPage from './EntryPage/EntryPage';
+import AdminNavbar from './AdminNavbar/AdminNavbar';
+
 export {
   Header,
   Navbar,
@@ -13,6 +14,6 @@ export {
   FoodDisplay,
   Footer,
   AppDownload,
-  LoginPopup,
   EntryPage,
+  AdminNavbar,
 };

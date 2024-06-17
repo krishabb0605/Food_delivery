@@ -17,7 +17,6 @@ const Verify = () => {
       success,
       orderId,
     });
-    console.log(response)
     if (response.data.success) {
       navigate('/myorders');
     } else {

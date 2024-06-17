@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const StoreContext = createContext(null);
 
@@ -7,6 +8,7 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [food_list, setFoodList] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const navigate = useNavigate();
 
   // const url = 'http://localhost:4001';
 
@@ -69,6 +71,14 @@ const StoreContextProvider = (props) => {
     setCartItems(response.data.cartData);
   };
 
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+
+    setToken('');
+    navigate('/login');
+  };
+
   useEffect(() => {
     async function loadData() {
       await fetchFoodList();
@@ -91,6 +101,7 @@ const StoreContextProvider = (props) => {
     token,
     setToken,
     isFetching,
+    logout,
   };
 
   return (

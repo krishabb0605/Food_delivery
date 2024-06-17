@@ -2,13 +2,23 @@ import React, { useContext, useState } from 'react';
 import './EntryPage.css';
 import { StoreContext } from '../../context/StoreContext';
 import { assets } from '../../assets/assets';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const EntryPage = () => {
+const EntryPage = ({ handleRole }) => {
   const [currState, setCurrState] = useState('Login');
-  const [data, setData] = useState({ name: '', email: '', password: '' });
-  const { url, setToken } = useContext(StoreContext);
-
+  const [data, setData] = useState({ role: 'user', email: '', password: '' });
   const [isLogin, setIsLogin] = useState(false);
+  const { url, token, setToken } = useContext(StoreContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate('/', { replace: true });
+    }
+  }, [token, navigate]);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -27,15 +37,29 @@ const EntryPage = () => {
     } else {
       newUrl += '/api/user/register';
     }
+    if (data.role === 'user') {
+      handleLoginProcess(newUrl);
+    } else {
+      let data = prompt('Please Enter Admin Code :');
+      if (data === 'admin@123') {
+        handleLoginProcess(newUrl);
+      } else {
+        toast.error('Enter valid admin code');
+      }
+    }
+    setIsLogin(false);
+  };
+
+  const handleLoginProcess = async (newUrl) => {
     const response = await axios.post(newUrl, data);
     if (response.data.success) {
       setToken(response.data.token);
       localStorage.setItem('token', response.data.token);
-      //   setShowLogin(false);
+      handleRole(response.data.user.role);
+      navigate('/', { replace: true });
     } else {
       alert(response.data.message);
     }
-    setIsLogin(false);
   };
 
   return (
@@ -46,14 +70,15 @@ const EntryPage = () => {
           <form onSubmit={onLogin} className='entry-form'>
             <div className='form-data'>
               {currState !== 'Login' ? (
-                <input
-                  type='text'
-                  placeholder='Your name'
-                  name='name'
+                <select
+                  name='role'
+                  id='role'
                   onChange={onChangeHandler}
-                  value={data.name}
-                  required
-                />
+                  value={data.role}
+                >
+                  <option value='user'>User</option>
+                  <option value='admin'>Admin</option>
+                </select>
               ) : (
                 <></>
               )}

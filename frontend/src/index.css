@@ -13,10 +13,19 @@ body {
 
 a {
   text-decoration: none;
-  columns: inherit;
+  color: inherit;
 }
 
 .app {
   width: 80%;
   margin: auto;
+}
+.app-content {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
