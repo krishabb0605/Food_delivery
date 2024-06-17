@@ -37,26 +37,24 @@ const EntryPage = ({ handleRole }) => {
       newUrl += '/api/user/register';
     }
     if (data.role === 'user') {
-      handleLoginProcess(newUrl, data.role);
+      handleLoginProcess(newUrl);
     } else {
       let code = prompt('Please Enter Admin Code :');
       if (code === 'admin@123') {
-        handleLoginProcess(newUrl, data.role);
+        handleLoginProcess(newUrl);
       } else {
         toast.error('Enter valid admin code');
       }
     }
   };
 
-  console.log(data.role);
-
-  const handleLoginProcess = async (newUrl, role) => {
+  const handleLoginProcess = async (newUrl) => {
     setIsLogin(true);
     const response = await axios.post(newUrl, data);
     if (response.data.success) {
       setToken(response.data.token);
       localStorage.setItem('token', response.data.token);
-      handleRole(role);
+      handleRole(response.data.user.role);
     } else {
       alert(response.data.message);
     }
