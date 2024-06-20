@@ -10,7 +10,7 @@ const AdminNavbar = () => {
   return (
     <>
       <div className='admin-navbar'>
-        <img className='logo' src={assets.logo} alt='logo' />
+        <img className='logo' src={assets.logoAdmin} alt='logo' />
         <div onClick={logout}>Logout</div>
         <img className='profile' src={assets.profile_image} alt='' />
       </div>

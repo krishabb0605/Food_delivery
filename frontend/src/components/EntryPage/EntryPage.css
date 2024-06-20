@@ -51,11 +51,12 @@
   border: 1px solid #c9c9c9 !important;
   padding: 10px !important;
   border-radius: 4px !important;
+  background-color: rgb(232, 240, 254);
 }
 
-.entry-form button {
+.entry-form .btn {
   border: none;
-  padding: 10px;
+  padding: 8px;
   border-radius: 4px;
   color: white;
   background-color: tomato;
@@ -64,6 +65,21 @@
   display: flex;
   justify-content: center;
   font-weight: bold;
+}
+
+.entry-form .btn-google {
+  border: 1px solid #d0d5dd;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.entry-form .sign_in_google {
+  display: flex;
+  align-items: center;
+  color: #6c6c6c;
+  gap: 8px;
 }
 .entry-form .condition {
   display: flex;
@@ -87,4 +103,14 @@
   .condition p {
     max-width: 270px;
   }
+}
+
+.spinner-login {
+  width: 16px;
+  height: 16px;
+  place-self: center;
+  border: 2px solid white;
+  border-top-color: #6c6c6c;
+  border-radius: 50%;
+  animation: rotate 1s infinite;
 }

@@ -15,7 +15,7 @@ const Navbar = ({ setShowLogin }) => {
     <>
       <div className='navbar app'>
         <Link to='/'>
-          <img src={assets.logo} alt='logo' className='logo' />
+          <img src={assets.cooking_logo} alt='logo' className='logo' />
         </Link>
 
         <ul className='navbar-menu'>
@@ -57,24 +57,26 @@ const Navbar = ({ setShowLogin }) => {
             </Link>
             <div className={getTotalCartAmount() === 0 ? '' : 'dot'}></div>
           </div>
-          {!token ? (
-            <button onClick={() => setShowLogin(true)}>Sign in</button>
-          ) : (
-            <div className='navbar-profile'>
-              <img src={assets.profile_icon} alt='profile' />
-              <ul className='nav-profile-dropdown'>
-                <li onClick={() => navigate('/myorders')}>
-                  <img src={assets.bag_icon} alt='bag' />
-                  <p>Orders</p>
-                </li>
-                <hr />
-                <li onClick={logout}>
-                  <img src={assets.logout_icon} alt='logout' />
-                  <p>Logout</p>
-                </li>
-              </ul>
-            </div>
-          )}
+
+          <div className='navbar-profile'>
+            <img src={assets.profile_icon} alt='profile' />
+            <ul className='nav-profile-dropdown'>
+              <li onClick={() => navigate('/myorders')}>
+                <img src={assets.bag_icon} alt='bag' />
+                <p>Orders</p>
+              </li>
+              <hr />
+              <li onClick={() => navigate('/myAccount')}>
+                <img src={assets.bag_icon} alt='bag' />
+                <p style={{ textWrap: 'nowrap' }}>My Account</p>
+              </li>
+              <hr />
+              <li onClick={logout}>
+                <img src={assets.logout_icon} alt='logout' />
+                <p>Logout</p>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 

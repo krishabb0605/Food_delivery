@@ -1,17 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import './EntryPage.css';
+import axios from 'axios';
 import { StoreContext } from '../../context/StoreContext';
 import { assets } from '../../assets/assets';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 const EntryPage = ({ handleRole }) => {
   const [currState, setCurrState] = useState('Login');
   const [data, setData] = useState({ role: 'user', email: '', password: '' });
   const [isLogin, setIsLogin] = useState(false);
+  const [isLoginGoogle, setIsLoginGoogle] = useState(false);
+  const [user, setUser] = useState();
+  const [profile, setProfile] = useState();
   const { url, token, setToken } = useContext(StoreContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +23,38 @@ const EntryPage = ({ handleRole }) => {
       navigate('/', { replace: true });
     }
   }, [token, navigate]);
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error),
+  });
+
+  useEffect(() => {
+    const getProfileData = async () => {
+      if (user) {
+        try {
+          const response = await axios.get(
+            `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+            {
+              headers: {
+                Authorization: `Bearer ${user.access_token}`,
+                Accept: 'application/json',
+              },
+            }
+          );
+
+          setProfile(response.data);
+          setIsLoginGoogle(false);
+        } catch (e) {
+          alert('Error while fetching data');
+        }
+      }
+    };
+
+    getProfileData();
+  }, [user]);
+
+  console.log({ profile });
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -61,6 +97,8 @@ const EntryPage = ({ handleRole }) => {
     setIsLogin(false);
   };
 
+  console.log(isLoginGoogle);
+
   return (
     <div className='entry-page'>
       <div className='card'>
@@ -98,13 +136,32 @@ const EntryPage = ({ handleRole }) => {
                 required
               />
             </div>
-            <button type='submit'>
+            <button type='submit' className='btn'>
               {isLogin ? (
                 <div className='spinner1' style={{ margin: '1.5px 0' }}></div>
               ) : currState !== 'Login' ? (
                 'Create Account'
               ) : (
                 'Login'
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setIsLoginGoogle(true), googleLogin();
+              }}
+              className='btn-google'
+            >
+              {isLoginGoogle ? (
+                <div
+                  className='spinner-login'
+                  style={{ margin: '1.5px 0' }}
+                ></div>
+              ) : (
+                <div className='sign_in_google'>
+                  <img src={assets.goggle_icon} alt='' />
+                  <p>Sign in with google</p>
+                </div>
               )}
             </button>
             <div className='condition'>

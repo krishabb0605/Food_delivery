@@ -8,6 +8,7 @@ import add_icon from './add_icon.png';
 import order_icon from './order_icon.png';
 import profile_image from './profile_image.png';
 import upload_area from './upload_area.png';
+import cooking_logo from './food_logo.png';
 
 import menu_1 from './menu_1.png';
 import menu_2 from './menu_2.png';
@@ -67,6 +68,7 @@ import bag_icon from './bag_icon.png';
 import logout_icon from './logout_icon.png';
 import parcel_icon from './parcel_icon.png';
 import background from './background.webp';
+import goggle_icon from './google.svg';
 
 export const assets = {
   logo,
@@ -95,6 +97,8 @@ export const assets = {
   profile_image,
   upload_area,
   parcel_icon,
+  cooking_logo,
+  goggle_icon,
 };
 
 export const menu_list = [
