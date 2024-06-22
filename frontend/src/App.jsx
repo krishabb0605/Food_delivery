@@ -18,7 +18,7 @@ import {
 } from './pages';
 
 const App = () => {
-  const [role, setRole] = useState('user');
+  const [role, setRole] = useState(localStorage.getItem('role'));
 
   const handleRole = (role) => {
     setRole(role);

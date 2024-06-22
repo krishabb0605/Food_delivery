@@ -12,17 +12,32 @@ const EntryPage = ({ handleRole }) => {
   const [data, setData] = useState({ role: 'user', email: '', password: '' });
   const [isLogin, setIsLogin] = useState(false);
   const [isLoginGoogle, setIsLoginGoogle] = useState(false);
+  const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
   const [user, setUser] = useState();
   const [profile, setProfile] = useState();
+  const [validationToken, setValidationToken] = useState('');
   const { url, token, setToken } = useContext(StoreContext);
+  const [currentStepRegister, setCurrentStepRegister] = useState(0);
+  const [userAllData, setUserAllData] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
-      navigate('/', { replace: true });
+    if (localStorage.getItem('token')) {
+      if (currState !== 'Login') {
+        if (JSON.parse(localStorage.getItem('user')).verified === false) {
+          setCurrentStepRegister(1);
+        }
+      } else {
+        if (JSON.parse(localStorage.getItem('user')).verified === false) {
+          setCurrentStepRegister(1);
+        } else {
+          localStorage.setItem('verified', true);
+          navigate('/', { replace: true });
+        }
+      }
     }
-  }, [token, navigate]);
+  }, [localStorage.getItem('token'), localStorage.getItem('user')]);
 
   const googleLogin = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
@@ -53,8 +68,6 @@ const EntryPage = ({ handleRole }) => {
 
     getProfileData();
   }, [user]);
-
-  console.log({ profile });
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -89,99 +102,176 @@ const EntryPage = ({ handleRole }) => {
     const response = await axios.post(newUrl, data);
     if (response.data.success) {
       setToken(response.data.token);
-      localStorage.setItem('token', response.data.token);
       handleRole(response.data.user.role);
+      setUserAllData(response.data.user);
+
+      if (currState !== 'Login') {
+        await axios.post(`${url}/api/user/verification`, {
+          user: response.data.user,
+        });
+      }
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('role', response.data.user.role);
     } else {
-      alert(response.data.message);
+      toast.error(response.data.message);
     }
     setIsLogin(false);
   };
 
-  console.log(isLoginGoogle);
+  const handleResend = async () => {
+    const response = await axios.post(`${url}/api/user/verification`, {
+      user: userAllData,
+    });
+    if (response.data.success) {
+      toast.success(response.data.message);
+    } else {
+      toast.success(response.data.message);
+    }
+  };
+
+  const handleVerification = async (event) => {
+    event.preventDefault();
+    setIsVerifiedEmail(true);
+    const response = await axios.get(
+      `${url}/api/user/verify-email/${validationToken}`
+    );
+
+    if (response.data.success) {
+      localStorage.setItem('verified', true);
+      navigate('/', { replace: true });
+    } else {
+      toast.error(response.data.message);
+    }
+    setIsVerifiedEmail(false);
+  };
 
   return (
     <div className='entry-page'>
       <div className='card'>
         <div className='card-header'>
-          <h2>{currState}</h2>
-          <form onSubmit={onLogin} className='entry-form'>
-            <div className='form-data'>
-              {currState !== 'Login' ? (
-                <select
-                  name='role'
-                  id='role'
-                  onChange={onChangeHandler}
-                  value={data.role}
-                >
-                  <option value='user'>User</option>
-                  <option value='admin'>Admin</option>
-                </select>
-              ) : (
-                <></>
-              )}
-              <input
-                type='email'
-                placeholder='Your email'
-                name='email'
-                onChange={onChangeHandler}
-                value={data.email}
-                required
-              />
-              <input
-                type='password'
-                placeholder='Password'
-                name='password'
-                onChange={onChangeHandler}
-                value={data.password}
-                required
-              />
-            </div>
-            <button type='submit' className='btn'>
-              {isLogin ? (
-                <div className='spinner1' style={{ margin: '1.5px 0' }}></div>
-              ) : currState !== 'Login' ? (
-                'Create Account'
-              ) : (
-                'Login'
-              )}
-            </button>
-
-            <button
-              onClick={() => {
-                setIsLoginGoogle(true), googleLogin();
-              }}
-              className='btn-google'
-            >
-              {isLoginGoogle ? (
-                <div
-                  className='spinner-login'
-                  style={{ margin: '1.5px 0' }}
-                ></div>
-              ) : (
-                <div className='sign_in_google'>
-                  <img src={assets.goggle_icon} alt='' />
-                  <p>Sign in with google</p>
+          {currentStepRegister === 0 ? (
+            <div className='card-header'>
+              <h2>{currState}</h2>
+              <form onSubmit={onLogin} className='entry-form'>
+                <div className='form-data'>
+                  {currState !== 'Login' ? (
+                    <select
+                      name='role'
+                      id='role'
+                      onChange={onChangeHandler}
+                      value={data.role}
+                    >
+                      <option value='user'>User</option>
+                      <option value='admin'>Admin</option>
+                    </select>
+                  ) : (
+                    <></>
+                  )}
+                  <input
+                    type='email'
+                    placeholder='Your email'
+                    name='email'
+                    onChange={onChangeHandler}
+                    value={data.email}
+                    required
+                  />
+                  <input
+                    type='password'
+                    placeholder='Password'
+                    name='password'
+                    onChange={onChangeHandler}
+                    value={data.password}
+                    required
+                  />
                 </div>
-              )}
-            </button>
-            <div className='condition'>
-              <input type='checkbox' required />
-              <p>
-                By continuing, i agree to the terms of use & privacy policy.
-              </p>
+                {currState === 'Login' ? (
+                  <p className='forgot-password'>Forgot password ?</p>
+                ) : (
+                  <></>
+                )}
+                <button type='submit' className='btn'>
+                  {isLogin ? (
+                    <div
+                      className='spinner1'
+                      style={{ margin: '1.5px 0' }}
+                    ></div>
+                  ) : currState !== 'Login' ? (
+                    'Create Account'
+                  ) : (
+                    'Login'
+                  )}
+                </button>
+
+                <button
+                  onClick={() => {
+                    setIsLoginGoogle(true), googleLogin();
+                  }}
+                  className='btn-google'
+                >
+                  {isLoginGoogle ? (
+                    <div
+                      className='spinner-login'
+                      style={{ margin: '1.5px 0' }}
+                    ></div>
+                  ) : (
+                    <div className='sign_in_google'>
+                      <img src={assets.goggle_icon} alt='' />
+                      <p>Sign in with google</p>
+                    </div>
+                  )}
+                </button>
+                {/* <div className='condition'>
+                  <input type='checkbox' required />
+                  <p>
+                    By continuing, i agree to the terms of use & privacy policy.
+                  </p>
+                </div> */}
+                {currState !== 'Login' ? (
+                  <p>
+                    Already have an account ?{' '}
+                    <span onClick={() => setCurrState('Login')}>
+                      Login here
+                    </span>
+                  </p>
+                ) : (
+                  <p>
+                    Create a new account ?
+                    <span onClick={() => setCurrState('Sign Up')}>
+                      Click here
+                    </span>
+                  </p>
+                )}
+              </form>
             </div>
-            {currState !== 'Login' ? (
-              <p>
-                Already have an account ?{' '}
-                <span onClick={() => setCurrState('Login')}>Login here</span>
-              </p>
-            ) : (
-              <p>
-                Create a new account ?
-                <span onClick={() => setCurrState('Sign Up')}>Click here</span>
-              </p>
-            )}
-          </form>
+          ) : (
+            <form
+              className='card-header validation'
+              onSubmit={handleVerification}
+            >
+              <h2>OTP Verification</h2>
+              <div className='validation-text'>
+                We've sent a verification code to your email -
+                krishabhingaradiya1234@gmail.com
+              </div>
+              <input
+                type='number'
+                name='verification'
+                id='verification'
+                value={validationToken}
+                placeholder='Enter verification code'
+                onChange={(e) => setValidationToken(parseInt(e.target.value))}
+              />
+              <p onClick={handleResend}>{`Resend verification >`}</p>
+              <button type='submit' className='validation-btn'>
+                {isVerifiedEmail ? (
+                  <div className='spinner1' style={{ margin: '1.5px 0' }}></div>
+                ) : (
+                  'Submit'
+                )}
+              </button>
+            </form>
+          )}
         </div>
         <img src={assets.background} alt='' />
       </div>

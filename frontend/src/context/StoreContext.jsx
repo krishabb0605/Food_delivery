@@ -74,6 +74,8 @@ const StoreContextProvider = (props) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('user');
+    localStorage.removeItem('verified');
 
     setToken('');
     navigate('/login');
@@ -82,7 +84,7 @@ const StoreContextProvider = (props) => {
   useEffect(() => {
     async function loadData() {
       await fetchFoodList();
-      if (localStorage.getItem('token')) {
+      if (localStorage.getItem('token') && localStorage.getItem('verified')) {
         setToken(localStorage.getItem('token'));
         await loadCartData(localStorage.getItem('token'));
       }
