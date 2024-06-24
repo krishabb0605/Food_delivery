@@ -156,37 +156,49 @@ const EntryPage = ({ handleRole }) => {
               <form onSubmit={onLogin} className='entry-form'>
                 <div className='form-data'>
                   {currState !== 'Login' ? (
-                    <select
-                      name='role'
-                      id='role'
-                      onChange={onChangeHandler}
-                      value={data.role}
-                    >
-                      <option value='user'>User</option>
-                      <option value='admin'>Admin</option>
-                    </select>
+                    <>
+                      <label htmlFor='role'>Role</label>
+                      <select
+                        name='role'
+                        id='role'
+                        onChange={onChangeHandler}
+                        value={data.role}
+                      >
+                        <option value='user'>User</option>
+                        <option value='admin'>Admin</option>
+                      </select>
+                    </>
                   ) : (
                     <></>
                   )}
+                  <label htmlFor='email'>Email</label>
                   <input
                     type='email'
                     placeholder='Your email'
                     name='email'
+                    id='email'
                     onChange={onChangeHandler}
                     value={data.email}
                     required
                   />
+                  <label htmlFor='password'>Password</label>
                   <input
                     type='password'
                     placeholder='Password'
                     name='password'
+                    id='password'
                     onChange={onChangeHandler}
                     value={data.password}
                     required
                   />
                 </div>
                 {currState === 'Login' ? (
-                  <p className='forgot-password'>Forgot password ?</p>
+                  <p
+                    className='forgot-password'
+                    onClick={() => navigate('/forgotPassword')}
+                  >
+                    Forgot password ?
+                  </p>
                 ) : (
                   <></>
                 )}
@@ -273,7 +285,7 @@ const EntryPage = ({ handleRole }) => {
             </form>
           )}
         </div>
-        <img src={assets.background} alt='' />
+        <img src={assets.background} alt='background_image' />
       </div>
     </div>
   );

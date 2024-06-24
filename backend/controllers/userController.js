@@ -91,7 +91,7 @@ const sendVerificationEmail = async (req, res) => {
     from: 'krishabhingaradiya1234@gmail.com',
     to: user.email,
     subject: 'Verify Your Email Address',
-    html:`<p>Your verification code: <code>${user.verificationToken}</code></p>`
+    html: `<p>Your verification code: <code>${user.verificationToken}</code></p>`,
   };
 
   try {
@@ -128,4 +128,73 @@ const verifyUser = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, verifyUser, sendVerificationEmail };
+const forgotPassword = async (req, res) => {
+  const email = req.params.email;
+  const exists = await userModel.findOne({ email });
+
+  if (!exists) {
+    return res.json({ success: false, message: `User doesn't exist` });
+  }
+
+  let frontend_url = 'https://fooddelivery-mern.netlify.app';
+  if (process.env.ENV !== 'production') {
+    frontend_url = 'http://localhost:5173';
+  }
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'krishabhingaradiya1234@gmail.com',
+      pass: 'comjqbcqomsdcazk',
+    },
+  });
+
+  const mailOptions = {
+    from: 'krishabhingaradiya1234@gmail.com',
+    to: email,
+    subject: 'Reset password',
+    html: `<p>Click on link to reset password: <code>${frontend_url}/forgotPassword?email=${email}</code></p>`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: 'Email send successfully' });
+  } catch (error) {
+    console.log('Email not sent', error);
+    res.json({ success: false, message: 'Failed to send email' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    const user = await userModel.findOne({ email });
+    // check if user already exist
+    if (!user) {
+      return res.json({
+        success: false,
+        message: `user doesn't already exist`,
+      });
+    }
+
+    // encrypt the password we use bycrpt
+    const salt = await bycrpt.genSalt(10);
+    const hashedPassword = await bycrpt.hash(password, salt);
+
+    user.password = hashedPassword;
+
+    await user.save();
+    res.json({ success: true, message: 'Password updated successfully .' });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: 'Error while updating password !' });
+  }
+};
+export {
+  loginUser,
+  registerUser,
+  verifyUser,
+  sendVerificationEmail,
+  forgotPassword,
+  resetPassword,
+};

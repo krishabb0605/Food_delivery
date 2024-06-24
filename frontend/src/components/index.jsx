@@ -6,6 +6,7 @@ import Footer from './Footer/Footer';
 import AppDownload from './AppDownload/AppDownload';
 import EntryPage from './EntryPage/EntryPage';
 import AdminNavbar from './AdminNavbar/AdminNavbar';
+import ForgotPassword from './ForgotPassword/ForgotPassword';
 
 export {
   Header,
@@ -16,4 +17,5 @@ export {
   AppDownload,
   EntryPage,
   AdminNavbar,
+  ForgotPassword,
 };

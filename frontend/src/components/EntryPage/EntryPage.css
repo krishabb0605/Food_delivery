@@ -31,6 +31,7 @@
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  width: 90%;
 }
 
 .entry-form h2 {
@@ -46,7 +47,8 @@
 
 .form-data input,
 .form-data select,
-.form-data select option {
+.form-data select option,
+.entry-form input {
   width: 100% !important;
   outline: none !important;
   border: 1px solid #c9c9c9 !important;
@@ -174,4 +176,44 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.entry-form label {
+  align-self: baseline;
+  font-size: 12px;
+  color: #6c6c6c;
+}
+
+.entry-form .btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-group .light-btn {
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  color: white;
+  background-color: gray;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  width: 84px;
+}
+
+.entry-form .dark-btn {
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  color: white;
+  background-color: tomato;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  width: 84px;
 }

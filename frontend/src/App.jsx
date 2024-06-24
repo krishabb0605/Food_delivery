@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router-dom';
-import { AdminNavbar, EntryPage, Navbar } from './components';
+import { AdminNavbar, EntryPage, ForgotPassword, Navbar } from './components';
 import {
   Add,
   Cart,
@@ -28,6 +28,7 @@ const App = () => {
     <>
       <ToastContainer />
       <Routes>
+        <Route path='/forgotPassword' element={<ForgotPassword />} />
         <Route path='/login' element={<EntryPage handleRole={handleRole} />} />
         <Route element={<PrivateRoute />}>
           {role === 'user' ? (

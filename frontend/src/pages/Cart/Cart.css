@@ -29,7 +29,7 @@
   margin-top: 80px;
   display: flex;
   justify-content: space-between;
-  gap: max(1vw, 20px);
+  gap: max(10vw, 20px);
 }
 .cart-total {
   flex: 1;

@@ -13,7 +13,7 @@ const Navbar = ({ setShowLogin }) => {
 
   return (
     <>
-      <div className='navbar app'>
+      <div className='navbar'>
         <Link to='/'>
           <img src={assets.cooking_logo} alt='logo' className='logo' />
         </Link>
