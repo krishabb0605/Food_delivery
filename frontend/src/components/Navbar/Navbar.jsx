@@ -5,7 +5,7 @@ import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import Footer from '../Footer/Footer';
 
-const Navbar = ({ setShowLogin }) => {
+const Navbar = () => {
   const [menu, setMenu] = useState('home');
   const { getTotalCartAmount, token, logout } = useContext(StoreContext);
 

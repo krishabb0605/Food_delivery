@@ -12,7 +12,7 @@ const StoreContextProvider = (props) => {
 
   // const url = 'http://localhost:4001';
 
-  const url = 'https://food-delievery-backend.onrender.com';
+  const url = 'https://food-delivery-ed6j.onrender.com';
   
   const [token, setToken] = useState('');
 
