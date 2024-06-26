@@ -217,3 +217,9 @@ input::-webkit-inner-spin-button {
   font-weight: bold;
   width: 84px;
 }
+
+@media (max-width: 425px) {
+  .card .card-header {
+    width: 325px;
+  }
+}
