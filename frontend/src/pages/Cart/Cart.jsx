@@ -70,16 +70,7 @@ const Cart = () => {
             Proceed To Checkout
           </button>
         </div>
-        <div>
-          <div>
-            <input type='radio' name='payment' id='cash' value='cash' />
-            <label htmlFor='cash'>Cash on Delivery</label>
-          </div>
-          <div>
-            <input type='radio' name='payment' id='online' value='online' />
-            <label htmlFor='online'>Credit / Debit</label>
-          </div>
-        </div>
+
         <div className='cart-promocode'>
           <div>
             <p>If you have a promo code , Enter it here</p>
