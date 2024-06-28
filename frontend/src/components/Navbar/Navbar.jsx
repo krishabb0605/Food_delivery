@@ -66,11 +66,7 @@ const Navbar = () => {
                 <p>Orders</p>
               </li>
               <hr />
-              <li onClick={() => navigate('/myAccount')}>
-                <img src={assets.bag_icon} alt='bag' />
-                <p style={{ textWrap: 'nowrap' }}>My Account</p>
-              </li>
-              <hr />
+              
               <li onClick={logout}>
                 <img src={assets.logout_icon} alt='logout' />
                 <p>Logout</p>

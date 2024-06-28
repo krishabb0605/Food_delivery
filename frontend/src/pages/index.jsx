@@ -8,7 +8,6 @@ import Add from './Add/Add';
 import Orders from './Orders/Orders';
 import List from './List/List';
 import ChefDetail from './ChefDetail/ChefDetail';
-import MyAccount from './MyAccount/MyAccount';
 
 export {
   Home,
@@ -21,5 +20,4 @@ export {
   Orders,
   List,
   ChefDetail,
-  MyAccount,
 };
