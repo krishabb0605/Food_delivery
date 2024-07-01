@@ -1,0 +1,30 @@
+.stepper-vertical {
+  list-style: none;
+  padding-left: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+.step::before {
+  content: '';
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  height: 50%;
+  width: 2px;
+  background-color: #e0e0e0;
+}
+.step:last-child::before {
+  display: none;
+}
+.process-name {
+  color: #808080;
+}
+.step.completed .process-name {
+  color: green;
+  font-weight: bold;
+}

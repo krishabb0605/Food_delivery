@@ -1,21 +1,25 @@
-import Header from './Header/Header';
-import Navbar from './Navbar/Navbar';
-import ExploreMenu from './ExploreMenu/ExploreMenu';
-import FoodDisplay from './FoodDisplay/FoodDisplay';
-import Footer from './Footer/Footer';
-import AppDownload from './AppDownload/AppDownload';
-import EntryPage from './EntryPage/EntryPage';
-import AdminNavbar from './AdminNavbar/AdminNavbar';
-import ForgotPassword from './ForgotPassword/ForgotPassword';
+import AdminNavbar from './AdminNavbar';
+import AppDownload from './AppDownload';
+import EntryPage from './EntryPage';
+import ExploreMenu from './ExploreMenu';
+import FoodDisplay from './FoodDisplay';
+import FoodItem from './FoodItem';
+import Footer from './Footer';
+import ForgotPassword from './ForgotPassword';
+import Header from './Header';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 
 export {
   Header,
-  Navbar,
-  ExploreMenu,
-  FoodDisplay,
-  Footer,
+  AdminNavbar,
   AppDownload,
   EntryPage,
-  AdminNavbar,
+  ExploreMenu,
+  FoodDisplay,
+  FoodItem,
+  Footer,
   ForgotPassword,
+  Sidebar,
+  Navbar,
 };
