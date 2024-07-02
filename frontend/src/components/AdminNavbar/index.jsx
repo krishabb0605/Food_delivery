@@ -1,12 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { assets } from '../../assets/assets';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { StoreContext } from '../../context/StoreContext';
 import { Button, Flex, Image } from '@chakra-ui/react';
 
 const AdminNavbar = () => {
   const { logout } = useContext(StoreContext);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate('/add');
+  }, []);
+  
   return (
     <>
       <Flex

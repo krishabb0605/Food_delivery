@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   AppDownload,
   ExploreMenu,
@@ -9,7 +9,6 @@ import { StoreContext } from '../../context/StoreContext';
 import { Flex, Spinner } from '@chakra-ui/react';
 
 const Home = () => {
-  const [category, setCategory] = useState('All');
   const { isFetching } = useContext(StoreContext);
 
   if (isFetching) {
@@ -23,8 +22,8 @@ const Home = () => {
   return (
     <div>
       <Header />
-      <ExploreMenu category={category} setCategory={setCategory} />
-      <FoodDisplay category={category} />
+      <ExploreMenu />
+      <FoodDisplay />
       <AppDownload />
     </div>
   );

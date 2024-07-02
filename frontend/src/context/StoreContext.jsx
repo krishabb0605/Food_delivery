@@ -9,11 +9,12 @@ const StoreContextProvider = (props) => {
   const [food_list, setFoodList] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
+  const [category, setCategory] = useState('');
 
-  // const url = 'http://localhost:4001';
+  const url = 'http://localhost:4001';
 
-  const url = 'https://food-delivery-ed6j.onrender.com';
-  
+  // const url = 'https://food-delivery-ed6j.onrender.com';
+
   const [token, setToken] = useState('');
 
   const addToCart = async (itemId) => {
@@ -60,6 +61,10 @@ const StoreContextProvider = (props) => {
     setIsFetching(false);
   };
 
+  const handleCategory = (category) => {
+    setCategory(category);
+  };
+
   const loadCartData = async (token) => {
     const response = await axios.post(
       url + '/api/cart/get',
@@ -104,6 +109,8 @@ const StoreContextProvider = (props) => {
     setToken,
     isFetching,
     logout,
+    category,
+    handleCategory,
   };
 
   return (

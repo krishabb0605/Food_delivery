@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { menu_list } from '../../assets/assets';
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { StoreContext } from '../../context/StoreContext';
 
-const ExploreMenu = ({ category, setCategory }) => {
+const ExploreMenu = () => {
+  const { category, handleCategory } = useContext(StoreContext);
+
   return (
     <Flex flexDir='column' gap='20px' id='explore-menu'>
       <Text color='#262626' fontWeight='600' fontSize='28px'>
@@ -32,8 +35,8 @@ const ExploreMenu = ({ category, setCategory }) => {
             <Box
               key={index}
               onClick={() =>
-                setCategory((prev) =>
-                  prev === item.menu_name ? 'All' : item.menu_name
+                handleCategory((prev) =>
+                  prev === item.menu_name ? '' : item.menu_name
                 )
               }
             >

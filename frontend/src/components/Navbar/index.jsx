@@ -1,16 +1,56 @@
-import React, { useContext, useState } from 'react';
-import { assets } from '../../assets/assets';
+import React, { useContext, useEffect, useState } from 'react';
+import { assets, menu_list } from '../../assets/assets';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import Footer from '../Footer';
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Icon,
+  Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { FaSearch } from 'react-icons/fa';
+import { uniq } from 'lodash';
+
+import {
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
+} from '@choc-ui/chakra-autocomplete';
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
   const [showMenu, setShowMenu] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [searchQuery, setSearchQuery] = useState('');
   const { getTotalCartAmount, logout } = useContext(StoreContext);
-
+  let [menuOptions, setMenuOptions] = useState([]);
+  const { handleCategory } = useContext(StoreContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    menu_list.map((menu) =>
+      setMenuOptions((prev) => [...prev, menu.menu_name])
+    );
+    setMenuOptions((prev) => [...prev]);
+  }, []);
+
+  useEffect(() => {
+    console.log(menuOptions);
+  }, [menuOptions]);
+
+  useEffect(() => {
+    handleCategory(searchQuery);
+  }, [searchQuery]);
+  menuOptions = uniq(menuOptions);
 
   return (
     <>
@@ -83,6 +123,8 @@ const Navbar = () => {
             src={assets.search_icon}
             alt='seach-icon'
             width={{ base: '20px', xl: 'auto' }}
+            cursor='pointer'
+            onClick={onOpen}
           />
           <Box pos='relative'>
             <Link to='/cart'>
@@ -165,6 +207,39 @@ const Navbar = () => {
       <Box>
         <Footer />
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <AutoComplete rollNavigation onChange={(e) => setSearchQuery(e)}>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents='none'
+                color='inherit'
+                fontSize='1.2em'
+              >
+                <Icon as={FaSearch} color='gray.300' />
+              </InputLeftElement>
+              <AutoCompleteInput
+                variant='filled'
+                placeholder='Search...'
+                _focusVisible={{ borderColor: '#ffd5ce' }}
+              />
+            </InputGroup>
+            <AutoCompleteList>
+              {menuOptions.map((option, oid) => (
+                <AutoCompleteItem
+                  key={`option-${oid}`}
+                  value={option}
+                  textTransform='capitalize'
+                  onClick={onClose}
+                >
+                  {option}
+                </AutoCompleteItem>
+              ))}
+            </AutoCompleteList>
+          </AutoComplete>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

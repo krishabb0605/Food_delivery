@@ -10,8 +10,11 @@ import {
   Button,
   Flex,
   FormControl,
+  HStack,
   Image,
   Input,
+  PinInput,
+  PinInputField,
   Select,
   Text,
 } from '@chakra-ui/react';
@@ -24,7 +27,7 @@ const EntryPage = ({ handleRole }) => {
   const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
   const [user, setUser] = useState();
   const [profile, setProfile] = useState();
-  const [validationToken, setValidationToken] = useState('');
+  const [validationToken, setValidationToken] = useState();
   const { url, token, setToken } = useContext(StoreContext);
   const [currentStepRegister, setCurrentStepRegister] = useState(0);
   const [userAllData, setUserAllData] = useState('');
@@ -52,10 +55,6 @@ const EntryPage = ({ handleRole }) => {
     onSuccess: (codeResponse) => setUser(codeResponse),
     onError: (error) => console.log('Login Failed:', error),
   });
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   useEffect(() => {
     const getProfileData = async () => {
@@ -159,6 +158,10 @@ const EntryPage = ({ handleRole }) => {
     }
     setIsVerifiedEmail(false);
   };
+
+  useEffect(() => {
+    console.log(validationToken);
+  }, [validationToken]);
 
   return (
     <Flex
@@ -364,7 +367,7 @@ const EntryPage = ({ handleRole }) => {
                 We've sent a verification code to your email -
                 krishabhingaradiya1234@gmail.com
               </Box>
-              <Input
+              {/* <Input
                 type='number'
                 name='verification'
                 id='verification'
@@ -374,7 +377,23 @@ const EntryPage = ({ handleRole }) => {
                 value={validationToken}
                 placeholder='Enter verification code'
                 onChange={(e) => setValidationToken(parseInt(e.target.value))}
-              />
+              /> */}
+              <HStack justifyContent='space-evenly' w='100%' gap='0'>
+                <PinInput
+                  otp
+                  mask
+                  // value={validationToken ? validationToken : ''}
+                  onChange={(e) => setValidationToken(parseInt(e))}
+                  colorScheme='purple'
+                >
+                  <PinInputField bg='blackAlpha.10' />
+                  <PinInputField bg='blackAlpha.200' />
+                  <PinInputField bg='blackAlpha.300' />
+                  <PinInputField bg='blackAlpha.200' />
+                  <PinInputField bg='blackAlpha.100' />
+                  <PinInputField bg='blackAlpha.50' />
+                </PinInput>
+              </HStack>
               <Text
                 bg='#d5efdb'
                 color='green'
@@ -394,6 +413,7 @@ const EntryPage = ({ handleRole }) => {
                 cursor='pointer'
                 width='90%'
                 isLoading={isVerifiedEmail}
+                mb='16px'
               >
                 Submit
               </Button>

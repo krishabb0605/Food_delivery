@@ -3,6 +3,7 @@ import { StoreContext } from '../../context/StoreContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, FormControl, Input, Text } from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 
 const PlaceOrder = () => {
   const { getTotalCartAmount, token, food_list, cartItems, url } = useContext(
@@ -41,6 +42,16 @@ const PlaceOrder = () => {
         orderItems.push(itemInfo);
       }
     });
+    if (data.value === '') {
+      console.log('object');
+    }
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === '') {
+        setIsLoading(false);
+        return toast.error('Fill all details');
+      }
+    }
 
     let orderData = {
       address: data,
