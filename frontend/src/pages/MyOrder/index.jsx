@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { IoMdDownload } from 'react-icons/io';
-import { FaShareAlt } from 'react-icons/fa';
+import { FaBox, FaShareAlt } from 'react-icons/fa';
 import moment from 'moment';
-import { assets } from '../../assets/assets';
 import { BlobProvider } from '@react-pdf/renderer';
 import Invoice from '../Invoice';
 import { toast } from 'react-toastify';
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Text, Button, Image } from '@chakra-ui/react';
+import { Box, Flex, Text, Button, Icon } from '@chakra-ui/react';
 import './index.css';
 
 const MyOrder = ({ index, order, totalData, fetchOrders }) => {
@@ -67,12 +66,8 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
           color='white'
         >
           <Box>
-            <Flex alignItems='center'>
-              <Image
-                src={assets.parcel_icon}
-                alt='parcel-icon'
-                style={{ height: '16px' }}
-              />
+            <Flex alignItems='center' gap='6px'>
+              <Icon as={FaBox} alt='parcel-icon' ms='20px' />
               Order #{totalData - index}
             </Flex>
             <Text fontSize='12px' pl='18px'>

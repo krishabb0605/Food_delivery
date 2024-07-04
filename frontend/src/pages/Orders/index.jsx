@@ -1,8 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { assets } from '../../assets/assets';
-import { StoreContext } from '../../context/StoreContext';
 import {
   Box,
   Grid,
@@ -11,15 +8,17 @@ import {
   Spinner,
   Text,
   Flex,
+  Icon,
 } from '@chakra-ui/react';
+import { orderService } from '../../services';
+import { FaBox } from 'react-icons/fa';
 
 const Orders = () => {
-  const { url } = useContext(StoreContext);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchAllOrders = async () => {
-    const response = await axios.get(`${url}/api/order/list`);
+    const response = await orderService.listOrder();
     if (response.data.success) {
       const sortedData = response.data.data.sort((a, b) =>
         b.date.localeCompare(a.date)
@@ -32,10 +31,11 @@ const Orders = () => {
   };
 
   const statusHandler = async (event, orderId) => {
-    const response = await axios.post(`${url}/api/order/status`, {
+    const response = await orderService.updateStatus(
       orderId,
-      status: event.target.value,
-    });
+      event.target.value
+    );
+
     if (response.data.success) {
       fetchAllOrders();
     } else {
@@ -44,7 +44,9 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    fetchAllOrders();
+    if (localStorage.getItem('token') && localStorage.getItem('verified')) {
+      fetchAllOrders();
+    }
   }, []);
 
   if (isLoading) {
@@ -58,7 +60,7 @@ const Orders = () => {
   return (
     <Box
       width='76%'
-      ml='max(5vw,25px)'
+      mx='auto'
       mt='50px'
       color='#6d6d69'
       fontSize='16px'
@@ -90,9 +92,11 @@ const Orders = () => {
             fontSize={{ base: '14px', lg: '12px' }}
             color='#505050'
           >
-            <Image
-              w={{ base: '40px', lg: 'auto' }}
-              src={assets.parcel_icon}
+            <Icon
+              as={FaBox}
+              color='#fc9535'
+              w={{ base: '40px', lg: '50px' }}
+              h={{ base: '40px', lg: '50px' }}
               alt='icon'
             />
             <Box>

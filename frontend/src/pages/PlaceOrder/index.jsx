@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, FormControl, Input, Text } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
+import { orderService } from '../../services';
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems, url } = useContext(
+  const { getTotalCartAmount, token, food_list, cartItems } = useContext(
     StoreContext
   );
 
@@ -42,9 +42,6 @@ const PlaceOrder = () => {
         orderItems.push(itemInfo);
       }
     });
-    if (data.value === '') {
-      console.log('object');
-    }
 
     for (const [key, value] of Object.entries(data)) {
       if (value === '') {
@@ -59,9 +56,7 @@ const PlaceOrder = () => {
       amount: getTotalCartAmount() + 2,
     };
 
-    let response = await axios.post(`${url}/api/order/place`, orderData, {
-      headers: { token },
-    });
+    let response = await orderService.placeOrder(orderData, token);
 
     if (response.data.success) {
       const { session_url } = response.data;

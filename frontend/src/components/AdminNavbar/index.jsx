@@ -1,18 +1,14 @@
 import React, { useContext, useEffect } from 'react';
 import { assets } from '../../assets/assets';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { StoreContext } from '../../context/StoreContext';
-import { Button, Flex, Image } from '@chakra-ui/react';
+import { Button, Flex, Icon, Image } from '@chakra-ui/react';
+import { FaUser } from 'react-icons/fa';
 
 const AdminNavbar = () => {
   const { logout } = useContext(StoreContext);
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate('/add');
-  }, []);
-  
   return (
     <>
       <Flex
@@ -24,11 +20,17 @@ const AdminNavbar = () => {
         bg='white'
         borderBottom='1px solid #a9a9a9'
       >
-        <Image width='max(10%,80px)' src={assets.logoAdmin} alt='logo' />
+        <Image src={assets.cooking_logo} alt='logo' w='90px' h='75px' />
         <Button onClick={logout} colorScheme='orange'>
           Logout
         </Button>
-        <Image width='40px' src={assets.profile_image} alt='' />
+        <Icon
+          width='40px'
+          as={FaUser}
+          alt=''
+          color='#4b537b'
+          transform='scale(1.3)'
+        />
       </Flex>
       <Flex>
         <Sidebar />

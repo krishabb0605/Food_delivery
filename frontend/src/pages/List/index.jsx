@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { MdDelete } from 'react-icons/md';
 
-import axios from 'axios';
 import { StoreContext } from '../../context/StoreContext';
 import { Box, Flex, Grid, Image, Spinner, Text } from '@chakra-ui/react';
+import foodService from '../../services/food.service';
 
 const List = () => {
   const { url } = useContext(StoreContext);
@@ -12,7 +12,7 @@ const List = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchList = async () => {
-    const response = await axios.get(`${url}/api/food/list`);
+    const response = await foodService.listFood();
     if (response.data.success) {
       setList(response.data.data);
       setIsLoading(false);
@@ -21,8 +21,8 @@ const List = () => {
     }
   };
 
-  const removeFood = async (foodId) => {
-    const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
+  const handleRemoveFood = async (foodId) => {
+    const response = await foodService.removeFood(foodId);
 
     await fetchList();
     if (response.data.success) {
@@ -38,7 +38,7 @@ const List = () => {
 
   if (isLoading) {
     return (
-      <Flex alignItems='center' justifyContent='center' h='40vh'  w='90%'>
+      <Flex alignItems='center' justifyContent='center' h='40vh' w='90%'>
         <Spinner size='xl' />
       </Flex>
     );
@@ -49,7 +49,7 @@ const List = () => {
       flexDir='column'
       gap='20px'
       width='76%'
-      ml='max(5vw,25px)'
+      mx='auto'
       mt='50px'
       color='#6d6d69'
       fontSize='16px'
@@ -100,7 +100,7 @@ const List = () => {
               <Text>{item.name}</Text>
               <Text>{item.category}</Text>
               <Text>{item.price}</Text>
-              <Text cursor='pointer' onClick={() => removeFood(item._id)}>
+              <Text cursor='pointer' onClick={() => handleRemoveFood(item._id)}>
                 <MdDelete />
               </Text>
             </Grid>

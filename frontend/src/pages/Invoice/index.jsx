@@ -94,7 +94,7 @@ const Invoice = ({ order, url }) => {
   const InvoiceTitle = () => (
     <View style={styles.titleContainer}>
       <View style={styles.spaceBetween}>
-        <Image src={assets.logo} style={{ width: '80px' }} />
+        <Image src={assets.cooking_logo} style={{ width: '80px' }} />
       </View>
     </View>
   );

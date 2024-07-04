@@ -6,8 +6,6 @@ import { Box, Grid, Text } from '@chakra-ui/react';
 const FoodDisplay = () => {
   const { food_list, category } = useContext(StoreContext);
 
-  console.log(food_list, category);
-
   return (
     <Box mt='30px' id='food-display'>
       <Text fontSize='max(2vw, 24px)' fontWeight='700'>

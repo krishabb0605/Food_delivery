@@ -1,8 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { assets } from '../../assets/assets';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { StoreContext } from '../../context/StoreContext';
 import {
   Box,
   Button,
@@ -14,12 +12,11 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
+import foodService from '../../services/food.service';
 
 const Add = () => {
-  const { url } = useContext(StoreContext);
   const [image, setImage] = useState(false);
   const [addingData, setAddingData] = useState(false);
-
   const [data, setData] = useState({
     name: '',
     description: '',
@@ -41,7 +38,15 @@ const Add = () => {
     formData.append('category', data.category);
     formData.append('image', image);
     setAddingData(true);
-    const response = await axios.post(`${url}/api/food/add`, formData);
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === '' || image === false) {
+        setAddingData(false);
+        return toast.error('Fill all details');
+      }
+    }
+
+    const response = await foodService.addFood(formData);
     if (response.data.success) {
       setData({
         name: '',
@@ -137,7 +142,12 @@ const Add = () => {
             />
           </Flex>
         </Flex>
-        <Button onClick={onSubmitHandler} maxW='120px' colorScheme='blackAlpha' isLoading={addingData}>
+        <Button
+          onClick={onSubmitHandler}
+          maxW='120px'
+          colorScheme='blackAlpha'
+          isLoading={addingData}
+        >
           Add
         </Button>
       </FormControl>

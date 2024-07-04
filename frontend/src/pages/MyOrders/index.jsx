@@ -1,21 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
-import axios from 'axios';
 import MyOrder from '../MyOrder';
 import { Box, Flex, Grid, Spinner, Text } from '@chakra-ui/react';
+import { orderService } from '../../services';
 
 const MyOrders = () => {
   const [data, setData] = useState();
   const [fetchData, setFetchData] = useState(false);
-  const { url, token } = useContext(StoreContext);
+  const { token } = useContext(StoreContext);
 
   const fetchOrders = async () => {
     setFetchData(true);
-    const response = await axios.post(
-      `${url}/api/order/userOrders`,
-      {},
-      { headers: { token } }
-    );
+    const response = await orderService.usersOrder(token);
+
     const sortedData = response.data.data.sort((a, b) =>
       b.date.localeCompare(a.date)
     );

@@ -1,15 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { assets } from '../../assets/assets';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
-import { StoreContext } from '../../context/StoreContext';
-import { Button, Flex, FormControl, Image, Input, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  FormControl,
+  Image,
+  Input,
+  Text,
+} from '@chakra-ui/react';
+import { userService } from '../../services';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { url } = useContext(StoreContext);
   const [email, setEmail] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [resetPassword, setResetPassword] = useState({
@@ -22,7 +27,7 @@ const ForgotPassword = () => {
   const handleForgotPassword = async (event) => {
     event.preventDefault();
     setIsFetching(true);
-    const response = await axios.get(`${url}/api/user/forgotPassword/${email}`);
+    const response = await userService.forgotPassword(email);
     if (response.data.success) {
       toast.success('Password reset email sent');
     } else {
@@ -48,7 +53,7 @@ const ForgotPassword = () => {
       password: resetPassword.password1,
     };
 
-    const response = await axios.post(`${url}/api/user/resetPassword`, data);
+    const response = await userService.resetPassword(data);
     if (response.data.success) {
       toast.success(response.data.message);
       navigate('/');

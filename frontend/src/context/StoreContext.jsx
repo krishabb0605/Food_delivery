@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { cartService, foodService } from '../services';
 
 export const StoreContext = createContext(null);
 
@@ -15,6 +16,8 @@ const StoreContextProvider = (props) => {
 
   const url = 'https://food-delivery-ed6j.onrender.com';
 
+  axios.defaults.baseURL = url;
+
   const [token, setToken] = useState('');
 
   const addToCart = async (itemId) => {
@@ -24,22 +27,14 @@ const StoreContextProvider = (props) => {
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
     if (token) {
-      await axios.post(
-        url + '/api/cart/add',
-        { itemId },
-        { headers: { token } }
-      );
+      await cartService.addToCart(itemId, token);
     }
   };
 
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (token) {
-      await axios.post(
-        url + '/api/cart/remove',
-        { itemId },
-        { headers: { token } }
-      );
+      await cartService.removeFromCart(itemId, token);
     }
   };
 
@@ -56,7 +51,7 @@ const StoreContextProvider = (props) => {
 
   const fetchFoodList = async () => {
     setIsFetching(true);
-    const response = await axios.get(`${url}/api/food/list`);
+    const response = await foodService.listFood();
     setFoodList(response.data.data);
     setIsFetching(false);
   };
@@ -66,13 +61,7 @@ const StoreContextProvider = (props) => {
   };
 
   const loadCartData = async (token) => {
-    const response = await axios.post(
-      url + '/api/cart/get',
-      {},
-      {
-        headers: { token },
-      }
-    );
+    const response = await cartService.getCart(token);
     setCartItems(response.data.cartData);
   };
 
@@ -88,14 +77,14 @@ const StoreContextProvider = (props) => {
 
   useEffect(() => {
     async function loadData() {
-      await fetchFoodList();
       if (localStorage.getItem('token') && localStorage.getItem('verified')) {
+        await fetchFoodList();
         setToken(localStorage.getItem('token'));
         await loadCartData(localStorage.getItem('token'));
       }
     }
     loadData();
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   const contextValue = {
     food_list,

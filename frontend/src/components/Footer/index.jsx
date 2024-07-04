@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { assets } from '../../assets/assets';
-import { Flex, Grid, Image, Text } from '@chakra-ui/react';
+import { Flex, Grid, Icon, Image, Text } from '@chakra-ui/react';
+import { FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -22,7 +23,14 @@ const Footer = () => {
         gap='80px'
       >
         <Flex flexDir='column' alignItems='start' gap='20px'>
-          <Image src={assets.logo} alt='logo' />
+          <Image
+            src={assets.cooking_logo}
+            alt='logo'
+            h='70px'
+            w='70px'
+            bg='white'
+            borderRadius='50%'
+          />
           <p>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet
             provident velit ratione eveniet quisquam rerum fugit vero! Quis
@@ -31,25 +39,10 @@ const Footer = () => {
             repellendus cumque est libero, inventore aliquid ullam accusamus
             ipsum. Quae assumenda mollitia sint rerum?
           </p>
-          <Flex>
-            <Image
-              src={assets.facebook_icon}
-              alt='facebook'
-              width='40px'
-              mr='15px'
-            />
-            <Image
-              src={assets.twitter_icon}
-              alt='twitter'
-              width='40px'
-              mr='15px'
-            />
-            <Image
-              src={assets.linkedin_icon}
-              alt='linkedin'
-              width='40px'
-              mr='15px'
-            />
+          <Flex gap='20px'>
+            <Icon as={FaFacebook} alt='facebook' w='30px' h='30px' />
+            <Icon as={FaTwitter} alt='twitter' w='30px' h='30px' />
+            <Icon as={FaLinkedin} alt='linkedin' w='30px' h='30px' />
           </Flex>
         </Flex>
 

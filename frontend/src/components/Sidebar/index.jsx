@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { assets } from '../../assets/assets';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Box, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import { IoMdAdd } from 'react-icons/io';
+import { FaListUl } from 'react-icons/fa';
+import { IoReceiptOutline } from 'react-icons/io5';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -22,7 +24,7 @@ const Sidebar = () => {
     >
       <Flex pt='50px' pl='20%' flexDir='column' gap='20px' className='sidebar'>
         <Flex
-          onClick={() => navigate('/add')}
+          onClick={() => navigate('/')}
           alignItems='center'
           gap='12px'
           border='1px solid #a9a9a9'
@@ -30,9 +32,17 @@ const Sidebar = () => {
           p='8px 10px'
           cursor='pointer'
           borderRight='0'
-          className={currState === '/add' ? 'active' : ''}
+          className={currState === '/' ? 'active' : ''}
         >
-          <Image src={assets.add_icon} alt='' />
+          <Icon
+            as={IoMdAdd}
+            alt=''
+            w='28px'
+            h='28px'
+            border='1px solid black'
+            borderRadius='50%'
+            p='4px'
+          />
           <Text display={{ base: 'none', lg: 'unset' }}>Add Items</Text>
         </Flex>
         <Flex
@@ -46,7 +56,15 @@ const Sidebar = () => {
           borderRight='0'
           className={currState === '/list' ? 'active' : ''}
         >
-          <Image src={assets.order_icon} alt='' />
+          <Icon
+            as={FaListUl}
+            alt=''
+            w='28px'
+            h='28px'
+            border='1px solid black'
+            borderRadius='4px'
+            p='4px'
+          />
           <Text display={{ base: 'none', lg: 'unset' }}>List Items</Text>
         </Flex>
         <Flex
@@ -60,7 +78,15 @@ const Sidebar = () => {
           borderRight='0'
           className={currState === '/orders' ? 'active' : ''}
         >
-          <Image src={assets.order_icon} alt='' />
+          <Icon
+            as={IoReceiptOutline}
+            alt=''
+            w='28px'
+            h='28px'
+            border='1px solid black'
+            borderRadius='4px'
+            p='4px'
+          />
           <Text display={{ base: 'none', lg: 'unset' }}>Orders</Text>
         </Flex>
       </Flex>

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { assets } from '../../assets/assets';
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import { IoMdAdd, IoMdRemove } from 'react-icons/io';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 
 const FoodItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart, url } = useContext(
@@ -23,18 +24,21 @@ const FoodItem = ({ id, name, price, description, image }) => {
           alt='food_item_image'
           width='100%'
           borderRadius='15px 15px 0px 0px'
+          userSelect='none'
         />
 
         {!cartItems[id] ? (
-          <Image
-            width='35px'
+          <Icon
+            background='white'
+            p='4px'
+            transform='scale(2)'
             pos='absolute'
             bottom='15px'
             right='15px'
             cursor='pointer'
             borderRadius='50%'
             onClick={() => addToCart(id)}
-            src={assets.add_icon_white}
+            as={IoMdAdd}
             alt='white'
           />
         ) : (
@@ -43,24 +47,32 @@ const FoodItem = ({ id, name, price, description, image }) => {
             bottom='15px'
             right='15px'
             alignItems='center'
-            gap='10px'
-            padding='6px'
+            gap='16px'
+            padding='8px 12px'
             borderRadius='50px'
             backgroundColor='white'
           >
-            <Image
-              src={assets.remove_icon_red}
+            <Icon
+              p='4px'
+              transform='scale(2)'
               alt='descrease'
-              width='30px'
+              bg='#fecfd2'
+              color='red'
+              borderRadius='50%'
+              as={IoMdRemove}
               cursor='pointer'
               onClick={() => removeFromCart(id)}
             />
-            <Text>{cartItems[id]}</Text>
-            <Image
-              src={assets.add_icon_green}
+            <Text userSelect='none'>{cartItems[id]}</Text>
+            <Icon
+              p='4px'
+              transform='scale(2)'
               alt='increase'
-              width='30px'
+              color='green'
+              bg='#d5ffd9'
+              borderRadius='50%'
               cursor='pointer'
+              as={IoMdAdd}
               onClick={() => addToCart(id)}
             />
           </Flex>
@@ -71,7 +83,13 @@ const FoodItem = ({ id, name, price, description, image }) => {
           <Text fontSize='20px' fontWeight='600'>
             {name}
           </Text>
-          <Image width='70px' src={assets.rating_starts} alt='rating-star' />
+          <Flex gap='4px'>
+            <Icon as={FaStar} alt='rating-star' color='orange' />
+            <Icon as={FaStar} alt='rating-star' color='orange' />
+            <Icon as={FaStar} alt='rating-star' color='orange' />
+            <Icon as={FaStar} alt='rating-star' color='orange' />
+            <Icon as={FaRegStar} alt='rating-star' color='orange' />
+          </Flex>
         </Flex>
         <Text color='#676767'>{description}</Text>
         <Text color='tomato' fontWeight='500' my='10px'>

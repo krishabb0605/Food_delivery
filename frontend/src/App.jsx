@@ -6,7 +6,6 @@ import { AdminNavbar, EntryPage, ForgotPassword, Navbar } from './components';
 import {
   Add,
   Cart,
-  ChefDetail,
   Home,
   List,
   MyOrders,
@@ -40,8 +39,7 @@ const App = () => {
             </Route>
           ) : (
             <Route element={<AdminNavbar />}>
-              <Route index element={<ChefDetail />} />
-              <Route path='/add' element={<Add />} />
+              <Route index element={<Add />} />
               <Route path='/list' element={<List />} />
               <Route path='/orders' element={<Orders />} />
             </Route>

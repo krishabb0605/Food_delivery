@@ -18,6 +18,7 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
+import { userService } from '../../services';
 
 const EntryPage = ({ handleRole }) => {
   const [currState, setCurrState] = useState('Login');
@@ -28,7 +29,7 @@ const EntryPage = ({ handleRole }) => {
   const [user, setUser] = useState();
   const [profile, setProfile] = useState();
   const [validationToken, setValidationToken] = useState();
-  const { url, token, setToken } = useContext(StoreContext);
+  const { setToken } = useContext(StoreContext);
   const [currentStepRegister, setCurrentStepRegister] = useState(0);
   const [userAllData, setUserAllData] = useState('');
 
@@ -90,39 +91,37 @@ const EntryPage = ({ handleRole }) => {
   const onLogin = async (event) => {
     event.preventDefault();
 
-    let newUrl = url;
+    let userRole;
 
     if (currState === 'Login') {
-      newUrl += '/api/user/login';
+      userRole = 'login';
     } else {
-      newUrl += '/api/user/register';
+      userRole = 'register';
     }
-
     if (data.role === 'admin' && currState !== 'Login') {
       let code = prompt('Please Enter Admin Code :');
       if (code === 'admin@123') {
-        handleLoginProcess(newUrl);
+        handleLoginProcess(userRole);
       } else {
         toast.error('Enter valid admin code');
       }
     } else {
-      handleLoginProcess(newUrl);
+      handleLoginProcess(userRole);
     }
   };
 
-  const handleLoginProcess = async (newUrl) => {
+  const handleLoginProcess = async (userRole) => {
     setIsLogin(true);
-    const response = await axios.post(newUrl, data);
+    const response = await userService.user(userRole, data);
     if (response.data.success) {
       setToken(response.data.token);
       handleRole(response.data.user.role);
       setUserAllData(response.data.user);
 
       if (currState !== 'Login') {
-        await axios.post(`${url}/api/user/verification`, {
-          user: response.data.user,
-        });
+        await userService.sendVerificationEmail(response.data.user);
       }
+
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('role', response.data.user.role);
@@ -133,9 +132,7 @@ const EntryPage = ({ handleRole }) => {
   };
 
   const handleResend = async () => {
-    const response = await axios.post(`${url}/api/user/verification`, {
-      user: userAllData,
-    });
+    const response = await userService.sendVerificationEmail(userAllData);
     if (response.data.success) {
       toast.success(response.data.message);
     } else {
@@ -146,22 +143,15 @@ const EntryPage = ({ handleRole }) => {
   const handleVerification = async (event) => {
     event.preventDefault();
     setIsVerifiedEmail(true);
-    const response = await axios.get(
-      `${url}/api/user/verify-email/${validationToken}`
-    );
-
+    const response = await userService.verifyUser(validationToken);
     if (response.data.success) {
       localStorage.setItem('verified', true);
       navigate('/', { replace: true });
     } else {
-      toast.error(response.data.message);
+      toast.error('Invalid OTP');
     }
     setIsVerifiedEmail(false);
   };
-
-  useEffect(() => {
-    console.log(validationToken);
-  }, [validationToken]);
 
   return (
     <Flex
@@ -367,22 +357,11 @@ const EntryPage = ({ handleRole }) => {
                 We've sent a verification code to your email -
                 krishabhingaradiya1234@gmail.com
               </Box>
-              {/* <Input
-                type='number'
-                name='verification'
-                id='verification'
-                bg='rgb(232, 240, 254)'
-                _placeholder={{ fontSize: '14px' }}
-                width='90%'
-                value={validationToken}
-                placeholder='Enter verification code'
-                onChange={(e) => setValidationToken(parseInt(e.target.value))}
-              /> */}
+
               <HStack justifyContent='space-evenly' w='100%' gap='0'>
                 <PinInput
                   otp
                   mask
-                  // value={validationToken ? validationToken : ''}
                   onChange={(e) => setValidationToken(parseInt(e))}
                   colorScheme='purple'
                 >
