@@ -82,13 +82,13 @@ const sendVerificationEmail = async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'krishabhingaradiya1234@gmail.com',
-      pass: 'comjqbcqomsdcazk',
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
 
   const mailOptions = {
-    from: 'krishabhingaradiya1234@gmail.com',
+    from: process.env.EMAIL_USERNAME,
     to: user.email,
     subject: 'Verify Your Email Address',
     html: `<p>Your verification code: <code>${user.verificationToken}</code></p>`,
@@ -143,13 +143,13 @@ const forgotPassword = async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'krishabhingaradiya1234@gmail.com',
-      pass: 'comjqbcqomsdcazk',
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
 
   const mailOptions = {
-    from: 'krishabhingaradiya1234@gmail.com',
+    from: process.env.EMAIL_USERNAME,
     to: email,
     subject: 'Reset password',
     html: `<p>Click on link to reset password: <code>${frontend_url}/forgotPassword?email=${email}</code></p>`,

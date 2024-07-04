@@ -35,7 +35,7 @@ $ git clone https://github.com/krishabb0605/Food_delivery.git
 
 You need client and server runs concurrently in different terminal session, in order to make them talk to each other
 
-## Client-side usage (PORT : 5173)
+# Client-side usage (PORT : 5173)
 ```terminal
 $ cd frontend          // Go to frontend folder
 $ yarn # or npm install    // Install packages
@@ -43,9 +43,25 @@ $ npm run dev        // Run it locally
 $ npm run build       // this will build the frontend code to es5 js codes and generate a dist file
 ```
 
-## Server-side usage (PORT : 4001)
+# Server-side usage (PORT : 4001)
 
-### ENV Variables
+## Stripe Payment Setup
+
+**To set up Stripe payment gateway, follow these steps:**
+1. Create a Stripe account and obtain your Stripe secret key.
+2. Add the Stripe secret key to your .env file: STRIPE_SECRET_KEY = "YOUR_STRIPE_SECRET_KEY"
+3. Install the Stripe library by running npm install stripe or yarn add stripe in your project root directory.
+
+## Nodemailer Setup (For Sending Mail)
+
+**To set up Nodemailer for sending emails, follow these steps:**
+1. Install Nodemailer by running npm install nodemailer or yarn add nodemailer in your project root directory.
+2. Add email configuration variables to your .env file:  EMAIL_USERNAME, and EMAIL_PASSWORD.
+3. Create transporter Object using that email.
+4. Configure mailoptions object.
+5. Deliver message with sendmail().
+
+## ENV Variables
 
 Make Sure to Create a .env file in root directory and add appropriate variables in order to use the app.
 
