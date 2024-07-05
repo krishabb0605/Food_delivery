@@ -101,6 +101,7 @@ const Add = () => {
             placeholder='Type here'
             onChange={onChangeHandler}
             value={data.name}
+            borderColor='#0000004d'
           />
         </Flex>
         <Flex flexDir='column' gap='20px' width='max(40%,280px)'>
@@ -112,13 +113,19 @@ const Add = () => {
             placeholder='Write Content here'
             onChange={onChangeHandler}
             value={data.description}
+            borderColor='#0000004d'
             required
           ></Textarea>
         </Flex>
         <Flex gap='30px'>
           <Flex flexDir='column' gap='20px'>
             <Text>Product category</Text>
-            <Select name='category' onChange={onChangeHandler} maxW='120px'>
+            <Select
+              name='category'
+              onChange={onChangeHandler}
+              maxW='120px'
+              borderColor='#0000004d'
+            >
               <option value='Salad'>Salad</option>
               <option value='Rolls'>Rolls</option>
               <option value='Desserts'>Desserts</option>
@@ -139,6 +146,7 @@ const Add = () => {
               onChange={onChangeHandler}
               value={data.price}
               placeholder='$20'
+              borderColor='#0000004d'
             />
           </Flex>
         </Flex>

@@ -3,13 +3,23 @@ import { toast } from 'react-toastify';
 import { MdDelete } from 'react-icons/md';
 
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Grid, Image, Spinner, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  Image,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 import foodService from '../../services/food.service';
 
 const List = () => {
   const { url } = useContext(StoreContext);
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deletedId, setDeletedId] = useState(null);
 
   const fetchList = async () => {
     const response = await foodService.listFood();
@@ -22,6 +32,8 @@ const List = () => {
   };
 
   const handleRemoveFood = async (foodId) => {
+    setIsDeleting(true);
+    setDeletedId(foodId);
     const response = await foodService.removeFood(foodId);
 
     await fetchList();
@@ -30,6 +42,8 @@ const List = () => {
     } else {
       toast.error('Error while deleting data');
     }
+    setIsDeleting(false);
+    setDeletedId(null);
   };
 
   useEffect(() => {
@@ -76,7 +90,9 @@ const List = () => {
           <Text fontWeight='700'>Name</Text>
           <Text fontWeight='700'>Category</Text>
           <Text fontWeight='700'>Price</Text>
-          <Text fontWeight='700'>Action</Text>
+          <Text fontWeight='700' justifySelf='center'>
+            Action
+          </Text>
         </Grid>
         {list.map((item, index) => {
           return (
@@ -94,15 +110,20 @@ const List = () => {
             >
               <Image
                 w='50px'
+                h='40px'
                 src={`${url}/images/` + item.image}
                 alt='food-image'
               />
               <Text>{item.name}</Text>
               <Text>{item.category}</Text>
-              <Text>{item.price}</Text>
-              <Text cursor='pointer' onClick={() => handleRemoveFood(item._id)}>
+              <Text>$ {item.price}</Text>
+              <Button
+                cursor='pointer'
+                isLoading={deletedId === item._id ? isDeleting : false}
+                onClick={() => handleRemoveFood(item._id)}
+              >
                 <MdDelete />
-              </Text>
+              </Button>
             </Grid>
           );
         })}

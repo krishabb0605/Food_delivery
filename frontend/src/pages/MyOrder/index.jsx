@@ -135,7 +135,7 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
                 );
               })}
             </Flex>
-            <b>Amount : ${order.amount}</b>
+            <Text fontWeight='bold'>Amount : ${order.amount}</Text>
           </Flex>
           <Flex flexDir='column' className='stepper-vertical'>
             <Box className={`step ${currentStep >= 1 ? 'completed' : ''}`}>

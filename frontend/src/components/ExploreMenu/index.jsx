@@ -42,7 +42,7 @@ const ExploreMenu = () => {
             >
               <Image
                 border={category === item.menu_name ? '4px solid tomato' : ''}
-                padding={category === item.menu_name ? '2px' : ''}
+                padding={category === item.menu_name ? '2px' : '0px'}
                 src={item.menu_image}
                 alt='menu-image'
                 width='7.5vw'

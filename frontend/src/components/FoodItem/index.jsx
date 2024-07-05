@@ -23,6 +23,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
           src={url + '/images/' + image}
           alt='food_item_image'
           width='100%'
+          h='194px'
           borderRadius='15px 15px 0px 0px'
           userSelect='none'
         />
@@ -78,9 +79,21 @@ const FoodItem = ({ id, name, price, description, image }) => {
           </Flex>
         )}
       </Box>
-      <Box p='20px'>
+      <Box p='16px'>
         <Flex justifyContent='space-between' alignItems='center' mb='10px'>
-          <Text fontSize='20px' fontWeight='600'>
+          <Text
+            fontSize='16px'
+            fontWeight='600'
+            w='116px'
+            overflow='hidden'
+            textOverflow='ellipsis'
+            style={{ textWrap: 'nowrap' }}
+            _hover={{
+              textOverflow: 'clip',
+              width: 'unset',
+              overflow: 'unset',
+            }}
+          >
             {name}
           </Text>
           <Flex gap='4px'>

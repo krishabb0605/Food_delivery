@@ -19,6 +19,8 @@ import {
   Modal,
   ModalContent,
   ModalOverlay,
+  Spinner,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { uniq } from 'lodash';
@@ -35,13 +37,14 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchQuery, setSearchQuery] = useState('');
-  const { getTotalCartAmount, logout, handleCategory } = useContext(
+  const { getTotalCartAmount, logout, handleCategory, isFetching } = useContext(
     StoreContext
   );
+
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   useEffect(() => {
     menu_list.map((menu) =>
       setMenuOptions((prev) => [...prev, menu.menu_name])
@@ -54,13 +57,20 @@ const Navbar = () => {
   }, [searchQuery]);
   menuOptions = uniq(menuOptions);
 
-  useEffect(() => {
+  const handleMenu = (data) => {
     if (showMenu) {
-      setTimeout(() => {
-        setShowMenu(false);
-      }, 2000);
+      return setShowMenu(false);
     }
-  }, [showMenu]);
+    setShowMenu(data);
+  };
+
+  if (isFetching) {
+    return (
+      <Flex alignItems='center' justifyContent='center' h='100vh'>
+        <Spinner size='xl' />
+      </Flex>
+    );
+  }
 
   return (
     <Box bg='white'>
@@ -166,7 +176,7 @@ const Navbar = () => {
                 color='#4b537b'
                 transform='scale(1.3)'
                 cursor='pointer'
-                onClick={() => setShowMenu(true)}
+                onClick={() => handleMenu(true)}
               />
               {showMenu && (
                 <Flex
@@ -186,12 +196,12 @@ const Navbar = () => {
                     gap='10px'
                     cursor='pointer'
                     onClick={() => {
-                      navigate('/myorders'), setShowMenu(false);
+                      navigate('/myorders'), handleMenu(false);
                     }}
                     _hover={{ color: 'tomato' }}
                   >
                     <Icon as={HiOutlineShoppingBag} alt='bag' color='#fc6965' />
-                    <p>Orders</p>
+                    <Text>Orders</Text>
                   </Flex>
                   <hr />
 
@@ -200,12 +210,12 @@ const Navbar = () => {
                     gap='10px'
                     cursor='pointer'
                     onClick={() => {
-                      logout(), setShowMenu(false);
+                      logout(), handleMenu(false);
                     }}
                     _hover={{ color: 'tomato' }}
                   >
                     <Icon as={MdLogout} alt='logout' color='#fc6965' />
-                    <p>Logout</p>
+                    <Text>Logout</Text>
                   </Flex>
                 </Flex>
               )}

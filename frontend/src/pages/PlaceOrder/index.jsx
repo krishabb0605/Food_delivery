@@ -224,24 +224,24 @@ const PlaceOrder = () => {
           <Text fontSize='24px' fontWeight='700'>
             Cart Total
           </Text>
-          <div>
+          <Box>
             <Flex justifyContent='space-between' color='#444'>
-              <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
+              <Text>Subtotal</Text>
+              <Text>${getTotalCartAmount()}</Text>
             </Flex>
             <hr />
             <Flex justifyContent='space-between' color='#444'>
-              <p>Delivary Fee</p>
-              <p>${getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <Text>Delivary Fee</Text>
+              <Text>${getTotalCartAmount() === 0 ? 0 : 2}</Text>
             </Flex>
             <hr />
             <Flex justifyContent='space-between' color='#444'>
-              <b>Total</b>
-              <b>
+              <Text fontWeight='bold'>Total</Text>
+              <Text fontWeight='bold'>
                 ${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}
-              </b>
+              </Text>
             </Flex>
-          </div>
+          </Box>
           <Button
             onClick={placeOrder}
             mt='30px'

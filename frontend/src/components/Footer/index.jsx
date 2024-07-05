@@ -31,14 +31,14 @@ const Footer = () => {
             bg='white'
             borderRadius='50%'
           />
-          <p>
+          <Text>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet
             provident velit ratione eveniet quisquam rerum fugit vero! Quis
             architecto reiciendis a labore natus id temporibus quasi debitis
             mollitia. Dignissimos fuga debitis, quae officiis odio a laudantium,
             repellendus cumque est libero, inventore aliquid ullam accusamus
             ipsum. Quae assumenda mollitia sint rerum?
-          </p>
+          </Text>
           <Flex gap='20px'>
             <Icon as={FaFacebook} alt='facebook' w='30px' h='30px' />
             <Icon as={FaTwitter} alt='twitter' w='30px' h='30px' />

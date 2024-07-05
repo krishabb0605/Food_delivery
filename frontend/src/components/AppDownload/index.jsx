@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { assets } from '../../assets/assets';
-import { Box, Flex, Image } from '@chakra-ui/react';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 
 const AppDownload = () => {
   return (
@@ -13,9 +13,9 @@ const AppDownload = () => {
       fontWeight='600'
       id='app-download'
     >
-      <p>
+      <Text>
         For Better Experience Download <br /> Tomato App
-      </p>
+      </Text>
       <Flex justifyContent='center' gap='max(2vw, 10px)' mt='40px'>
         <Image
           src={assets.play_store}
