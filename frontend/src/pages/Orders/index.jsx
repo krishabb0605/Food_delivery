@@ -51,7 +51,7 @@ const Orders = () => {
 
   if (isLoading) {
     return (
-      <Flex alignItems='center' justifyContent='center' h='40vh' w='90%'>
+      <Flex alignItems='center' justifyContent='center' h='40vh' w='80%'>
         <Spinner size='xl' />
       </Flex>
     );

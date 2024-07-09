@@ -45,8 +45,8 @@ const FoodItem = ({ id, name, price, description, image }) => {
         ) : (
           <Flex
             pos='absolute'
-            bottom='15px'
-            right='15px'
+            bottom='6px'
+            right='6px'
             alignItems='center'
             gap='16px'
             padding='8px 12px'

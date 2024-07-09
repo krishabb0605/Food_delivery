@@ -1,7 +1,47 @@
 import React, { useContext } from 'react';
 import { menu_list } from '../../assets/assets';
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
+import { Flex, Image, Text } from '@chakra-ui/react';
 import { StoreContext } from '../../context/StoreContext';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+  
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 8,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  pauseOnHover: true,
+  swipeToSlide: true,
+  arrows: false,
+  responsive: [
+    {
+      breakpoint: 1025,
+      settings: {
+        slidesToShow: 6,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 769,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 426,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        dots: false,
+      },
+    },
+  ],
+};
 
 const ExploreMenu = () => {
   const { category, handleCategory } = useContext(StoreContext);
@@ -21,18 +61,15 @@ const ExploreMenu = () => {
         is to satisfy your cravings and elevate your dining experience, one
         delicious meal at a time.
       </Text>
-      <Flex
-        justifyContent='space-between'
-        alignItems='center'
-        gap='30px'
-        textAlign='center'
-        my='20px'
-        overflowX='auto'
-        style={{ scrollbarWidth: 'none' }}
-      >
+      <Slider {...settings}>
         {menu_list.map((item, index) => {
           return (
-            <Box
+            <Flex
+              display='flex !important'
+              justifyContent='center'
+              alignItems='center'
+              flexDir='column'
+              _focusVisible={{ outline: 'none' }}
               key={index}
               onClick={() =>
                 handleCategory((prev) =>
@@ -59,10 +96,10 @@ const ExploreMenu = () => {
               >
                 {item.menu_name}
               </Text>
-            </Box>
+            </Flex>
           );
         })}
-      </Flex>
+      </Slider>
 
       <hr />
     </Flex>

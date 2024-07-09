@@ -12,9 +12,9 @@ const StoreContextProvider = (props) => {
   const navigate = useNavigate();
   const [category, setCategory] = useState('');
 
-  // const url = 'http://localhost:4001';
+  const url = 'http://localhost:4001';
 
-  const url = 'https://food-delivery-ed6j.onrender.com';
+  // const url = 'https://food-delivery-ed6j.onrender.com';
 
   axios.defaults.baseURL = url;
 
