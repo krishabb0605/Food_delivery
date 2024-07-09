@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, Grid, Image, Input, Text } from '@chakra-ui/react';
+import { MdDelete } from 'react-icons/md';
 
 const Cart = () => {
   const {
@@ -29,7 +30,7 @@ const Cart = () => {
           <Text>Price</Text>
           <Text>Quantity</Text>
           <Text>Total</Text>
-          <Text>Remove</Text>
+          <Text justifySelf='center'>Remove</Text>
         </Grid>
         <br />
         <hr />
@@ -55,7 +56,13 @@ const Cart = () => {
                   <Text>${item.price}</Text>
                   <Text>{cartItems[item._id]}</Text>
                   <Text>${item.price * cartItems[item._id]}</Text>
-                  <Text onClick={() => removeFromCart(item._id)}>x</Text>
+                  <Text
+                    onClick={() => removeFromCart(item._id)}
+                    justifySelf='center'
+                    cursor='pointer'
+                  >
+                    <MdDelete />
+                  </Text>
                 </Grid>
                 <hr />
               </Box>
