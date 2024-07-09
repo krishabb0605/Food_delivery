@@ -22,7 +22,7 @@ const ForgotPassword = () => {
     password2: '',
   });
 
-  const email1 = new URLSearchParams(location.search).get('email');
+  const fetchedEmail = new URLSearchParams(location.search).get('email');
 
   const handleForgotPassword = async (event) => {
     event.preventDefault();
@@ -49,7 +49,7 @@ const ForgotPassword = () => {
     }
 
     const data = {
-      email: email1,
+      email: fetchedEmail,
       password: resetPassword.password1,
     };
 
@@ -86,7 +86,7 @@ const ForgotPassword = () => {
           justifyContent='space-between'
           w={{ base: '325px', sm: '400px' }}
         >
-          {!email1 ? (
+          {!fetchedEmail ? (
             <FormControl
               display='flex'
               flexDir='column'

@@ -21,58 +21,53 @@ import {
 import { userService } from '../../services';
 
 const EntryPage = ({ handleRole }) => {
+  const [isFetching, setIsFetching] = useState(false);
   const [currState, setCurrState] = useState('Login');
   const [data, setData] = useState({ role: 'user', email: '', password: '' });
-  const [isLogin, setIsLogin] = useState(false);
-  const [isLoginGoogle, setIsLoginGoogle] = useState(false);
-  const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
-  const [user, setUser] = useState();
-  const [profile, setProfile] = useState();
+
+  const [isLoginWithGoogle, setIsLoginWithGoogle] = useState(false);
+  const [googleUserData, setGoogleUserData] = useState();
+
   const [validationToken, setValidationToken] = useState();
   const { setToken } = useContext(StoreContext);
-  const [currentStepRegister, setCurrentStepRegister] = useState(0);
-  const [userAllData, setUserAllData] = useState('');
 
+  const [userDataForVerification, setUserDataForVerification] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      if (currState !== 'Login') {
-        if (JSON.parse(localStorage.getItem('user')).verified === false) {
-          setCurrentStepRegister(1);
-        }
-      } else {
-        if (JSON.parse(localStorage.getItem('user')).verified === false) {
-          setCurrentStepRegister(1);
-        } else {
-          localStorage.setItem('verified', true);
-          navigate('/', { replace: true });
-        }
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (token) {
+      if (user && user.verified === false) {
+        setCurrState('verification');
+      } else if (currState === 'Login') {
+        localStorage.setItem('verified', true);
+        navigate('/', { replace: true });
       }
     }
-  }, [localStorage.getItem('token'), localStorage.getItem('user')]);
+  }, [currState, localStorage.getItem('token'), localStorage.getItem('user')]);
 
   const googleLogin = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
+    onSuccess: (codeResponse) => setGoogleUserData(codeResponse),
     onError: (error) => console.log('Login Failed:', error),
   });
 
   useEffect(() => {
     const getProfileData = async () => {
-      if (user) {
+      if (googleUserData) {
         try {
           const response = await axios.get(
-            `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+            `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleUserData.access_token}`,
             {
               headers: {
-                Authorization: `Bearer ${user.access_token}`,
+                Authorization: `Bearer ${googleUserData.access_token}`,
                 Accept: 'application/json',
               },
             }
           );
-
-          setProfile(response.data);
-          setIsLoginGoogle(false);
+          console.log(response.data);
+          setIsLoginWithGoogle(false);
         } catch (e) {
           alert('Error while fetching data');
         }
@@ -80,7 +75,7 @@ const EntryPage = ({ handleRole }) => {
     };
 
     getProfileData();
-  }, [user]);
+  }, [googleUserData]);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -88,17 +83,17 @@ const EntryPage = ({ handleRole }) => {
     setData((data) => ({ ...data, [name]: value }));
   };
 
-  const onLogin = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     let userRole;
 
     if (currState === 'Login') {
       userRole = 'login';
-    } else {
+    } else if (currState === 'Sign Up') {
       userRole = 'register';
     }
-    if (data.role === 'admin' && currState !== 'Login') {
+    if (data.role === 'admin' && currState === 'Sign Up') {
       let code = prompt('Please Enter Admin Code :');
       if (code === 'admin@123') {
         handleLoginProcess(userRole);
@@ -111,15 +106,15 @@ const EntryPage = ({ handleRole }) => {
   };
 
   const handleLoginProcess = async (userRole) => {
-    setIsLogin(true);
+    setIsFetching(true);
     const response = await userService.user(userRole, data);
     if (response.data.success) {
       setToken(response.data.token);
       handleRole(response.data.user.role);
-      setUserAllData(response.data.user);
+      setUserDataForVerification(response.data.user);
 
-      if (currState !== 'Login') {
-        await userService.sendVerificationEmail(response.data.user);
+      if (currState === 'Sign Up') {
+        handleSendVerificationEmail(response.data.user);
       }
 
       localStorage.setItem('token', response.data.token);
@@ -128,11 +123,12 @@ const EntryPage = ({ handleRole }) => {
     } else {
       toast.error(response.data.message);
     }
-    setIsLogin(false);
+    setIsFetching(false);
   };
 
-  const handleResend = async () => {
-    const response = await userService.sendVerificationEmail(userAllData);
+  const handleSendVerificationEmail = async (userData) => {
+    const data = userData ? userData : userDataForVerification;
+    const response = await userService.sendVerificationEmail(data);
     if (response.data.success) {
       toast.success(response.data.message);
     } else {
@@ -142,7 +138,7 @@ const EntryPage = ({ handleRole }) => {
 
   const handleVerification = async (event) => {
     event.preventDefault();
-    setIsVerifiedEmail(true);
+    setIsFetching(true);
     const response = await userService.verifyUser(validationToken);
     if (response.data.success) {
       localStorage.setItem('verified', true);
@@ -150,7 +146,7 @@ const EntryPage = ({ handleRole }) => {
     } else {
       toast.error('Invalid OTP');
     }
-    setIsVerifiedEmail(false);
+    setIsFetching(false);
   };
 
   return (
@@ -177,7 +173,7 @@ const EntryPage = ({ handleRole }) => {
           justifyContent='space-between'
           w={{ base: '325px', sm: '400px' }}
         >
-          {currentStepRegister === 0 ? (
+          {currState !== 'verification' ? (
             <Flex
               alignItems='center'
               flexDir='column'
@@ -274,28 +270,28 @@ const EntryPage = ({ handleRole }) => {
                   <></>
                 )}
                 <Button
-                  onClick={onLogin}
+                  onClick={handleLogin}
                   border='none'
                   colorScheme='orange'
                   fontWeight='bold'
                   cursor='pointer'
                   display='flex'
                   justifyContent='center'
-                  isLoading={isLogin}
+                  isLoading={isFetching}
                 >
                   {currState !== 'Login' ? 'Create Account' : 'Login'}
                 </Button>
 
                 <Button
                   onClick={() => {
-                    setIsLoginGoogle(true), googleLogin();
+                    setIsLoginWithGoogle(true), googleLogin();
                   }}
                   borderRadius='4px'
                   borderColor='#d0d5dd'
                   bg='rgb(239, 239, 239)'
                   display='flex'
                   justifyContent='center'
-                  isLoading={isLoginGoogle}
+                  isLoading={isLoginWithGoogle}
                 >
                   <Flex
                     display='flex'
@@ -382,7 +378,7 @@ const EntryPage = ({ handleRole }) => {
                 alignSelf='baseline'
                 marginLeft='20px'
                 cursor='pointer'
-                onClick={handleResend}
+                onClick={() => handleSendVerificationEmail()}
               >{`Resend verification >`}</Text>
               <Button
                 onClick={handleVerification}
@@ -391,7 +387,7 @@ const EntryPage = ({ handleRole }) => {
                 fontWeight='bold'
                 cursor='pointer'
                 width='90%'
-                isLoading={isVerifiedEmail}
+                isLoading={isFetching}
                 mb='16px'
               >
                 Submit
