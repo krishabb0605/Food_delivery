@@ -1,13 +1,22 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { assets } from '../../assets/assets';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { StoreContext } from '../../context/StoreContext';
-import { Button, Flex, Icon, Image } from '@chakra-ui/react';
+import { Box, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
+import { MdLogout } from 'react-icons/md';
 
 const AdminNavbar = () => {
   const { logout } = useContext(StoreContext);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleMenu = (data) => {
+    if (showMenu) {
+      return setShowMenu(false);
+    }
+    setShowMenu(data);
+  };
 
   return (
     <>
@@ -21,16 +30,46 @@ const AdminNavbar = () => {
         borderBottom='1px solid #a9a9a9'
       >
         <Image src={assets.cooking_logo} alt='logo' w='90px' h='75px' />
-        <Button onClick={logout} colorScheme='orange'>
-          Logout
-        </Button>
-        <Icon
-          width='40px'
-          as={FaUser}
-          alt=''
-          color='#4b537b'
-          transform='scale(1.3)'
-        />
+
+        <Box pos='relative'>
+          <Icon
+            width='40px'
+            as={FaUser}
+            alt=''
+            color='#4b537b'
+            transform='scale(2)'
+            cursor='pointer'
+            onClick={() => handleMenu(true)}
+          />
+          {showMenu && (
+            <Flex
+              pos='absolute'
+              flexDir='column'
+              right='0'
+              top='30px'
+              zIndex='1'
+              bg='#fff2ed'
+              padding='12px 25px'
+              borderRadius='4px'
+              border='1px solid tomato'
+              outline='2px solid white'
+              width='max-content'
+            >
+              <Flex
+                alignItems='center'
+                gap='10px'
+                cursor='pointer'
+                onClick={() => {
+                  logout(), handleMenu(false);
+                }}
+                _hover={{ color: 'tomato' }}
+              >
+                <Icon as={MdLogout} alt='logout' color='#fc6965' />
+                <Text>Logout</Text>
+              </Flex>
+            </Flex>
+          )}
+        </Box>
       </Flex>
       <Flex>
         <Sidebar />
