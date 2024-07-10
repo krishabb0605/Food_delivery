@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { assets, menu_list } from '../../assets/assets';
+import { assets } from '../../assets/assets';
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import Footer from '../Footer';
 import { StoreContext } from '../../context/StoreContext';
@@ -37,18 +37,20 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchQuery, setSearchQuery] = useState('');
-  const { getTotalCartAmount, logout, handleCategory, isFetching } = useContext(
-    StoreContext
-  );
+  const {
+    getTotalCartAmount,
+    logout,
+    handleCategory,
+    isFetching,
+    categoryData,
+  } = useContext(StoreContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    menu_list.map((menu) =>
-      setMenuOptions((prev) => [...prev, menu.menu_name])
-    );
+    categoryData.map((menu) => setMenuOptions((prev) => [...prev, menu.name]));
     setMenuOptions((prev) => [...prev]);
   }, []);
 

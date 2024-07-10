@@ -12,9 +12,11 @@ import {
   Text,
   Textarea,
   Switch,
+  Spinner,
 } from '@chakra-ui/react';
 import foodService from '../../services/food.service';
 import { categoryService } from '../../services';
+import { StoreContext } from '../../context/StoreContext';
 
 const Add = () => {
   const [image, setImage] = useState(false);
@@ -26,6 +28,13 @@ const Add = () => {
     price: '',
     category: 'Salad',
   });
+  const { categoryData, isFetching, fetchCategoryList } = useContext(
+    StoreContext
+  );
+
+  useEffect(() => {
+    fetchCategoryList();
+  }, []);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -60,11 +69,9 @@ const Add = () => {
 
     if (isChecked) {
       response = await foodService.addFood(formData);
-      console.log(response);
     } else {
       response = await categoryService.addCategory(formData);
     }
-    console.log(response);
     if (response.data.success) {
       setData({
         name: '',
@@ -79,6 +86,14 @@ const Add = () => {
     }
     setAddingData(false);
   };
+
+  if (isFetching) {
+    return (
+      <Flex alignItems='center' justifyContent='center' h='40vh' w='80%'>
+        <Spinner size='xl' />
+      </Flex>
+    );
+  }
 
   return (
     <Box
@@ -202,14 +217,11 @@ const Add = () => {
                   maxW='120px'
                   borderColor='#0000004d'
                 >
-                  <option value='Salad'>Salad</option>
-                  <option value='Rolls'>Rolls</option>
-                  <option value='Desserts'>Desserts</option>
-                  <option value='Sandwich'>Sandwich</option>
-                  <option value='Cake'>Cake</option>
-                  <option value='Pure veg'>Pure veg</option>
-                  <option value='Pasta'>Pasta</option>
-                  <option value='Noodles'>Noodles</option>
+                  {categoryData.map((data) => (
+                    <option value={data.name} key={data.name}>
+                      {data.name}
+                    </option>
+                  ))}
                 </Select>
               </Flex>
               <Flex flexDir='column' gap='20px'>

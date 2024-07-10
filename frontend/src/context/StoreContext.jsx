@@ -1,20 +1,19 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { cartService, foodService } from '../services';
+import { cartService, categoryService, foodService } from '../services';
+import { API_BASE_URL } from '../config';
 
+const url = API_BASE_URL;
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [food_list, setFoodList] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
   const [category, setCategory] = useState('');
-
-  // const url = 'http://localhost:4001';
-
-  const url = 'https://food-delivery-ed6j.onrender.com';
 
   axios.defaults.baseURL = url;
 
@@ -56,6 +55,13 @@ const StoreContextProvider = (props) => {
     setIsFetching(false);
   };
 
+  const fetchCategoryList = async () => {
+    setIsFetching(true);
+    const response = await categoryService.listCategory();
+    setCategoryData(response.data.data);
+    setIsFetching(false);
+  };
+
   const handleCategory = (category) => {
     setCategory(category);
   };
@@ -79,6 +85,7 @@ const StoreContextProvider = (props) => {
     async function loadData() {
       if (localStorage.getItem('token') && localStorage.getItem('verified')) {
         await fetchFoodList();
+        await fetchCategoryList();
         setToken(localStorage.getItem('token'));
         await loadCartData(localStorage.getItem('token'));
       }
@@ -100,6 +107,8 @@ const StoreContextProvider = (props) => {
     logout,
     category,
     handleCategory,
+    categoryData,
+    fetchCategoryList,
   };
 
   return (

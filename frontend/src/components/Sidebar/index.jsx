@@ -46,7 +46,7 @@ const Sidebar = () => {
           <Text display={{ base: 'none', lg: 'unset' }}>Add Items</Text>
         </Flex>
         <Flex
-          onClick={() => navigate('/list')}
+          onClick={() => navigate('/item')}
           alignItems='center'
           gap='12px'
           border='1px solid #a9a9a9'
@@ -54,7 +54,7 @@ const Sidebar = () => {
           p='8px 10px'
           cursor='pointer'
           borderRight='0'
-          className={currState === '/list' ? 'active' : ''}
+          className={currState === '/item' ? 'active' : ''}
         >
           <Icon
             as={FaListUl}
@@ -66,6 +66,28 @@ const Sidebar = () => {
             p='4px'
           />
           <Text display={{ base: 'none', lg: 'unset' }}>List Items</Text>
+        </Flex>
+        <Flex
+          onClick={() => navigate('/category')}
+          alignItems='center'
+          gap='12px'
+          border='1px solid #a9a9a9'
+          borderRadius='3px 0px 0px 3px'
+          p='8px 10px'
+          cursor='pointer'
+          borderRight='0'
+          className={currState === '/category' ? 'active' : ''}
+        >
+          <Icon
+            as={FaListUl}
+            alt=''
+            w='28px'
+            h='28px'
+            border='1px solid black'
+            borderRadius='4px'
+            p='4px'
+          />
+          <Text display={{ base: 'none', lg: 'unset' }}>List categories</Text>
         </Flex>
         <Flex
           onClick={() => navigate('/orders')}

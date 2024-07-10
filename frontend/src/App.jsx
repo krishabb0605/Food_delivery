@@ -6,8 +6,9 @@ import { AdminNavbar, EntryPage, ForgotPassword, Navbar } from './components';
 import {
   Add,
   Cart,
+  CategoryList,
   Home,
-  List,
+  ItemList,
   MyOrders,
   Orders,
   PlaceOrder,
@@ -40,7 +41,8 @@ const App = () => {
           ) : (
             <Route element={<AdminNavbar />}>
               <Route index element={<Add />} />
-              <Route path='/list' element={<List />} />
+              <Route path='/item' element={<ItemList />} />
+              <Route path='/category' element={<CategoryList />} />
               <Route path='/orders' element={<Orders />} />
             </Route>
           )}

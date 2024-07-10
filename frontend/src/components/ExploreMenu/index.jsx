@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { menu_list } from '../../assets/assets';
 import { Flex, Image, Text } from '@chakra-ui/react';
 import { StoreContext } from '../../context/StoreContext';
 import Slider from 'react-slick';
@@ -44,7 +43,9 @@ const settings = {
 };
 
 const ExploreMenu = () => {
-  const { category, handleCategory } = useContext(StoreContext);
+  const { category, handleCategory, categoryData, url } = useContext(
+    StoreContext
+  );
 
   return (
     <Flex flexDir='column' gap='20px' id='explore-menu'>
@@ -62,7 +63,7 @@ const ExploreMenu = () => {
         delicious meal at a time.
       </Text>
       <Slider {...settings}>
-        {menu_list.map((item, index) => {
+        {categoryData.map((item, index) => {
           return (
             <Flex
               display='flex !important'
@@ -72,15 +73,13 @@ const ExploreMenu = () => {
               _focusVisible={{ outline: 'none' }}
               key={index}
               onClick={() =>
-                handleCategory((prev) =>
-                  prev === item.menu_name ? '' : item.menu_name
-                )
+                handleCategory((prev) => (prev === item.name ? '' : item.name))
               }
             >
               <Image
-                border={category === item.menu_name ? '4px solid tomato' : ''}
-                padding={category === item.menu_name ? '2px' : '0px'}
-                src={item.menu_image}
+                border={category === item.name ? '4px solid tomato' : ''}
+                padding={category === item.name ? '2px' : '0px'}
+                src={`${url}/images/` + item.image}
                 alt='menu-image'
                 width='7.5vw'
                 minW='80px'
@@ -94,7 +93,7 @@ const ExploreMenu = () => {
                 fontSize='max(1.4vw, 16px)'
                 cursor='pointer'
               >
-                {item.menu_name}
+                {item.name}
               </Text>
             </Flex>
           );

@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import foodService from '../../services/food.service';
 
-const List = () => {
+const ItemList = () => {
   const { url } = useContext(StoreContext);
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -131,4 +131,4 @@ const List = () => {
     </Flex>
   );
 };
-export default List;
+export default ItemList;
