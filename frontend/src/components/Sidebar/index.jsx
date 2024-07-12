@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { IoMdAdd } from 'react-icons/io';
 import { FaListUl } from 'react-icons/fa';
 import { IoReceiptOutline } from 'react-icons/io5';

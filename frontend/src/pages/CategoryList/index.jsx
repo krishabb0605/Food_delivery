@@ -28,8 +28,12 @@ const CategoryList = () => {
 
   const fetchCategoryList = async () => {
     setIsFetching(true);
-    const response = await categoryService.listCategory();
-    setCategoryData(response.data.data);
+    try {
+      const response = await categoryService.listCategory();
+      setCategoryData(response.data.data);
+    } catch (error) {
+      toast.error(error);
+    }
     setIsFetching(false);
   };
 
@@ -41,14 +45,17 @@ const CategoryList = () => {
 
   const handleRemoveCategory = async (categoryID) => {
     setDeletingData([true, categoryID]);
+    try {
+      const response = await categoryService.removeCategory(categoryID);
 
-    const response = await categoryService.removeCategory(categoryID);
-
-    await fetchCategoryList();
-    if (response.data.success) {
-      toast.success(response.data.message);
-    } else {
-      toast.error('Error while deleting data');
+      await fetchCategoryList();
+      if (response.data.success) {
+        toast.success(response.data.message);
+      } else {
+        toast.error('Error while deleting data');
+      }
+    } catch (error) {
+      toast.error(error);
     }
     setDeletingData([false, null]);
   };

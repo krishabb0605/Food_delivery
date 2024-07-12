@@ -109,44 +109,56 @@ const EntryPage = ({ handleRole }) => {
 
   const handleLoginProcess = async (userRole) => {
     setIsFetching(true);
-    const response = await userService.user(userRole, data);
-    if (response.data.success) {
-      setToken(response.data.token);
-      handleRole(response.data.user.role);
-      setUserDataForVerification(response.data.user);
+    try {
+      const response = await userService.user(userRole, data);
+      if (response.data.success) {
+        setToken(response.data.token);
+        handleRole(response.data.user.role);
+        setUserDataForVerification(response.data.user);
 
-      if (currState === 'Sign Up') {
-        handleSendVerificationEmail(response.data.user);
+        if (currState === 'Sign Up') {
+          handleSendVerificationEmail(response.data.user);
+        }
+
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('role', response.data.user.role);
+      } else {
+        toast.error(response.data.message);
       }
-
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      localStorage.setItem('role', response.data.user.role);
-    } else {
-      toast.error(response.data.message);
+    } catch (error) {
+      toast.error(error);
     }
     setIsFetching(false);
   };
 
   const handleSendVerificationEmail = async (userData) => {
     const data = userData ? userData : userDataForVerification;
-    const response = await userService.sendVerificationEmail(data);
-    if (response.data.success) {
-      toast.success(response.data.message);
-    } else {
-      toast.success(response.data.message);
+    try {
+      const response = await userService.sendVerificationEmail(data);
+      if (response.data.success) {
+        toast.success(response.data.message);
+      } else {
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error);
     }
   };
 
   const handleVerification = async (event) => {
     event.preventDefault();
     setIsFetching(true);
-    const response = await userService.verifyUser(validationToken);
-    if (response.data.success) {
-      localStorage.setItem('verified', true);
-      navigate('/', { replace: true });
-    } else {
-      toast.error('Invalid OTP');
+    try {
+      const response = await userService.verifyUser(validationToken);
+      if (response.data.success) {
+        localStorage.setItem('verified', true);
+        navigate('/', { replace: true });
+      } else {
+        toast.error('Invalid OTP');
+      }
+    } catch (error) {
+      toast.error(error);
     }
     setIsFetching(false);
   };

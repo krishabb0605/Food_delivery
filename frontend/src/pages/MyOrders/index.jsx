@@ -3,6 +3,7 @@ import { StoreContext } from '../../context/StoreContext';
 import MyOrder from '../MyOrder';
 import { Box, Flex, Grid, Spinner, Text } from '@chakra-ui/react';
 import { orderService } from '../../services';
+import { toast } from 'react-toastify';
 
 const MyOrders = () => {
   const [data, setData] = useState();
@@ -11,12 +12,16 @@ const MyOrders = () => {
 
   const fetchOrders = async () => {
     setFetchData(true);
-    const response = await orderService.usersOrder(token);
+    try {
+      const response = await orderService.usersOrder(token);
 
-    const sortedData = response.data.data.sort((a, b) =>
-      b.date.localeCompare(a.date)
-    );
-    setData(sortedData);
+      const sortedData = response.data.data.sort((a, b) =>
+        b.date.localeCompare(a.date)
+      );
+      setData(sortedData);
+    } catch (error) {
+      toast(error);
+    }
     setFetchData(false);
   };
 

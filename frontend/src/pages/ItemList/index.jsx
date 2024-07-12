@@ -12,7 +12,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
-import foodService from '../../services/food.service';
+import { foodService } from '../../services';
 
 const ItemList = () => {
   const { url } = useContext(StoreContext);
@@ -22,25 +22,33 @@ const ItemList = () => {
   const [deletedId, setDeletedId] = useState(null);
 
   const fetchList = async () => {
-    const response = await foodService.listFood();
-    if (response.data.success) {
-      setList(response.data.data);
-      setIsLoading(false);
-    } else {
-      toast.error('Error while fetching the data');
+    try {
+      const response = await foodService.listFood();
+      if (response.data.success) {
+        setList(response.data.data);
+        setIsLoading(false);
+      } else {
+        toast.error('Error while fetching the data');
+      }
+    } catch (error) {
+      toast.error(error);
     }
   };
 
   const handleRemoveFood = async (foodId) => {
     setIsDeleting(true);
     setDeletedId(foodId);
-    const response = await foodService.removeFood(foodId);
+    try {
+      const response = await foodService.removeFood(foodId);
 
-    await fetchList();
-    if (response.data.success) {
-      toast.success(response.data.message);
-    } else {
-      toast.error('Error while deleting data');
+      await fetchList();
+      if (response.data.success) {
+        toast.success(response.data.message);
+      } else {
+        toast.error('Error while deleting data');
+      }
+    } catch (error) {
+      toast.error(error);
     }
     setIsDeleting(false);
     setDeletedId(null);

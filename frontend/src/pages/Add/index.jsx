@@ -83,21 +83,25 @@ const Add = () => {
         return toast.error('Fill all details');
       }
     }
+    try {
+      let response = await foodService.addFood(formData);
 
-    let response = await foodService.addFood(formData);
-
-    if (response.data.success) {
-      setItemData({
-        name: '',
-        description: '',
-        price: '',
-        category: 'Salad',
-      });
-      setImage(false);
-      toast.success(response.data.message);
-    } else {
-      toast.error(response.data.message);
+      if (response.data.success) {
+        setItemData({
+          name: '',
+          description: '',
+          price: '',
+          category: 'Salad',
+        });
+        setImage(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error);
     }
+
     setAddingData(false);
   };
 
@@ -118,25 +122,29 @@ const Add = () => {
     }
 
     let response;
-    if (addedCategoryData.id) {
-      // update data
-      response = await categoryService.updateCategory(
-        addedCategoryData.id,
-        formData
-      );
-    } else {
-      // add data
-      response = await categoryService.addCategory(formData);
-    }
+    try {
+      if (addedCategoryData.id) {
+        // update data
+        response = await categoryService.updateCategory(
+          addedCategoryData.id,
+          formData
+        );
+      } else {
+        // add data
+        response = await categoryService.addCategory(formData);
+      }
 
-    if (response.data.success) {
-      setAddedCategoryData({
-        name: '',
-        image: false,
-      });
-      toast.success(response.data.message);
-    } else {
-      toast.error(response.data.message);
+      if (response.data.success) {
+        setAddedCategoryData({
+          name: '',
+          image: false,
+        });
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error);
     }
     setAddingData(false);
   };

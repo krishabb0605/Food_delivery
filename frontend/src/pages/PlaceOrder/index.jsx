@@ -32,7 +32,7 @@ const PlaceOrder = () => {
     setData((data) => ({ ...data, [name]: value }));
   };
 
-  const placeOrder = async (event) => {
+  const placeOrder = async () => {
     setIsLoading(true);
     let orderItems = [];
     food_list.map((item) => {
@@ -56,13 +56,17 @@ const PlaceOrder = () => {
       amount: getTotalCartAmount() + 2,
     };
 
-    let response = await orderService.placeOrder(orderData, token);
+    try {
+      let response = await orderService.placeOrder(orderData, token);
 
-    if (response.data.success) {
-      const { session_url } = response.data;
-      window.location.replace(session_url);
-    } else {
-      alert('Error');
+      if (response.data.success) {
+        const { session_url } = response.data;
+        window.location.replace(session_url);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error);
     }
     setIsLoading(false);
   };

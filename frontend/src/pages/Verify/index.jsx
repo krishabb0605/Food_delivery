@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { orderService } from '../../services';
+import { toast } from 'react-toastify';
 
 const Verify = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,11 +11,15 @@ const Verify = () => {
   const navigate = useNavigate();
 
   const verifyPayment = async () => {
-    const response = await orderService.verifyOrder(success, orderId);
-    if (response.data.success) {
-      navigate('/myorders');
-    } else {
-      navigate('/');
+    try {
+      const response = await orderService.verifyOrder(success, orderId);
+      if (response.data.success) {
+        navigate('/myorders');
+      } else {
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error(error);
     }
   };
 

@@ -9,28 +9,36 @@ const Orders = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchAllOrders = async () => {
-    const response = await orderService.listOrder();
-    if (response.data.success) {
-      const sortedData = response.data.data.sort((a, b) =>
-        b.date.localeCompare(a.date)
-      );
-      setOrders(sortedData);
-      setIsLoading(false);
-    } else {
-      toast.error('Error while fetching order list');
+    try {
+      const response = await orderService.listOrder();
+      if (response.data.success) {
+        const sortedData = response.data.data.sort((a, b) =>
+          b.date.localeCompare(a.date)
+        );
+        setOrders(sortedData);
+        setIsLoading(false);
+      } else {
+        toast.error('Error while fetching order list');
+      }
+    } catch (error) {
+      toast.error(error);
     }
   };
 
   const statusHandler = async (event, orderId) => {
-    const response = await orderService.updateStatus(
-      orderId,
-      event.target.value
-    );
+    try {
+      const response = await orderService.updateStatus(
+        orderId,
+        event.target.value
+      );
 
-    if (response.data.success) {
-      fetchAllOrders();
-    } else {
-      toast.error('Error while fetching order list');
+      if (response.data.success) {
+        fetchAllOrders();
+      } else {
+        toast.error('Error while fetching order list');
+      }
+    } catch (error) {
+      toast.error(error);
     }
   };
 

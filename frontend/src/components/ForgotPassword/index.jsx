@@ -36,11 +36,15 @@ const ForgotPassword = () => {
   const handleForgotPassword = async (event) => {
     event.preventDefault();
     setIsFetching(true);
-    const response = await userService.forgotPassword(email);
-    if (response.data.success) {
-      toast.success('Password reset email sent');
-    } else {
-      toast.error(response.data.message);
+    try {
+      const response = await userService.forgotPassword(email);
+      if (response.data.success) {
+        toast.success('Password reset email sent');
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error);
     }
     setIsFetching(false);
     setEmail('');
@@ -62,12 +66,16 @@ const ForgotPassword = () => {
       password: resetPassword.password1,
     };
 
-    const response = await userService.resetPassword(data);
-    if (response.data.success) {
-      toast.success(response.data.message);
-      navigate('/');
-    } else {
-      toast.error(response.data.message);
+    try {
+      const response = await userService.resetPassword(data);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate('/');
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error);
     }
   };
 
