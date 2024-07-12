@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { assets } from '../../assets/assets';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -23,6 +23,15 @@ const ForgotPassword = () => {
   });
 
   const fetchedEmail = new URLSearchParams(location.search).get('email');
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (token && user) {
+      navigate('/');
+    }
+  }, [localStorage.getItem('token'), localStorage.getItem('user')]);
 
   const handleForgotPassword = async (event) => {
     event.preventDefault();

@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { cartService, categoryService, foodService } from '../services';
 import { API_BASE_URL } from '../config';
 
 const url = API_BASE_URL;
+axios.defaults.baseURL = url;
+
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
@@ -14,10 +16,13 @@ const StoreContextProvider = (props) => {
   const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
   const [category, setCategory] = useState('');
-
-  axios.defaults.baseURL = url;
+  const { pathname } = useLocation();
 
   const [token, setToken] = useState('');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const addToCart = async (itemId) => {
     if (!cartItems[itemId]) {
@@ -83,15 +88,19 @@ const StoreContextProvider = (props) => {
 
   useEffect(() => {
     async function loadData() {
-      if (localStorage.getItem('token') && localStorage.getItem('verified')) {
+      if (
+        localStorage.getItem('token') &&
+        localStorage.getItem('verified') &&
+        localStorage.getItem('role') === 'user'
+      ) {
         await fetchFoodList();
         await fetchCategoryList();
-        setToken(localStorage.getItem('token'));
         await loadCartData(localStorage.getItem('token'));
+        setToken(localStorage.getItem('token'));
       }
     }
     loadData();
-  }, [localStorage.getItem('token')]);
+  }, [localStorage.getItem('token'), localStorage.getItem('verified')]);
 
   const contextValue = {
     food_list,

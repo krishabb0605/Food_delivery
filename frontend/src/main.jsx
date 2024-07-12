@@ -7,13 +7,14 @@ import { BrowserRouter } from 'react-router-dom';
 import StoreContextProvider from './context/StoreContext.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { coreTheme } from './theme/core';
+import { CLIENT_ID } from './config.js';
 
 const theme = extendTheme({
   ...coreTheme,
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <GoogleOAuthProvider clientId='591270015150-lpmd9kesbjttdvhrt8ahtah9c90qed84.apps.googleusercontent.com'>
+  <GoogleOAuthProvider clientId={CLIENT_ID}>
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <StoreContextProvider>

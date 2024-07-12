@@ -31,7 +31,9 @@ const EntryPage = ({ handleRole }) => {
   const [validationToken, setValidationToken] = useState();
   const { setToken } = useContext(StoreContext);
 
-  const [userDataForVerification, setUserDataForVerification] = useState('');
+  const [userDataForVerification, setUserDataForVerification] = useState(
+    JSON.parse(localStorage.getItem('user'))
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -262,7 +264,7 @@ const EntryPage = ({ handleRole }) => {
                     color='tomato'
                     alignSelf='end'
                     cursor='pointer'
-                    onClick={() => navigate('/forgotPassword')}
+                    onClick={() => navigate('/forgot-password')}
                   >
                     Forgot password ?
                   </Text>
@@ -351,7 +353,7 @@ const EntryPage = ({ handleRole }) => {
                 color='#6d967d'
               >
                 We've sent a verification code to your email -
-                krishabhingaradiya1234@gmail.com
+                {userDataForVerification.email}
               </Box>
 
               <HStack justifyContent='space-evenly' w='100%' gap='0'>

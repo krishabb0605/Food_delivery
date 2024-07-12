@@ -53,5 +53,24 @@ const removeCateogry = async (req, res) => {
     res.json({ success: false, message: 'Error while removing category' });
   }
 };
+const updateCateogry = async (req, res) => {
+  const id = req.params.id;
 
-export { addCategory, listCategory, removeCateogry };
+  try {
+    const category = await categoryModel.findById(id);
+    if (req.file) {
+      fs.unlink(`uploads/${category.image}`, () => {});
+      category.image = req.file.filename;
+    }
+    if (req.body.name) {
+      category.name = req.body.name;
+    }
+    await category.save();
+    res.json({ success: true, message: 'Category updated' });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: 'Error while updating category' });
+  }
+};
+
+export { addCategory, listCategory, removeCateogry, updateCateogry };

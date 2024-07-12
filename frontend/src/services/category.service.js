@@ -14,4 +14,8 @@ export default class categoryService {
     const response = await axios.post('/api/category/remove', { id });
     return response;
   }
+  static async updateCategory(id, data) {
+    const response = await axios.post(`/api/category/update/${id}`, data);
+    return response;
+  }
 }

@@ -83,6 +83,8 @@ const ExploreMenu = () => {
                 alt='menu-image'
                 width='7.5vw'
                 minW='80px'
+                height='7.5vw'
+                minH='80px'
                 cursor='pointer'
                 borderRadius='50%'
                 transition='0.2s'

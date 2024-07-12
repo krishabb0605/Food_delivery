@@ -27,7 +27,7 @@ const App = () => {
     <>
       <ToastContainer />
       <Routes>
-        <Route path='/forgotPassword' element={<ForgotPassword />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/login' element={<EntryPage handleRole={handleRole} />} />
         <Route element={<PrivateRoute />}>
           {role === 'user' ? (

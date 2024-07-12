@@ -16,6 +16,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import { categoryService } from '../../services';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CategoryList = () => {
   const { url } = useContext(StoreContext);
@@ -23,11 +24,19 @@ const CategoryList = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
 
+  const navigate = useNavigate();
+
   const fetchCategoryList = async () => {
     setIsFetching(true);
     const response = await categoryService.listCategory();
     setCategoryData(response.data.data);
     setIsFetching(false);
+  };
+
+  const handleEditCategory = (data) => {
+    navigate('/', {
+      state: { id: data._id, name: data.name, image: data.image },
+    });
   };
 
   const handleRemoveCategory = async (categoryID) => {
@@ -76,7 +85,7 @@ const CategoryList = () => {
         style={{ scrollbarWidth: 'thin' }}
         gap='20px'
         alignItems='center'
-        justifyContent='center'
+        justifyContent='space-evenly'
         py='4px'
       >
         {categoryData &&
@@ -95,8 +104,10 @@ const CategoryList = () => {
               >
                 <Image
                   src={`${url}/images/` + category.image}
-                  alt='Green double couch with wooden legs'
-                  borderRadius='lg'
+                  alt='item'
+                  borderRadius='50%'
+                  h='130px'
+                  w='130px'
                 />
 
                 <Heading size='md'>{category.name}</Heading>
@@ -104,7 +115,11 @@ const CategoryList = () => {
               <Divider />
               <CardFooter>
                 <ButtonGroup spacing='2'>
-                  <Button variant='ghost' colorScheme='blue'>
+                  <Button
+                    variant='ghost'
+                    colorScheme='blue'
+                    onClick={() => handleEditCategory(category)}
+                  >
                     Edit
                   </Button>
                   <Button

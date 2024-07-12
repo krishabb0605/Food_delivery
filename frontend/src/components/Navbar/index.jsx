@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { assets } from '../../assets/assets';
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import Footer from '../Footer';
@@ -22,6 +22,7 @@ import {
   Spinner,
   Text,
   useDisclosure,
+  useOutsideClick,
 } from '@chakra-ui/react';
 import { uniq } from 'lodash';
 
@@ -48,11 +49,17 @@ const Navbar = () => {
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const ref = useRef();
+  useOutsideClick({
+    ref,
+    handler: () => setShowMenu(false),
+  });
 
   useEffect(() => {
     categoryData.map((menu) => setMenuOptions((prev) => [...prev, menu.name]));
     setMenuOptions((prev) => [...prev]);
-  }, []);
+  }, [isFetching]);
 
   useEffect(() => {
     handleCategory(searchQuery);
@@ -171,7 +178,7 @@ const Navbar = () => {
               )}
             </Box>
 
-            <Box pos='relative'>
+            <Box pos='relative' ref={ref}>
               <Icon
                 as={FaUser}
                 alt='profile'

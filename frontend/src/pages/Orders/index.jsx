@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import {
-  Box,
-  Grid,
-  Image,
-  Select,
-  Spinner,
-  Text,
-  Flex,
-  Icon,
-} from '@chakra-ui/react';
+import { Box, Grid, Select, Spinner, Text, Flex, Icon } from '@chakra-ui/react';
 import { orderService } from '../../services';
 import { FaBox } from 'react-icons/fa';
 
@@ -44,9 +35,7 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('token') && localStorage.getItem('verified')) {
-      fetchAllOrders();
-    }
+    fetchAllOrders();
   }, []);
 
   if (isLoading) {

@@ -1,15 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { assets } from '../../assets/assets';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, Image, Text, useOutsideClick } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 
 const AdminNavbar = () => {
   const { logout } = useContext(StoreContext);
   const [showMenu, setShowMenu] = useState(false);
+  const ref = useRef();
+
+  useOutsideClick({
+    ref,
+    handler: () => setShowMenu(false),
+  });
 
   const handleMenu = (data) => {
     if (showMenu) {
@@ -31,7 +37,7 @@ const AdminNavbar = () => {
       >
         <Image src={assets.cooking_logo} alt='logo' w='90px' h='75px' />
 
-        <Box pos='relative'>
+        <Box pos='relative' ref={ref}>
           <Icon
             width='40px'
             as={FaUser}

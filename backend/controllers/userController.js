@@ -152,7 +152,7 @@ const forgotPassword = async (req, res) => {
     from: process.env.EMAIL_USERNAME,
     to: email,
     subject: 'Reset password',
-    html: `<p>Click on link to reset password: <code>${frontend_url}/forgotPassword?email=${email}</code></p>`,
+    html: `<p>Click on link to reset password: <code>${frontend_url}/forgot-password?email=${email}</code></p>`,
   };
 
   try {

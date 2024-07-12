@@ -16,7 +16,7 @@ export default class userService {
     return response;
   }
   static async forgotPassword(email) {
-    const response = await axios.get(`/api/user/forgotPassword/${email}`);
+    const response = await axios.get(`/api/user/forgot-password/${email}`);
     return response;
   }
 
