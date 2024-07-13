@@ -22,7 +22,6 @@ const Add = () => {
   const [image, setImage] = useState(false);
   const [addingData, setAddingData] = useState(false);
   const [isCategory, setIsCategory] = useState(false);
-  const [isState, setIsState] = useState(false);
   const [itemData, setItemData] = useState({
     id: false,
     name: '',
@@ -51,7 +50,6 @@ const Add = () => {
 
   useEffect(() => {
     if (state) {
-      setIsState(true);
       const image = `${url}/images/` + state.image;
       if (state.type === 'item') {
         setIsCategory(false);
@@ -347,7 +345,7 @@ const Add = () => {
             colorScheme='blackAlpha'
             isLoading={addingData}
           >
-            {isState ? 'Update' : 'Add'}
+            {itemData.id ? 'Update' : 'Add'}
           </Button>
         </FormControl>
       ) : (
@@ -357,7 +355,7 @@ const Add = () => {
             <label htmlFor='image'>
               <Image
                 w='120px'
-                maxH='120px' 
+                maxH='120px'
                 cursor='pointer'
                 src={
                   typeof addedCategoryData.image === 'string'
@@ -406,7 +404,7 @@ const Add = () => {
             colorScheme='blackAlpha'
             isLoading={addingData}
           >
-            {isState ? 'Update' : 'Add'}
+            {addedCategoryData.id ? 'Update' : 'Add'}
           </Button>
         </FormControl>
       )}

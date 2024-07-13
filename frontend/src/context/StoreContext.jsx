@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cartService, categoryService, foodService } from '../services';
 import { API_BASE_URL } from '../config';
+import { toast } from 'react-toastify';
 
 const url = API_BASE_URL;
 axios.defaults.baseURL = url;
@@ -31,14 +32,22 @@ const StoreContextProvider = (props) => {
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
     if (token) {
-      await cartService.addToCart(itemId, token);
+      try {
+        await cartService.addToCart(itemId, token);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (token) {
-      await cartService.removeFromCart(itemId, token);
+      try {
+        await cartService.removeFromCart(itemId, token);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
@@ -55,15 +64,23 @@ const StoreContextProvider = (props) => {
 
   const fetchFoodList = async () => {
     setIsFetching(true);
-    const response = await foodService.listFood();
-    setFoodList(response.data.data);
+    try {
+      const response = await foodService.listFood();
+      setFoodList(response.data.data);
+    } catch (error) {
+      toast.error(error);
+    }
     setIsFetching(false);
   };
 
   const fetchCategoryList = async () => {
     setIsFetching(true);
-    const response = await categoryService.listCategory();
-    setCategoryData(response.data.data);
+    try {
+      const response = await categoryService.listCategory();
+      setCategoryData(response.data.data);
+    } catch (error) {
+      toast.error(error);
+    }
     setIsFetching(false);
   };
 
@@ -72,8 +89,12 @@ const StoreContextProvider = (props) => {
   };
 
   const loadCartData = async (token) => {
-    const response = await cartService.getCart(token);
-    setCartItems(response.data.cartData);
+    try {
+      const response = await cartService.getCart(token);
+      setCartItems(response.data.cartData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const logout = () => {
@@ -87,7 +108,7 @@ const StoreContextProvider = (props) => {
   };
 
   useEffect(() => {
-    async function loadData() {
+    const loadData = async () => {
       if (
         localStorage.getItem('token') &&
         localStorage.getItem('verified') &&
@@ -98,7 +119,7 @@ const StoreContextProvider = (props) => {
         await loadCartData(localStorage.getItem('token'));
         setToken(localStorage.getItem('token'));
       }
-    }
+    };
     loadData();
   }, [localStorage.getItem('token'), localStorage.getItem('verified')]);
 
