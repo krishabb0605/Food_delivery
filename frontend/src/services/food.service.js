@@ -15,4 +15,9 @@ export default class foodService {
     const response = await axios.post(`/api/food/remove`, { id });
     return response;
   }
+
+  static async updateFood(id, data) {
+    const response = await axios.post(`/api/food/update/${id}`, data);
+    return response;
+  }
 }

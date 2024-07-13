@@ -17,6 +17,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { categoryService } from '../../services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
 const CategoryList = () => {
   const { url } = useContext(StoreContext);
@@ -39,7 +40,7 @@ const CategoryList = () => {
 
   const handleEditCategory = (data) => {
     navigate('/', {
-      state: { id: data._id, name: data.name, image: data.image },
+      state: { ...data, type: 'category' },
     });
   };
 
@@ -127,6 +128,7 @@ const CategoryList = () => {
                     colorScheme='blue'
                     onClick={() => handleEditCategory(category)}
                   >
+                    <MdEdit />
                     Edit
                   </Button>
                   <Button
@@ -135,6 +137,7 @@ const CategoryList = () => {
                     isLoading={deletingData[1] === category._id ? true : false}
                     onClick={() => handleRemoveCategory(category._id)}
                   >
+                    <MdDelete />
                     Remove
                   </Button>
                 </ButtonGroup>

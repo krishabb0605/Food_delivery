@@ -24,6 +24,7 @@ const Add = () => {
   const [isCategory, setIsCategory] = useState(false);
   const [isState, setIsState] = useState(false);
   const [itemData, setItemData] = useState({
+    id: false,
     name: '',
     description: '',
     price: '',
@@ -50,14 +51,26 @@ const Add = () => {
 
   useEffect(() => {
     if (state) {
-      setIsCategory(true);
       setIsState(true);
       const image = `${url}/images/` + state.image;
-      setAddedCategoryData({
-        id: state.id,
-        name: state.name,
-        image: image,
-      });
+      if (state.type === 'item') {
+        setIsCategory(false);
+        setItemData({
+          id: state._id,
+          name: state.name,
+          description: state.description,
+          price: state.price,
+          category: state.category,
+        });
+        setImage(image);
+      } else {
+        setIsCategory(true);
+        setAddedCategoryData({
+          id: state._id,
+          name: state.name,
+          image: image,
+        });
+      }
     }
   }, [state]);
 
@@ -70,7 +83,9 @@ const Add = () => {
   const handleItemAdd = async () => {
     const formData = new FormData();
     formData.append('name', itemData.name);
-    formData.append('image', image);
+    if (typeof image === 'object') {
+      formData.append('image', image);
+    }
     formData.append('description', itemData.description);
     formData.append('price', Number(itemData.price));
     formData.append('category', itemData.category);
@@ -83,8 +98,14 @@ const Add = () => {
         return toast.error('Fill all details');
       }
     }
+
     try {
-      let response = await foodService.addFood(formData);
+      let response;
+      if (itemData.id) {
+        response = await foodService.updateFood(itemData.id, formData);
+      } else {
+        response = await foodService.addFood(formData);
+      }
 
       if (response.data.success) {
         setItemData({
@@ -225,14 +246,29 @@ const Add = () => {
       </Flex>
 
       {!isCategory ? (
-        <FormControl display='flex' flexDir='column' gap='20px' isRequired>
+        <FormControl
+          display='flex'
+          flexDir='column'
+          gap='20px'
+          h='calc(100vh - 208px)'
+          overflow='auto'
+          style={{ scrollbarWidth: 'thin' }}
+          isRequired
+        >
           <Flex flexDir='column' gap='20px'>
             <FormLabel>Upload Image</FormLabel>
             <label htmlFor='image'>
               <Image
                 w='120px'
+                maxH='120px'
                 cursor='pointer'
-                src={image ? URL.createObjectURL(image) : assets.upload_area}
+                src={
+                  typeof image === 'string'
+                    ? image
+                    : image
+                    ? URL.createObjectURL(image)
+                    : assets.upload_area
+                }
                 alt='upload-area'
               />
             </label>
@@ -276,6 +312,7 @@ const Add = () => {
                 <FormLabel>Item category</FormLabel>
                 <Select
                   name='category'
+                  value={itemData.category}
                   onChange={onChangeHandler}
                   maxW='120px'
                   borderColor='#0000004d'
@@ -306,10 +343,11 @@ const Add = () => {
           <Button
             onClick={handleItemAdd}
             maxW='120px'
+            minH='40px'
             colorScheme='blackAlpha'
             isLoading={addingData}
           >
-            Add
+            {isState ? 'Update' : 'Add'}
           </Button>
         </FormControl>
       ) : (
@@ -319,6 +357,7 @@ const Add = () => {
             <label htmlFor='image'>
               <Image
                 w='120px'
+                maxH='120px' 
                 cursor='pointer'
                 src={
                   typeof addedCategoryData.image === 'string'

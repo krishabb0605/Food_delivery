@@ -1,25 +1,30 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { MdDelete } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
 import { StoreContext } from '../../context/StoreContext';
 import {
-  Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
   Flex,
-  Grid,
+  Heading,
   Image,
   Spinner,
+  Stack,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
 import { foodService } from '../../services';
+import { useNavigate } from 'react-router-dom';
 
 const ItemList = () => {
   const { url } = useContext(StoreContext);
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [deletedId, setDeletedId] = useState(null);
+  const navigate = useNavigate();
 
   const fetchList = async () => {
     try {
@@ -35,8 +40,13 @@ const ItemList = () => {
     }
   };
 
+  const handleEditFood = (data) => {
+    navigate('/', {
+      state: { ...data, type: 'item' },
+    });
+  };
+
   const handleRemoveFood = async (foodId) => {
-    setIsDeleting(true);
     setDeletedId(foodId);
     try {
       const response = await foodService.removeFood(foodId);
@@ -50,7 +60,6 @@ const ItemList = () => {
     } catch (error) {
       toast.error(error);
     }
-    setIsDeleting(false);
     setDeletedId(null);
   };
 
@@ -80,62 +89,87 @@ const ItemList = () => {
       style={{ scrollbarWidth: 'thin' }}
     >
       <Text>All Foods List</Text>
-      <Box overflow='auto' style={{ scrollbarWidth: 'thin' }}>
-        <Grid
-          templateColumns={{
-            base: '1fr 3fr 1fr',
-            md: '0.5fr 2fr 1fr 1fr 0.5fr',
-          }}
-          alignItems='center'
-          gap={{ base: '15px', md: '10px' }}
-          p='12px 15px'
-          border='1px solid #cacaca'
-          fontSize='13px'
-          bg='#f9f9f9'
-          display={{ base: 'none', md: 'grid' }}
-        >
-          <Text fontWeight='700'>Image</Text>
-          <Text fontWeight='700'>Name</Text>
-          <Text fontWeight='700'>Category</Text>
-          <Text fontWeight='700'>Price</Text>
-          <Text fontWeight='700' justifySelf='center'>
-            Action
-          </Text>
-        </Grid>
-        {list.map((item, index) => {
-          return (
-            <Grid
-              templateColumns={{
-                base: '1fr 3fr 1fr',
-                md: '0.5fr 2fr 1fr 1fr 0.5fr',
-              }}
-              alignItems='center'
-              gap={{ base: '15px', md: '10px' }}
-              p='12px 15px'
-              border='1px solid #cacaca'
-              fontSize='13px'
-              key={index}
-            >
-              <Image
-                w='50px'
-                h='40px'
-                src={`${url}/images/` + item.image}
-                alt='food-image'
-              />
-              <Text>{item.name}</Text>
-              <Text>{item.category}</Text>
-              <Text>$ {item.price}</Text>
-              <Button
-                cursor='pointer'
-                isLoading={deletedId === item._id ? isDeleting : false}
-                onClick={() => handleRemoveFood(item._id)}
-              >
-                <MdDelete />
-              </Button>
-            </Grid>
-          );
-        })}
-      </Box>
+
+      <Flex
+        flexWrap='wrap'
+        justifyContent={{ base: 'center', lg: 'space-between' }}
+        gap='16px'
+        height='calc(100vh - 150px)'
+        overflow='auto'
+        style={{ scrollbarWidth: 'thin' }}
+      >
+        {list.map((item, index) => (
+          <Card
+            key={index}
+            direction={{ base: 'column', lg: 'row' }}
+            overflow='hidden'
+            variant='outline'
+            width='fit-content'
+            h={{ base: 'unset', lg: '150px' }}
+            w={{ base: 'unset', lg: '328px' }}
+          >
+            <Image
+              objectFit='cover'
+              w={{ base: '280px', lg: '150px' }}
+              p='12px'
+              boxShadow='0px 0px 16px 0px gray'
+              src={`${url}/images/` + item.image}
+              alt='Food-Image'
+            />
+
+            <Stack>
+              <CardBody py='0'>
+                <Tooltip label={item.name}>
+                  <Heading
+                    size='md'
+                    maxW='140px'
+                    overflow='hidden'
+                    style={{ textWrap: 'nowrap' }}
+                    textOverflow='ellipsis'
+                    py='8px'
+                  >
+                    {item.name}
+                  </Heading>
+                </Tooltip>
+                <Flex gap='4px'>
+                  <Text fontWeight='bold' fontSize='14px'>
+                    Category :{' '}
+                  </Text>
+                  <Text fontSize='14px'>{item.category}</Text>
+                </Flex>
+                <Flex gap='4px'>
+                  <Text fontWeight='bold' fontSize='14px'>
+                    Price :{' '}
+                  </Text>
+                  <Text fontSize='14px'>$ {item.price}</Text>
+                </Flex>
+              </CardBody>
+
+              <CardFooter justifyContent='space-evenly' pt='0' pb='8px' px='0'>
+                <Button
+                  p='0px'
+                  variant='ghost'
+                  colorScheme='blue'
+                  onClick={() => handleEditFood(item)}
+                >
+                  <MdEdit />
+                  Edit
+                </Button>
+                <Button
+                  p='0px'
+                  variant='ghost'
+                  colorScheme='orange'
+                  isLoading={deletedId === item._id ? true : false}
+                  onClick={() => handleRemoveFood(item._id)}
+                >
+                  <MdDelete />
+                  Remove
+                </Button>
+              </CardFooter>
+            </Stack>
+          </Card>
+        ))}
+      </Flex>
     </Flex>
   );
 };
