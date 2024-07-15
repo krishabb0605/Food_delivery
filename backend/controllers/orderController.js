@@ -7,26 +7,37 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // placing user order from frontend
 const placeOrder = async (req, res) => {
-
   let frontend_url = 'https://fooddelivery-mern.netlify.app';
   if (process.env.ENV !== 'production') {
     frontend_url = 'http://localhost:5173';
   }
 
   try {
-    const newOrder = new orderModel({
-      userId: req.body.userId,
-      items: req.body.items,
-      amount: req.body.amount,
-      address: req.body.address,
-      date: Date.now(),
-    });
+    let itemData;
+    let orderId;
+    if (req.body._id) {
+      const orderData = await orderModel.findById(req.body._id);
+      if (orderData) {
+        itemData = orderData.items;
+        orderId = req.body._id;
+      }
+    } else {
+      const newOrder = new orderModel({
+        userId: req.body.userId,
+        items: req.body.items,
+        amount: req.body.amount,
+        address: req.body.address,
+        date: Date.now(),
+      });
 
-    await newOrder.save();
+      await newOrder.save();
 
-    await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
+      await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
+      orderId = newOrder._id;
+      itemData = req.body.items;
+    }
 
-    const line_items = req.body.items.map((item) => ({
+    const line_items = itemData.map((item) => ({
       price_data: {
         currency: 'inr',
         product_data: {
@@ -51,11 +62,15 @@ const placeOrder = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       line_items: line_items,
       mode: 'payment',
-      success_url: `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
-      cancel_url: `${frontend_url}/verify?success=false&orderId=${newOrder._id}`,
+      success_url: `${frontend_url}/verify?success=true&orderId=${orderId}`,
+      cancel_url: `${frontend_url}/verify?success=false&orderId=${orderId}`,
     });
 
-    res.json({ success: true, session_url: session.url });
+    res.json({
+      success: true,
+      session_url: session.url,
+      sessionId: session.id,
+    });
   } catch (error) {
     console.log(error);
     return res.json({ success: false, message: 'Error' });
@@ -63,10 +78,31 @@ const placeOrder = async (req, res) => {
 };
 
 const verifyOrder = async (req, res) => {
-  const { orderId, success } = req.body;
+  const { orderId, success, id } = req.body;
   try {
-    if (success == 'true') {
-      await orderModel.findByIdAndUpdate(orderId, { payment: true });
+    // Retrieve the Checkout Session
+    const session = await stripe.checkout.sessions.retrieve(id);
+    const paymentIntentId = session.payment_intent;
+
+    // Retrieve the Payment Intent to get charge details
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const paymentMethodId = paymentIntent.payment_method;
+
+    // Retrieve payment method data
+    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+
+    const cardholderName = paymentMethod.billing_details.name;
+    const cardholderEmail = paymentMethod.billing_details.email;
+    const last4 = paymentMethod.card.last4;
+
+    const cardData = { cardholderName, cardholderEmail, last4 };
+
+    // Update order status based on success flag
+    if (success === 'true') {
+      await orderModel.findByIdAndUpdate(orderId, {
+        payment: true,
+        paymentInfo: cardData,
+      });
       res.json({ success: true, message: 'paid' });
     } else {
       await orderModel.findByIdAndDelete(orderId);

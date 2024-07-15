@@ -5,13 +5,28 @@ import moment from 'moment';
 import { BlobProvider } from '@react-pdf/renderer';
 import Invoice from '../Invoice';
 import { toast } from 'react-toastify';
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Icon,
+  Stepper,
+  Step,
+  StepSeparator,
+} from '@chakra-ui/react';
+import { orderService } from '../../services';
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Text, Button, Icon } from '@chakra-ui/react';
-import './index.css';
 
 const MyOrder = ({ index, order, totalData, fetchOrders }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const { url } = useContext(StoreContext);
+  const { token } = useContext(StoreContext);
+
+  const steps = [
+    { label: 'Food Processing', isComplete: currentStep >= 1 },
+    { label: 'Out for Delivery', isComplete: currentStep >= 2 },
+    { label: 'Delivered', isComplete: currentStep >= 3 },
+  ];
 
   useEffect(() => {
     if (order.status === 'Food Processing') {
@@ -22,6 +37,26 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
       setCurrentStep(3);
     }
   }, [fetchOrders]);
+
+  const handleOrderData = async () => {
+    if (order.paymentInfo) {
+      fetchOrders();
+    } else {
+      try {
+        let response = await orderService.placeOrder(order, token);
+
+        if (response.data.success) {
+          const { session_url, sessionId } = response.data;
+          localStorage.setItem('sessionId', sessionId);
+          window.location.replace(session_url);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+  };
 
   const handleShare = async (blob) => {
     if (navigator.share) {
@@ -75,49 +110,55 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
             </Text>
           </Box>
 
-          <Flex alignItems='center' gap='8px'>
-            <BlobProvider document={<Invoice order={order} url={url} />}>
-              {({ url, blob }) => (
-                <Flex
-                  cursor='pointer'
-                  bg='white'
-                  color='tomato'
-                  h='20px'
-                  w='20px'
-                  alignItems='center'
-                  justifyContent='center'
-                  borderRadius='2px'
-                >
-                  <a
-                    href={url}
-                    target='_blank'
-                    style={{ color: 'tomato', height: 'inherit' }}
+          {order.paymentInfo && (
+            <Flex alignItems='center' gap='8px'>
+              <BlobProvider
+                document={<Invoice order={order} index={totalData - index} />}
+              >
+                {({ url, blob }) => (
+                  <Flex
+                    cursor='pointer'
+                    bg='white'
+                    color='tomato'
+                    h='20px'
+                    w='20px'
+                    alignItems='center'
+                    justifyContent='center'
+                    borderRadius='2px'
                   >
-                    <IoMdDownload />
-                  </a>
-                </Flex>
-              )}
-            </BlobProvider>
+                    <a
+                      href={url}
+                      target='_blank'
+                      style={{ color: 'tomato', height: 'inherit' }}
+                    >
+                      <IoMdDownload />
+                    </a>
+                  </Flex>
+                )}
+              </BlobProvider>
 
-            <BlobProvider document={<Invoice order={order} url={url} />}>
-              {({ url, blob }) => (
-                <Flex
-                  cursor='pointer'
-                  bg='white'
-                  color='tomato'
-                  h='20px'
-                  w='20px'
-                  alignItems='center'
-                  justifyContent='center'
-                  borderRadius='2px'
-                  onClick={() => handleShare(blob)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <FaShareAlt style={{ height: '12px' }} />
-                </Flex>
-              )}
-            </BlobProvider>
-          </Flex>
+              <BlobProvider
+                document={<Invoice order={order} index={totalData - index} />}
+              >
+                {({ url, blob }) => (
+                  <Flex
+                    cursor='pointer'
+                    bg='white'
+                    color='tomato'
+                    h='20px'
+                    w='20px'
+                    alignItems='center'
+                    justifyContent='center'
+                    borderRadius='2px'
+                    onClick={() => handleShare(blob)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <FaShareAlt style={{ height: '12px' }} />
+                  </Flex>
+                )}
+              </BlobProvider>
+            </Flex>
+          )}
         </Flex>
 
         <Flex justifyContent='space-between' p='4px 8px' gap='10px'>
@@ -137,60 +178,52 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
             </Flex>
             <Text fontWeight='bold'>Amount : ${order.amount}</Text>
           </Flex>
-          <Flex flexDir='column' className='stepper-vertical'>
-            <Box className={`step ${currentStep >= 1 ? 'completed' : ''}`}>
-              <Box
-                maxW='78px'
-                textAlign='center'
-                color='#808080'
-                className='process-name'
-                fontSize='14px'
-              >
-                Food Processing
-              </Box>
-            </Box>
-            <Box className={`step ${currentStep >= 2 ? 'completed' : ''}`}>
-              <Box
-                maxW='78px'
-                textAlign='center'
-                color='#808080'
-                className='process-name'
-                fontSize='14px'
-              >
-                Out for delivery
-              </Box>
-            </Box>
-            <Box className={`step ${currentStep >= 3 ? 'completed' : ''}`}>
-              <Box
-                maxW='78px'
-                textAlign='center'
-                color='#808080'
-                className='process-name'
-                fontSize='14px'
-              >
-                Delivered
-              </Box>
-            </Box>
-          </Flex>
+
+          {order.paymentInfo && (
+            <Stepper orientation='vertical' padding='0'>
+              {steps.map((step, index) => (
+                <Box key={index} position='relative'>
+                  <Step iscomplete={step.isComplete ? 'true' : 'false'}>
+                    <Text
+                      fontSize='14px'
+                      color={step.isComplete ? 'green' : '#808080'}
+                      fontWeight={step.isComplete ? 'bold' : 'normal'}
+                      style={{ textWrap: 'nowrap' }}
+                    >
+                      {step.label}
+                    </Text>
+                  </Step>
+                  {index !== steps.length - 1 && (
+                    <StepSeparator
+                      height='40px !important'
+                      top='20px !important'
+                      left='28px !important'
+                      maxH='50px !important'
+                    />
+                  )}
+                </Box>
+              ))}
+            </Stepper>
+          )}
         </Flex>
 
         <Flex
           alignItems='center'
           justifyContent='center'
           mt='-16px'
-          onClick={fetchOrders}
+          onClick={handleOrderData}
         >
           <Button
             border='none'
-            colorScheme='orange'
-            w='max(8vw, 100px)'
+            colorScheme={!order.paymentInfo ? 'green' : 'orange'}
+            w={!order.paymentInfo ? 'max(9vw, 156px)' : 'max(8vw, 100px)'}
             p='4px 0'
             borderRadius='4px'
             cursor='pointer'
-            mt='8px'
+            mt='18px'
             h='26px'
           >
-            Track Order
+            {!order.paymentInfo ? 'Proceed to payment' : 'Track Order'}
           </Button>
         </Flex>
       </Box>

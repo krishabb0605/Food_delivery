@@ -12,12 +12,18 @@ const Verify = () => {
 
   const verifyPayment = async () => {
     try {
-      const response = await orderService.verifyOrder(success, orderId);
+      const sessionId = localStorage.getItem('sessionId');
+      const response = await orderService.verifyOrder(
+        success,
+        orderId,
+        sessionId
+      );
       if (response.data.success) {
         navigate('/myorders');
       } else {
         navigate('/');
       }
+      localStorage.removeItem('sessionId');
     } catch (error) {
       toast.error(error);
     }

@@ -8,10 +8,11 @@ export default class orderService {
     return response;
   }
 
-  static async verifyOrder(success, orderId) {
+  static async verifyOrder(success, orderId, id) {
     const response = await axios.post('/api/order/verify', {
       success,
       orderId,
+      id,
     });
     return response;
   }

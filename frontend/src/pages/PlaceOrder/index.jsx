@@ -60,7 +60,8 @@ const PlaceOrder = () => {
       let response = await orderService.placeOrder(orderData, token);
 
       if (response.data.success) {
-        const { session_url } = response.data;
+        const { session_url, sessionId } = response.data;
+        localStorage.setItem('sessionId', sessionId);
         window.location.replace(session_url);
       } else {
         toast.error(response.data.message);

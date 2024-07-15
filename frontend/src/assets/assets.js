@@ -5,6 +5,8 @@ import app_store from './app_store.png';
 import play_store from './play_store.png';
 import background from './background.webp';
 import goggle_icon from './google.svg';
+import background_pdf from './background_pdf.png';
+import invoice_bg from './invoice_bg.png';
 
 export const assets = {
   app_store,
@@ -13,4 +15,6 @@ export const assets = {
   upload_area,
   cooking_logo,
   goggle_icon,
+  background_pdf,
+  invoice_bg,
 };
