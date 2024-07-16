@@ -7,7 +7,9 @@ import {
   Document,
   StyleSheet,
 } from '@react-pdf/renderer';
-import { assets } from '../../assets/assets';
+import food_logo from '../../assets/food_logo.png';
+import invoice_bg from '../../assets/invoice_bg.png';
+import background_pdf from '../../assets/background_pdf.png';
 import moment from 'moment';
 
 const Invoice = ({ order, index }) => {
@@ -113,10 +115,10 @@ const Invoice = ({ order, index }) => {
     <View style={styles.titleContainer}>
       <View style={styles.spaceBetween}>
         <View style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Image src={assets.cooking_logo} style={{ width: '70px' }} />
+          <Image src={food_logo} style={{ width: '70px' }} />
           <View style={{ position: 'relative' }}>
             <Image
-              src={assets.invoice_bg}
+              src={invoice_bg}
               style={{ width: '150px', height: '20px' }}
             />
             <View style={styles.invoice}>
@@ -362,7 +364,7 @@ const Invoice = ({ order, index }) => {
   return (
     <Document>
       <Page size='A4' style={styles.page}>
-        <Image src={assets.background_pdf} style={styles.background} />
+        <Image src={background_pdf} style={styles.background} />
         <Address />
         <TableHead />
         <TableBody />

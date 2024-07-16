@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { assets } from '../../assets/assets';
+import play_store from '../../assets/play_store.png';
+import app_store from '../../assets/app_store.png';
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
 
 const AppDownload = () => {
@@ -18,7 +19,7 @@ const AppDownload = () => {
       </Text>
       <Flex justifyContent='center' gap='max(2vw, 10px)' mt='40px'>
         <Image
-          src={assets.play_store}
+          src={play_store}
           alt='app-store'
           width='max(30vw,120px)'
           maxW='180px'
@@ -27,7 +28,7 @@ const AppDownload = () => {
           _hover={{ transform: 'scale(1.05)' }}
         />
         <Image
-          src={assets.app_store}
+          src={app_store}
           alt='app-store'
           width='max(30vw,120px)'
           maxW='180px'

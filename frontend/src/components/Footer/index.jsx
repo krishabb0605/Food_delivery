@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { assets } from '../../assets/assets';
+import food_logo from '../../assets/food_logo.png'
 import { Flex, Grid, Icon, Image, Text } from '@chakra-ui/react';
 import { FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
@@ -24,7 +24,7 @@ const Footer = () => {
       >
         <Flex flexDir='column' alignItems='start' gap='20px'>
           <Image
-            src={assets.cooking_logo}
+            src={food_logo}
             alt='logo'
             h='70px'
             w='70px'

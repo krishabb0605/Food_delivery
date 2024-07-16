@@ -1,7 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { StoreContext } from '../../context/StoreContext';
-import { assets } from '../../assets/assets';
+import google_icon from '../../assets/google.svg';
+import background_mobile from '../../assets/background.webp';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
@@ -313,7 +314,7 @@ const EntryPage = ({ handleRole }) => {
                     color='#6c6c6c'
                     gap='8px'
                   >
-                    <Image src={assets.goggle_icon} alt='' />
+                    <Image src={google_icon} alt='' />
                     <Text>Sign in with google</Text>
                   </Flex>
                 </Button>
@@ -410,7 +411,7 @@ const EntryPage = ({ handleRole }) => {
           )}
         </Flex>
         <Image
-          src={assets.background}
+          src={background_mobile}
           alt='background_image'
           display={{ base: 'none', lg: 'unset' }}
         />

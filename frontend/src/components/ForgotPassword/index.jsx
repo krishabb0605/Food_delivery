@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { assets } from '../../assets/assets';
+import background_mobile from '../../assets/background.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
@@ -224,7 +224,7 @@ const ForgotPassword = () => {
           )}
         </Flex>
         <Image
-          src={assets.background}
+          src={background_mobile}
           alt='background_image'
           display={{ base: 'none', lg: 'unset' }}
         />

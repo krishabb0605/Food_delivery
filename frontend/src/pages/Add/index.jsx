@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { assets } from '../../assets/assets';
+import upload_area from '../../assets/upload_area.png';
 import { toast } from 'react-toastify';
 import {
   Box,
@@ -265,7 +265,7 @@ const Add = () => {
                     ? image
                     : image
                     ? URL.createObjectURL(image)
-                    : assets.upload_area
+                    : upload_area
                 }
                 alt='upload-area'
               />
@@ -362,7 +362,7 @@ const Add = () => {
                     ? addedCategoryData.image
                     : addedCategoryData.image
                     ? URL.createObjectURL(addedCategoryData.image)
-                    : assets.upload_area
+                    : upload_area
                 }
                 alt='upload-area'
               />

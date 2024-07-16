@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { assets } from '../../assets/assets';
+import food_logo from '../../assets/food_logo.png'
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { StoreContext } from '../../context/StoreContext';
@@ -35,7 +35,7 @@ const AdminNavbar = () => {
         bg='white'
         borderBottom='1px solid #a9a9a9'
       >
-        <Image src={assets.cooking_logo} alt='logo' w='90px' h='75px' />
+        <Image src={food_logo} alt='logo' w='90px' h='75px' />
 
         <Box pos='relative' ref={ref}>
           <Icon

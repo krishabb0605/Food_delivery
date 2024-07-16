@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { assets } from '../../assets/assets';
+import food_logo from '../../assets/food_logo.png';
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import Footer from '../Footer';
 import { StoreContext } from '../../context/StoreContext';
@@ -94,12 +94,7 @@ const Navbar = () => {
           margin='auto'
         >
           <Link to='/'>
-            <Image
-              src={assets.cooking_logo}
-              alt='logo'
-              width='90px'
-              height='75px'
-            />
+            <Image src={food_logo} alt='logo' width='90px' height='75px' />
           </Link>
 
           <Flex

@@ -14,12 +14,15 @@ import {
   Stepper,
   Step,
   StepSeparator,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { orderService } from '../../services';
 import { StoreContext } from '../../context/StoreContext';
 
 const MyOrder = ({ index, order, totalData, fetchOrders }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isMobileSize] = useMediaQuery('(max-width: 425px)');
+
   const { token } = useContext(StoreContext);
 
   const steps = [
@@ -137,26 +140,28 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
                 )}
               </BlobProvider>
 
-              <BlobProvider
-                document={<Invoice order={order} index={totalData - index} />}
-              >
-                {({ url, blob }) => (
-                  <Flex
-                    cursor='pointer'
-                    bg='white'
-                    color='tomato'
-                    h='20px'
-                    w='20px'
-                    alignItems='center'
-                    justifyContent='center'
-                    borderRadius='2px'
-                    onClick={() => handleShare(blob)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <FaShareAlt style={{ height: '12px' }} />
-                  </Flex>
-                )}
-              </BlobProvider>
+              {isMobileSize && (
+                <BlobProvider
+                  document={<Invoice order={order} index={totalData - index} />}
+                >
+                  {({ url, blob }) => (
+                    <Flex
+                      cursor='pointer'
+                      bg='white'
+                      color='tomato'
+                      h='20px'
+                      w='20px'
+                      alignItems='center'
+                      justifyContent='center'
+                      borderRadius='2px'
+                      onClick={() => handleShare(blob)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <FaShareAlt style={{ height: '12px' }} />
+                    </Flex>
+                  )}
+                </BlobProvider>
+              )}
             </Flex>
           )}
         </Flex>
@@ -180,7 +185,12 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
           </Flex>
 
           {order.paymentInfo && (
-            <Stepper orientation='vertical' padding='0'>
+            <Stepper
+              orientation='vertical'
+              padding='0'
+              w='90px !important'
+              alignItems='center !important'
+            >
               {steps.map((step, index) => (
                 <Box key={index} position='relative'>
                   <Step iscomplete={step.isComplete ? 'true' : 'false'}>
@@ -188,16 +198,16 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
                       fontSize='14px'
                       color={step.isComplete ? 'green' : '#808080'}
                       fontWeight={step.isComplete ? 'bold' : 'normal'}
-                      style={{ textWrap: 'nowrap' }}
+                      textAlign='center'
                     >
                       {step.label}
                     </Text>
                   </Step>
                   {index !== steps.length - 1 && (
                     <StepSeparator
-                      height='40px !important'
-                      top='20px !important'
-                      left='28px !important'
+                      height='30px !important'
+                      top='38px !important'
+                      left='44px !important'
                       maxH='50px !important'
                     />
                   )}
