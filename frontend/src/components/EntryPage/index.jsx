@@ -86,6 +86,12 @@ const EntryPage = ({ handleRole }) => {
     setData((data) => ({ ...data, [name]: value }));
   };
 
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin(event);
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -246,6 +252,7 @@ const EntryPage = ({ handleRole }) => {
                     id='email'
                     _placeholder={{ fontSize: '14px' }}
                     onChange={onChangeHandler}
+                    onKeyDown={handleEnter}
                     value={data.email}
                     bg='rgb(232, 240, 254)'
                     required
@@ -265,6 +272,7 @@ const EntryPage = ({ handleRole }) => {
                     name='password'
                     id='password'
                     onChange={onChangeHandler}
+                    onKeyDown={handleEnter}
                     value={data.password}
                     bg='rgb(232, 240, 254)'
                     required

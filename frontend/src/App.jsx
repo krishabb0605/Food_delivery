@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router-dom';
@@ -40,10 +40,10 @@ const App = () => {
             </Route>
           ) : (
             <Route element={<AdminNavbar />}>
-              <Route index element={<Add />} />
+              <Route index element={<Orders />} />
+              <Route path='/add' element={<Add />} />
               <Route path='/item' element={<ItemList />} />
               <Route path='/category' element={<CategoryList />} />
-              <Route path='/orders' element={<Orders />} />
             </Route>
           )}
         </Route>

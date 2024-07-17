@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { orderService } from '../../services';
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems } = useContext(
+  const { getTotalCartAmount, token, foodList, cartItems } = useContext(
     StoreContext
   );
 
@@ -35,7 +35,7 @@ const PlaceOrder = () => {
   const placeOrder = async () => {
     setIsLoading(true);
     let orderItems = [];
-    food_list.map((item) => {
+    foodList.map((item) => {
       if (cartItems[item._id] > 0) {
         let itemInfo = item;
         itemInfo['quantity'] = cartItems[item._id];

@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { IoMdDownload } from 'react-icons/io';
-import { FaBox, FaShareAlt } from 'react-icons/fa';
+import { FaBox } from 'react-icons/fa';
 import moment from 'moment';
-import { BlobProvider } from '@react-pdf/renderer';
-import Invoice from '../Invoice';
 import { toast } from 'react-toastify';
 import {
   Box,
@@ -14,14 +11,13 @@ import {
   Stepper,
   Step,
   StepSeparator,
-  useMediaQuery,
 } from '@chakra-ui/react';
 import { orderService } from '../../services';
 import { StoreContext } from '../../context/StoreContext';
+import InvoiceButton from '../../components/InvoiceButton';
 
 const MyOrder = ({ index, order, totalData, fetchOrders }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isMobileSize] = useMediaQuery('(max-width: 425px)');
 
   const { token } = useContext(StoreContext);
 
@@ -99,69 +95,27 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
         <Flex
           justifyContent='space-between'
           alignSelf='center'
-          p='4px'
+          p='4px 16px'
+          borderTopLeftRadius={index % 2 !== 0 && '20px'}
+          borderTopRightRadius={index % 2 === 0 && '20px'}
+          borderBottomLeftRadius={index % 2 === 0 && '20px'}
+          borderBottomRightRadius={index % 2 !== 0 && '20px'}
           bg='#ff7100'
           color='white'
         >
           <Box>
             <Flex alignItems='center' gap='6px'>
-              <Icon as={FaBox} alt='parcel-icon' ms='20px' />
+              <Icon as={FaBox} alt='parcel-icon' />
               Order #{totalData - index}
             </Flex>
-            <Text fontSize='12px' pl='18px'>
+            <Text fontSize='12px'>
               {moment(order.date).format('D MMM YYYY, h:mm A')}
             </Text>
           </Box>
 
           {order.paymentInfo && (
             <Flex alignItems='center' gap='8px'>
-              <BlobProvider
-                document={<Invoice order={order} index={totalData - index} />}
-              >
-                {({ url, blob }) => (
-                  <Flex
-                    cursor='pointer'
-                    bg='white'
-                    color='tomato'
-                    h='20px'
-                    w='20px'
-                    alignItems='center'
-                    justifyContent='center'
-                    borderRadius='2px'
-                  >
-                    <a
-                      href={url}
-                      target='_blank'
-                      style={{ color: 'tomato', height: 'inherit' }}
-                    >
-                      <IoMdDownload />
-                    </a>
-                  </Flex>
-                )}
-              </BlobProvider>
-
-              {isMobileSize && (
-                <BlobProvider
-                  document={<Invoice order={order} index={totalData - index} />}
-                >
-                  {({ url, blob }) => (
-                    <Flex
-                      cursor='pointer'
-                      bg='white'
-                      color='tomato'
-                      h='20px'
-                      w='20px'
-                      alignItems='center'
-                      justifyContent='center'
-                      borderRadius='2px'
-                      onClick={() => handleShare(blob)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <FaShareAlt style={{ height: '12px' }} />
-                    </Flex>
-                  )}
-                </BlobProvider>
-              )}
+              <InvoiceButton order={order} index={totalData - index} />
             </Flex>
           )}
         </Flex>

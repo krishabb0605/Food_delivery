@@ -130,6 +130,11 @@ const verifyUser = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const email = req.params.email;
+
+  if (!validator.isEmail(email)) {
+    return res.json({ success: false, message: 'Please enter valid email' });
+  }
+
   const exists = await userModel.findOne({ email });
 
   if (!exists) {
@@ -166,7 +171,7 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { email, password } = req.body;
-  
+
   try {
     const user = await userModel.findOne({ email });
     // check if user already exist

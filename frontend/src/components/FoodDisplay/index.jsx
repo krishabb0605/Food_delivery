@@ -4,7 +4,7 @@ import FoodItem from '../FoodItem';
 import { Box, Grid, Text } from '@chakra-ui/react';
 
 const FoodDisplay = () => {
-  const { food_list, category } = useContext(StoreContext);
+  const { foodList, category } = useContext(StoreContext);
 
   return (
     <Box mt='30px' id='food-display'>
@@ -17,7 +17,7 @@ const FoodDisplay = () => {
         gap='30px'
         rowGap='50px'
       >
-        {food_list.map((item, index) => {
+        {foodList.map((item, index) => {
           if (category === '' || category === item.category) {
             return (
               <FoodItem

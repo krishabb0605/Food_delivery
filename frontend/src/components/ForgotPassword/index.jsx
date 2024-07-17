@@ -6,6 +6,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormLabel,
   Image,
   Input,
   Text,
@@ -33,13 +34,29 @@ const ForgotPassword = () => {
     }
   }, [localStorage.getItem('token'), localStorage.getItem('user')]);
 
+  const handleEnter = (event, type) => {
+    if (event.key === 'Enter') {
+      if (type === 'forgot') {
+        handleForgotPassword(event);
+      } else {
+        handleResetPassword(event);
+      }
+    }
+  };
+
   const handleForgotPassword = async (event) => {
     event.preventDefault();
     setIsFetching(true);
+    if (!email) {
+      setIsFetching(false);
+      return toast.error('Email is required');
+    }
+
     try {
       const response = await userService.forgotPassword(email);
       if (response.data.success) {
         toast.success('Password reset email sent');
+        navigate('/');
       } else {
         toast.error(response.data.message);
       }
@@ -110,18 +127,19 @@ const ForgotPassword = () => {
               gap='20px'
               padding='20px'
               width='100%'
+              isRequired
             >
               <Text fontSize='24px' fontWeight='bold'>
                 Forgot password ?
               </Text>
-              <Text
+              <FormLabel
                 alignSelf='baseline'
                 fontSize='12px'
                 color='#6c6c6c'
                 htmlFor='email'
               >
                 Email
-              </Text>
+              </FormLabel>
               <Input
                 type='email'
                 placeholder='contact@gmail.com'
@@ -130,6 +148,7 @@ const ForgotPassword = () => {
                 value={email}
                 bg='rgb(232, 240, 254)'
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(event) => handleEnter(event, 'forgot')}
                 required
               />
               <Flex alignItems='center' gap='8px'>
@@ -214,6 +233,7 @@ const ForgotPassword = () => {
                     password2: e.target.value,
                   }))
                 }
+                onKeyDown={(event) => handleEnter(event, 'reset')}
                 required
               />
               <Button

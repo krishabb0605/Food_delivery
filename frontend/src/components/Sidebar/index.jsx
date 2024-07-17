@@ -35,6 +35,28 @@ const Sidebar = () => {
           className={currState === '/' ? 'active' : ''}
         >
           <Icon
+            as={IoReceiptOutline}
+            alt=''
+            w='28px'
+            h='28px'
+            border='1px solid black'
+            borderRadius='4px'
+            p='4px'
+          />
+          <Text display={{ base: 'none', lg: 'unset' }}>Orders</Text>
+        </Flex>
+        <Flex
+          onClick={() => navigate('/add')}
+          alignItems='center'
+          gap='12px'
+          border='1px solid #a9a9a9'
+          borderRadius='3px 0px 0px 3px'
+          p='8px 10px'
+          cursor='pointer'
+          borderRight='0'
+          className={currState === '/add' ? 'active' : ''}
+        >
+          <Icon
             as={IoMdAdd}
             alt=''
             w='28px'
@@ -88,28 +110,6 @@ const Sidebar = () => {
             p='4px'
           />
           <Text display={{ base: 'none', lg: 'unset' }}>List categories</Text>
-        </Flex>
-        <Flex
-          onClick={() => navigate('/orders')}
-          alignItems='center'
-          gap='12px'
-          border='1px solid #a9a9a9'
-          borderRadius='3px 0px 0px 3px'
-          p='8px 10px'
-          cursor='pointer'
-          borderRight='0'
-          className={currState === '/orders' ? 'active' : ''}
-        >
-          <Icon
-            as={IoReceiptOutline}
-            alt=''
-            w='28px'
-            h='28px'
-            border='1px solid black'
-            borderRadius='4px'
-            p='4px'
-          />
-          <Text display={{ base: 'none', lg: 'unset' }}>Orders</Text>
         </Flex>
       </Flex>
     </Box>

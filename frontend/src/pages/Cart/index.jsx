@@ -7,7 +7,7 @@ import { MdDelete } from 'react-icons/md';
 const Cart = () => {
   const {
     cartItems,
-    food_list,
+    foodList,
     removeFromCart,
     getTotalCartAmount,
     url,
@@ -34,7 +34,7 @@ const Cart = () => {
         </Grid>
         <br />
         <hr />
-        {food_list.map((item, index) => {
+        {foodList.map((item, index) => {
           if (cartItems[item._id] > 0) {
             return (
               <Box key={item._id}>

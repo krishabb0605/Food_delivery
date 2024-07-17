@@ -13,6 +13,26 @@ import background_pdf from '../../assets/background_pdf.png';
 import moment from 'moment';
 
 const Invoice = ({ order, index }) => {
+  const total = order.items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const subTotalData = [
+    {
+      name: 'Subtotal',
+      value: total,
+    },
+    {
+      name: 'Tax',
+      value: 2,
+    },
+    {
+      name: 'Total',
+      value: total + 2,
+    },
+  ];
+
   const styles = StyleSheet.create({
     page: {
       fontSize: 11,
@@ -21,6 +41,7 @@ const Invoice = ({ order, index }) => {
       paddingRight: 40,
       lineHeight: 1.5,
       flexDirection: 'column',
+      minHeight: '100%',
     },
 
     background: {
@@ -88,6 +109,19 @@ const Invoice = ({ order, index }) => {
       paddingLeft: 7,
       flex: 1,
       color: '#AD785C',
+    },
+
+    subHeader: {
+      color: '#5F4F45',
+      fontStyle: 'bold',
+      paddingTop: 2,
+      paddingBottom: 0,
+    },
+
+    subheaderData: {
+      color: '#816556',
+      paddingTop: 2,
+      paddingBottom: 0,
     },
 
     total: {
@@ -194,16 +228,46 @@ const Invoice = ({ order, index }) => {
       </Fragment>
     ));
 
-  const TableTotal = () => (
+  const TableTotal = () =>
+    subTotalData.map((data) => (
+      <View
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <View style={[styles.tbody, styles.tbody2, styles.subHeader]}>
+          <Text></Text>
+        </View>
+        <View style={[styles.tbody, styles.subHeader]}>
+          <Text></Text>
+        </View>
+        <View style={[styles.tbody, styles.subHeader]}>
+          <Text>{data.name}</Text>
+        </View>
+        <View style={[styles.tbody, styles.subheaderData]}>
+          <Text>$ {data.value}</Text>
+        </View>
+      </View>
+    ));
+
+  const Footer = () => (
     <View
       style={{
+        width: '75%',
+        position: 'absolute',
+        bottom: 90,
+        left: 40,
+        right: 100,
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingTop: 16,
+        flexDirection: 'column',
+        gap: '4px',
+        paddingLeft: 8,
+        pageBreakBefore: 'always',
       }}
     >
-      <View>
+      <View style={{ marginBottom: 12 }}>
         <Text style={{ color: '#5F4F45', fontStyle: 'bold', fontSize: 14 }}>
           Payment Info:
         </Text>
@@ -254,101 +318,6 @@ const Invoice = ({ order, index }) => {
         </View>
       </View>
 
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '180px',
-        }}
-      >
-        <View
-          style={{
-            color: '#816556',
-            fontSize: 12,
-            flexDirection: 'row',
-            gap: '8px',
-          }}
-        >
-          <Text
-            style={{
-              color: '#5F4F45',
-              fontStyle: 'bold',
-              fontSize: 12,
-              flex: 1,
-            }}
-          >
-            SUBTOTAL
-          </Text>
-          <Text style={{ color: '#816556', fontSize: 12, flex: 1 }}>
-            ${' '}
-            {order.items.reduce(
-              (sum, item) => sum + item.price * item.quantity,
-              0
-            )}
-          </Text>
-        </View>
-
-        <View
-          style={{
-            color: '#816556',
-            fontSize: 12,
-            flexDirection: 'row',
-            gap: '8px',
-          }}
-        >
-          <Text
-            style={{
-              color: '#5F4F45',
-              fontStyle: 'bold',
-              fontSize: 12,
-              flex: 1,
-            }}
-          >
-            TAX
-          </Text>
-          <Text style={{ color: '#816556', fontSize: 12, flex: 1 }}>$ 2</Text>
-        </View>
-
-        <View
-          style={{
-            color: '#816556',
-            fontSize: 12,
-            flexDirection: 'row',
-            gap: '8px',
-          }}
-        >
-          <Text
-            style={{
-              color: '#5F4F45',
-              fontStyle: 'bold',
-              fontSize: 12,
-              flex: 1,
-            }}
-          >
-            TOTAL
-          </Text>
-          <Text style={{ color: '#816556', fontSize: 12, flex: 1 }}>
-            ${' '}
-            {order.items.reduce(
-              (sum, item) => sum + item.price * item.quantity,
-              0
-            ) + 2}
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
-
-  const Footer = () => (
-    <View
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        paddingTop: 12,
-      }}
-    >
       <Text style={{ color: '#5F4F45', fontStyle: 'bold', fontSize: 14 }}>
         TERMS AND CONDITIONS:
       </Text>

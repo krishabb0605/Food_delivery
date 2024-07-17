@@ -7,6 +7,7 @@ import FoodItem from './FoodItem';
 import Footer from './Footer';
 import ForgotPassword from './ForgotPassword';
 import Header from './Header';
+import InvoiceButton from './InvoiceButton';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
@@ -22,4 +23,5 @@ export {
   ForgotPassword,
   Sidebar,
   Navbar,
+  InvoiceButton,
 };

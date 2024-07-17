@@ -12,7 +12,7 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
-  const [food_list, setFoodList] = useState([]);
+  const [foodList, setFoodList] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const StoreContextProvider = (props) => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = food_list.find((product) => product._id === item);
+        let itemInfo = foodList.find((product) => product._id === item);
         totalAmount += itemInfo.price * cartItems[item];
       }
     }
@@ -124,7 +124,7 @@ const StoreContextProvider = (props) => {
   }, [localStorage.getItem('token'), localStorage.getItem('verified')]);
 
   const contextValue = {
-    food_list,
+    foodList,
     cartItems,
     setCartItems,
     addToCart,

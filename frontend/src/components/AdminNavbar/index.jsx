@@ -1,9 +1,16 @@
 import React, { useContext, useRef, useState } from 'react';
-import food_logo from '../../assets/food_logo.png'
-import { Outlet } from 'react-router-dom';
+import food_logo from '../../assets/food_logo.png';
+import { Link, Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 import { StoreContext } from '../../context/StoreContext';
-import { Box, Flex, Icon, Image, Text, useOutsideClick } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Icon,
+  Image,
+  Text,
+  useOutsideClick,
+} from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 
@@ -35,7 +42,9 @@ const AdminNavbar = () => {
         bg='white'
         borderBottom='1px solid #a9a9a9'
       >
-        <Image src={food_logo} alt='logo' w='90px' h='75px' />
+        <Link to='/'>
+          <Image src={food_logo} alt='logo' w='90px' h='75px' />
+        </Link>
 
         <Box pos='relative' ref={ref}>
           <Icon
