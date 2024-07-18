@@ -15,12 +15,18 @@ import {
   FormLabel,
 } from '@chakra-ui/react';
 import { categoryService, foodService } from '../../services';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Add = () => {
-  const [image, setImage] = useState(false);
+  const { backendUrl } = useContext(AuthContext);
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
+
   const [addingData, setAddingData] = useState(false);
+  const [image, setImage] = useState(false);
+
   const [isCategory, setIsCategory] = useState(false);
   const [itemData, setItemData] = useState({
     id: false,
@@ -36,12 +42,20 @@ const Add = () => {
     image: false,
   });
 
-  const { categoryData, isFetching, fetchCategoryList, url } = useContext(
-    StoreContext
-  );
   const { state } = useLocation();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const fetchCategoryList = async () => {
+    setIsFetching(true);
+    try {
+      const response = await categoryService.listCategory();
+      setCategoryData(response.data.data);
+    } catch (error) {
+      toast.error(error);
+    }
+    setIsFetching(false);
+  };
 
   useEffect(() => {
     fetchCategoryList();
@@ -50,7 +64,7 @@ const Add = () => {
 
   useEffect(() => {
     if (state) {
-      const image = `${url}/images/` + state.image;
+      const image = `${backendUrl}/images/` + state.image;
       if (state.type === 'item') {
         setIsCategory(false);
         setItemData({
@@ -78,7 +92,7 @@ const Add = () => {
     setItemData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleItemAdd = async () => {
+  const handleItemData = async () => {
     const formData = new FormData();
     formData.append('name', itemData.name);
     if (typeof image === 'object') {
@@ -124,7 +138,7 @@ const Add = () => {
     setAddingData(false);
   };
 
-  const handleCategoryAdd = async () => {
+  const handleCategoryData = async () => {
     const formData = new FormData();
     formData.append('name', addedCategoryData.name);
     if (typeof addedCategoryData.image === 'object') {
@@ -153,6 +167,7 @@ const Add = () => {
         response = await categoryService.addCategory(formData);
       }
 
+      fetchCategoryList();
       if (response.data.success) {
         setAddedCategoryData({
           name: '',
@@ -339,7 +354,7 @@ const Add = () => {
             </Flex>
           </Flex>
           <Button
-            onClick={handleItemAdd}
+            onClick={handleItemData}
             maxW='120px'
             minH='40px'
             colorScheme='blackAlpha'
@@ -399,7 +414,7 @@ const Add = () => {
           </Flex>
 
           <Button
-            onClick={handleCategoryAdd}
+            onClick={handleCategoryData}
             maxW='120px'
             colorScheme='blackAlpha'
             isLoading={addingData}

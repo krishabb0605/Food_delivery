@@ -1,14 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import MyOrder from '../MyOrder';
-import { Box, Flex, Grid, Spinner, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  Image,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 import { orderService } from '../../services';
 import { toast } from 'react-toastify';
+import empty_order from '../../assets/empty_order.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const MyOrders = () => {
-  const [data, setData] = useState();
+  const [ordersData, setOrdersData] = useState([]);
   const [fetchData, setFetchData] = useState(false);
   const { token } = useContext(StoreContext);
+  const navigate = useNavigate();
 
   const fetchOrders = async () => {
     setFetchData(true);
@@ -18,7 +29,7 @@ const MyOrders = () => {
       const sortedData = response.data.data.sort((a, b) =>
         b.date.localeCompare(a.date)
       );
-      setData(sortedData);
+      setOrdersData(sortedData);
     } catch (error) {
       toast(error);
     }
@@ -39,6 +50,24 @@ const MyOrders = () => {
     );
   }
 
+  if (!ordersData.length) {
+    return (
+      <Flex alignItems='center' justifyContent='center' mt='85px' flexDir='column' gap='40px'>
+        <Image src={empty_order} />
+        <Button
+          onClick={() => navigate('/')}
+          border='none'
+          colorScheme='orange'
+          w='max(10vw, 180px)'
+          py='12px'
+          borderRadius='4px'
+        >
+          Place Order
+        </Button>
+      </Flex>
+    );
+  }
+
   return (
     <Box m='50px 0px'>
       <Text fontSize='24px' fontWeight='700'>
@@ -51,14 +80,14 @@ const MyOrders = () => {
           gap='30px'
           rowGap='50px'
         >
-          {data &&
-            data.map((order, index) => {
+          {ordersData &&
+            ordersData.map((order, index) => {
               return (
                 <MyOrder
                   key={index}
                   index={index}
                   order={order}
-                  totalData={data.length}
+                  totalData={ordersData.length}
                   fetchOrders={fetchOrders}
                 />
               );

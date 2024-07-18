@@ -13,14 +13,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import { categoryService } from '../../services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 const CategoryList = () => {
-  const { url } = useContext(StoreContext);
+  const { backendUrl } = useContext(AuthContext);
   const [deletingData, setDeletingData] = useState([false, null]);
   const [isFetching, setIsFetching] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
@@ -39,7 +39,7 @@ const CategoryList = () => {
   };
 
   const handleEditCategory = (data) => {
-    navigate('/', {
+    navigate('/add', {
       state: { ...data, type: 'category' },
     });
   };
@@ -111,7 +111,7 @@ const CategoryList = () => {
                 alignItems='center'
               >
                 <Image
-                  src={`${url}/images/` + category.image}
+                  src={`${backendUrl}/images/` + category.image}
                   alt='item'
                   borderRadius='50%'
                   h='130px'

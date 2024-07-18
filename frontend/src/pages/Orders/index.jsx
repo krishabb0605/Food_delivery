@@ -141,7 +141,7 @@ const Orders = () => {
                                 fontSize={{ base: 'xs', lg: 'sm' }}
                                 key={index}
                               >
-                                • {(item.name += ' x ' + item.quantity)}
+                                • {item.name + ' x ' + item.quantity}
                               </Text>
                             );
                           })}

@@ -8,6 +8,7 @@ import StoreContextProvider from './context/StoreContext.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { coreTheme } from './theme/core';
 import { CLIENT_ID } from './config.js';
+import AuthContextProvider from './context/AuthContext.jsx';
 
 const theme = extendTheme({
   ...coreTheme,
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <StoreContextProvider>
-          <App />
+          <AuthContextProvider>
+            <App />
+          </AuthContextProvider>
         </StoreContextProvider>
       </BrowserRouter>
     </ChakraProvider>

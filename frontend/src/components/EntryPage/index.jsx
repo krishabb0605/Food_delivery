@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import google_icon from '../../assets/google.svg';
 import background_mobile from '../../assets/background.webp';
 import { toast } from 'react-toastify';
@@ -30,7 +30,7 @@ const EntryPage = ({ handleRole }) => {
   const [googleUserData, setGoogleUserData] = useState();
 
   const [validationToken, setValidationToken] = useState();
-  const { setToken } = useContext(StoreContext);
+  const { setToken } = useContext(AuthContext);
 
   const [userDataForVerification, setUserDataForVerification] = useState(
     JSON.parse(localStorage.getItem('user'))

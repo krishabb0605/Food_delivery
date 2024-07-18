@@ -3,6 +3,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, Grid, Image, Input, Text } from '@chakra-ui/react';
 import { MdDelete } from 'react-icons/md';
+import empty_cart from '../../assets/empty_cart.png';
 
 const Cart = () => {
   const {
@@ -14,6 +15,40 @@ const Cart = () => {
   } = useContext(StoreContext);
 
   const navigate = useNavigate();
+
+  if (getTotalCartAmount() === 0) {
+    return (
+      <Flex
+        alignItems='center'
+        justifyContent='center'
+        flexDir='column'
+        gap='30px'
+      >
+        <Image src={empty_cart} h='200px' />
+        <Flex flexDir='column' gap='2px' alignItems='center'>
+          <Text
+            color='#da6534'
+            fontSize='30px'
+            fontWeight='bold'
+            letterSpacing='2px'
+          >
+            Your cart is empty
+          </Text>
+          <Text>{`Add something to make me happy :)`}</Text>
+        </Flex>
+        <Button
+          onClick={() => navigate('/')}
+          border='none'
+          colorScheme='orange'
+          w='max(15vw, 200px)'
+          py='12px'
+          borderRadius='4px'
+        >
+          Continue Ordering
+        </Button>
+      </Flex>
+    );
+  }
 
   return (
     <Box mt={{ base: '40px', md: '100px' }}>

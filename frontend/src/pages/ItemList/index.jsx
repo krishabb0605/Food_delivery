@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import {
   Button,
   Card,
@@ -20,7 +20,7 @@ import { foodService } from '../../services';
 import { useNavigate } from 'react-router-dom';
 
 const ItemList = () => {
-  const { url } = useContext(StoreContext);
+  const { backendUrl } = useContext(AuthContext);
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deletedId, setDeletedId] = useState(null);
@@ -41,7 +41,7 @@ const ItemList = () => {
   };
 
   const handleEditFood = (data) => {
-    navigate('/', {
+    navigate('/add', {
       state: { ...data, type: 'item' },
     });
   };
@@ -113,7 +113,7 @@ const ItemList = () => {
               w={{ base: '280px', lg: '150px' }}
               p='12px'
               boxShadow='0px 0px 16px 0px gray'
-              src={`${url}/images/` + item.image}
+              src={`${backendUrl}/images/` + item.image}
               alt='Food-Image'
             />
 

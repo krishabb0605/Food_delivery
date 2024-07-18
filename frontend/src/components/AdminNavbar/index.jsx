@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import food_logo from '../../assets/food_logo.png';
 import { Link, Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import {
   Box,
   Flex,
@@ -15,7 +15,7 @@ import { FaUser } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 
 const AdminNavbar = () => {
-  const { logout } = useContext(StoreContext);
+  const { logout } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   const ref = useRef();
 
