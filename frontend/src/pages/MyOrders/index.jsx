@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import MyOrder from '../MyOrder';
 import {
   Box,
@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 const MyOrders = () => {
   const [ordersData, setOrdersData] = useState([]);
   const [fetchData, setFetchData] = useState(false);
-  const { token } = useContext(StoreContext);
+  const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const fetchOrders = async () => {
@@ -52,7 +52,13 @@ const MyOrders = () => {
 
   if (!ordersData.length) {
     return (
-      <Flex alignItems='center' justifyContent='center' mt='85px' flexDir='column' gap='40px'>
+      <Flex
+        alignItems='center'
+        justifyContent='center'
+        mt='85px'
+        flexDir='column'
+        gap='40px'
+      >
         <Image src={empty_order} />
         <Button
           onClick={() => navigate('/')}

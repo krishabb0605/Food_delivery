@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import food_logo from '../../assets/food_logo.png';
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import Footer from '../Footer';
-import { StoreContext } from '../../context/StoreContext';
+import { UserContext } from '../../context/UserContext';
+import { AuthContext } from '../../context/AuthContext';
 import { FaUser } from 'react-icons/fa';
 import { IoCart } from 'react-icons/io5';
 import { FaSearch } from 'react-icons/fa';
@@ -39,17 +40,17 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchQuery, setSearchQuery] = useState('');
   const {
+    setCategory,
     getTotalCartAmount,
-    logout,
-    handleCategory,
     isFetching,
-    categoryData,
-  } = useContext(StoreContext);
+    categoryList,
+  } = useContext(UserContext);
+  const { logout } = useContext(AuthContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const ref = useRef();
   useOutsideClick({
     ref,
@@ -57,12 +58,12 @@ const Navbar = () => {
   });
 
   useEffect(() => {
-    categoryData.map((menu) => setMenuOptions((prev) => [...prev, menu.name]));
+    categoryList.map((menu) => setMenuOptions((prev) => [...prev, menu.name]));
     setMenuOptions((prev) => [...prev]);
   }, [isFetching]);
 
   useEffect(() => {
-    handleCategory(searchQuery);
+    setCategory(searchQuery);
   }, [searchQuery]);
   menuOptions = uniq(menuOptions);
 

@@ -13,13 +13,13 @@ import {
   StepSeparator,
 } from '@chakra-ui/react';
 import { orderService } from '../../services';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
 import InvoiceButton from '../../components/InvoiceButton';
 
 const MyOrder = ({ index, order, totalData, fetchOrders }) => {
   const [currentStep, setCurrentStep] = useState(1);
 
-  const { token } = useContext(StoreContext);
+  const { token } = useContext(AuthContext);
 
   const steps = [
     { label: 'Food Processing', isComplete: currentStep >= 1 },

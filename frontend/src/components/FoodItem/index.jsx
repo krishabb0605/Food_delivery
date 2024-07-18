@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
-import { StoreContext } from '../../context/StoreContext';
+import { UserContext } from '../../context/UserContext';
+import { AuthContext } from '../../context/AuthContext';
 import { Box, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 
 const FoodItem = ({ id, name, price, description, image }) => {
-  const { cartItems, addToCart, removeFromCart, url } = useContext(
-    StoreContext
-  );
+  const { backendUrl } = useContext(AuthContext);
+  const { cartItems, addToCart, removeFromCart } = useContext(UserContext);
 
   return (
     <Box
@@ -20,7 +20,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
     >
       <Box pos='relative'>
         <Image
-          src={url + '/images/' + image}
+          src={backendUrl + '/images/' + image}
           alt='food_item_image'
           width='100%'
           h='194px'

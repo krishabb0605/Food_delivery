@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
+import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, Grid, Image, Input, Text } from '@chakra-ui/react';
 import { MdDelete } from 'react-icons/md';
@@ -11,9 +12,9 @@ const Cart = () => {
     foodList,
     removeFromCart,
     getTotalCartAmount,
-    url,
-  } = useContext(StoreContext);
+  } = useContext(UserContext);
 
+  const { backendUrl } = useContext(AuthContext);
   const navigate = useNavigate();
 
   if (getTotalCartAmount() === 0) {
@@ -69,7 +70,7 @@ const Cart = () => {
         </Grid>
         <br />
         <hr />
-        {foodList.map((item, index) => {
+        {foodList.map((item) => {
           if (cartItems[item._id] > 0) {
             return (
               <Box key={item._id}>
@@ -84,7 +85,7 @@ const Cart = () => {
                   <Image
                     width='50px'
                     height='40px'
-                    src={url + '/images/' + item.image}
+                    src={backendUrl + '/images/' + item.image}
                     alt='item-image'
                   />
                   <Text>{item.name}</Text>

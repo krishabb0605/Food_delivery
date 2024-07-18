@@ -82,7 +82,7 @@ const Footer = () => {
       </Grid>
       <hr />
       <Text textAlign='center'>
-        Copyright 2024 © Tomato.com -All right Reserved.
+        Copyright 2024 © Flavorful_cuisine.com -All right Reserved.
       </Text>
     </Flex>
   );

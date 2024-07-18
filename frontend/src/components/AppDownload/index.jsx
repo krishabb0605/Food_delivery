@@ -15,7 +15,7 @@ const AppDownload = () => {
       id='app-download'
     >
       <Text>
-        For Better Experience Download <br /> Tomato App
+        For Better Experience Download <br /> Flavorful cuisine App
       </Text>
       <Flex justifyContent='center' gap='max(2vw, 10px)' mt='40px'>
         <Image

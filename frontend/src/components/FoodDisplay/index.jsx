@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { StoreContext } from '../../context/StoreContext';
+import { UserContext } from '../../context/UserContext';
 import FoodItem from '../FoodItem';
 import { Box, Grid, Text } from '@chakra-ui/react';
 
 const FoodDisplay = () => {
-  const { foodList, category } = useContext(StoreContext);
+  const { foodList, category } = useContext(UserContext);
 
   return (
     <Box mt='30px' id='food-display'>

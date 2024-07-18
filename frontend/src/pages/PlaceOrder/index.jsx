@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../../context/StoreContext';
+import { AuthContext } from '../../context/AuthContext';
+import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, FormControl, Input, Text } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { orderService } from '../../services';
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, foodList, cartItems } = useContext(
-    StoreContext
-  );
+  const { getTotalCartAmount, foodList, cartItems } = useContext(UserContext);
+  const { token } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(false);
 

@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { Flex, Image, Text } from '@chakra-ui/react';
-import { StoreContext } from '../../context/StoreContext';
+import { UserContext } from '../../context/UserContext';
+import { AuthContext } from '../../context/AuthContext';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-  
+
 const settings = {
   dots: false,
   infinite: true,
@@ -43,9 +44,8 @@ const settings = {
 };
 
 const ExploreMenu = () => {
-  const { category, handleCategory, categoryData, url } = useContext(
-    StoreContext
-  );
+  const { backendUrl } = useContext(AuthContext);
+  const { category, setCategory, categoryList } = useContext(UserContext);
 
   return (
     <Flex flexDir='column' gap='20px' id='explore-menu'>
@@ -63,7 +63,7 @@ const ExploreMenu = () => {
         delicious meal at a time.
       </Text>
       <Slider {...settings}>
-        {categoryData.map((item, index) => {
+        {categoryList.map((item, index) => {
           return (
             <Flex
               display='flex !important'
@@ -73,13 +73,13 @@ const ExploreMenu = () => {
               _focusVisible={{ outline: 'none' }}
               key={index}
               onClick={() =>
-                handleCategory((prev) => (prev === item.name ? '' : item.name))
+                setCategory((prev) => (prev === item.name ? '' : item.name))
               }
             >
               <Image
                 border={category === item.name ? '4px solid tomato' : ''}
                 padding={category === item.name ? '2px' : '0px'}
-                src={`${url}/images/` + item.image}
+                src={`${backendUrl}/images/` + item.image}
                 alt='menu-image'
                 width='7.5vw'
                 minW='80px'
