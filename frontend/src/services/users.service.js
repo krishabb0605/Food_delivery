@@ -24,4 +24,11 @@ export default class userService {
     const response = await axios.post('/api/user/resetPassword', data);
     return response;
   }
+
+  static async googleLogin(access_token) {
+    const response = await axios.post('/api/user/google-login', {
+      access_token,
+    });
+    return response;
+  }
 }

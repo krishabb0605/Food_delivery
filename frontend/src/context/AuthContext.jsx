@@ -9,26 +9,36 @@ axios.defaults.baseURL = backendUrl;
 export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
-  const tokenData = localStorage.getItem('token');
-  const [token, setToken] = useState(tokenData);
+  const userJsonData = localStorage.getItem('user');
 
+  const [token, setToken] = useState(JSON.parse(userJsonData)?.token);
+  const [userData, setUserData] = useState(JSON.parse(userJsonData));
+  const [role, setRole] = useState(JSON.parse(userJsonData)?.role);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToken(tokenData);
-  }, [tokenData]);
+    if (userJsonData) {
+      setUserData(JSON.parse(userJsonData));
+      setToken(JSON.parse(userJsonData).token);
+    }
+  }, [userJsonData]);
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
     localStorage.removeItem('user');
-    localStorage.removeItem('verified');
 
     setToken('');
     navigate('/login');
   };
 
-  const value = { token, logout, setToken, backendUrl };
+  const value = {
+    token,
+    backendUrl,
+    userData,
+    role,
+    setRole,
+    logout,
+    setToken,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

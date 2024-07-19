@@ -5,6 +5,7 @@ import {
   registerUser,
   resetPassword,
   sendVerificationEmail,
+  signInWithGoogle,
   verifyUser,
 } from '../controllers/userController.js';
 
@@ -16,5 +17,6 @@ userRouter.post('/verification', sendVerificationEmail);
 userRouter.get('/verify-email/:token', verifyUser);
 userRouter.get('/forgot-password/:email', forgotPassword);
 userRouter.post('/resetPassword', resetPassword);
+userRouter.post('/google-login',signInWithGoogle)
 
 export default userRouter;

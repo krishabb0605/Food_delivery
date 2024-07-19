@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import background_mobile from '../../assets/background.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,6 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { userService } from '../../services';
+import { AuthContext } from '../../context/AuthContext';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -22,17 +23,16 @@ const ForgotPassword = () => {
     password1: '',
     password2: '',
   });
-
+  const { token } = useContext(AuthContext);
   const fetchedEmail = new URLSearchParams(location.search).get('email');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (token && user) {
       navigate('/');
     }
-  }, [localStorage.getItem('token'), localStorage.getItem('user')]);
+  }, [token, localStorage.getItem('user')]);
 
   const handleEnter = (event, type) => {
     if (event.key === 'Enter') {

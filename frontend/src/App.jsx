@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router-dom';
@@ -15,20 +15,17 @@ import {
   PrivateRoute,
   Verify,
 } from './pages';
+import { AuthContext } from './context/AuthContext';
 
 const App = () => {
-  const [role, setRole] = useState(localStorage.getItem('role'));
-
-  const handleRole = (role) => {
-    setRole(role);
-  };
+  const { role } = useContext(AuthContext);
 
   return (
     <>
       <ToastContainer />
       <Routes>
         <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/login' element={<EntryPage handleRole={handleRole} />} />
+        <Route path='/login' element={<EntryPage />} />
         <Route element={<PrivateRoute />}>
           {role === 'user' ? (
             <Route element={<Navbar />}>

@@ -45,7 +45,7 @@ const Navbar = () => {
     isFetching,
     categoryList,
   } = useContext(UserContext);
-  const { logout } = useContext(AuthContext);
+  const { userData, logout } = useContext(AuthContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
@@ -175,14 +175,24 @@ const Navbar = () => {
             </Box>
 
             <Box pos='relative' ref={ref}>
-              <Icon
-                as={FaUser}
-                alt='profile'
-                color='#4b537b'
-                transform='scale(1.3)'
-                cursor='pointer'
-                onClick={() => handleMenu(true)}
-              />
+              {userData && !userData.avtar ? (
+                <Icon
+                  as={FaUser}
+                  alt='profile'
+                  color='#4b537b'
+                  transform='scale(1.3)'
+                  cursor='pointer'
+                  onClick={() => handleMenu(true)}
+                />
+              ) : (
+                <Image
+                  src={userData.avtar}
+                  h='50px'
+                  borderRadius='50%'
+                  onClick={() => handleMenu(true)}
+                  cursor='pointer'
+                />
+              )}
               {showMenu && (
                 <Flex
                   pos='absolute'

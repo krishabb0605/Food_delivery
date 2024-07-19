@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import bycrpt from 'bcrypt';
 import validator from 'validator';
 import nodemailer from 'nodemailer';
-
-// login user
+import 'dotenv/config';
+import axios from 'axios';
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -195,6 +195,50 @@ const resetPassword = async (req, res) => {
     res.json({ success: false, message: 'Error while updating password !' });
   }
 };
+
+const signInWithGoogle = async (req, res) => {
+  const { access_token } = req.body;
+  try {
+    const response = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          Accept: 'application/json',
+        },
+      }
+    );
+    console.log(response.data);
+    const { email, verified_email, picture } = response.data;
+    const existUser = await userModel.findOne({ email });
+
+    if (existUser) {
+      const token = createToken(existUser._id);
+      return res.json({ success: true, token, user: existUser });
+    } else {
+      const salt = await bycrpt.genSalt(10);
+      let password = Math.floor(Math.random() * 900000) + 100000;
+      password = password.toString();
+      const hashedPassword = await bycrpt.hash(password, salt);
+      const newUser = new userModel({
+        role: 'user',
+        email,
+        password: hashedPassword,
+        verified: verified_email,
+        verificationToken: '',
+        avtar: picture,
+      });
+
+      const user = await newUser.save();
+      const token = createToken(user._id);
+      res.json({ success: true, token, user });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: 'Error while signing in' });
+  }
+};
+
 export {
   loginUser,
   registerUser,
@@ -202,4 +246,5 @@ export {
   sendVerificationEmail,
   forgotPassword,
   resetPassword,
+  signInWithGoogle,
 };

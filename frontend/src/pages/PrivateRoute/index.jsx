@@ -3,9 +3,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 import UserContextProvider from '../../context/UserContext';
 
 const PrivateRoute = () => {
-  const token = localStorage.getItem('token');
-  const verified = localStorage.getItem('verified');
-  const userRole = localStorage.getItem('role') === 'user';
+  const token = JSON.parse(localStorage.getItem('user'))?.token;
+  const verified = JSON.parse(localStorage.getItem('user'))?.verified;
+  const userRole = JSON.parse(localStorage.getItem('user'))?.role === 'user';
 
   return token && verified ? (
     userRole ? (

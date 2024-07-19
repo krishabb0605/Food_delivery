@@ -1,11 +1,10 @@
 import React, { useEffect, useContext, useState } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 import google_icon from '../../assets/google.svg';
 import background_mobile from '../../assets/background.webp';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import {
   Box,
   Button,
@@ -21,16 +20,16 @@ import {
 } from '@chakra-ui/react';
 import { userService } from '../../services';
 
-const EntryPage = ({ handleRole }) => {
+const EntryPage = () => {
   const [isFetching, setIsFetching] = useState(false);
-  const [currState, setCurrState] = useState('Login');
+  const [currState, setCurrState] = useState('login');
   const [data, setData] = useState({ role: 'user', email: '', password: '' });
 
   const [isLoginWithGoogle, setIsLoginWithGoogle] = useState(false);
   const [googleUserData, setGoogleUserData] = useState();
 
   const [validationToken, setValidationToken] = useState();
-  const { setToken } = useContext(AuthContext);
+  const { setToken, setRole } = useContext(AuthContext);
 
   const [userDataForVerification, setUserDataForVerification] = useState(
     JSON.parse(localStorage.getItem('user'))
@@ -38,18 +37,21 @@ const EntryPage = ({ handleRole }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
 
-    if (token) {
+    if (user && user.token) {
       if (user && user.verified === false) {
         setCurrState('verification');
-      } else if (currState === 'Login') {
-        localStorage.setItem('verified', true);
+      } else if (currState === 'login') {
+        const updatedUserData = {
+          ...JSON.parse(localStorage.getItem('user')),
+          verified: true,
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUserData));
         navigate('/', { replace: true });
       }
     }
-  }, [currState, localStorage.getItem('token'), localStorage.getItem('user')]);
+  }, [currState, localStorage.getItem('user')]);
 
   const googleLogin = useGoogleLogin({
     onSuccess: (codeResponse) => setGoogleUserData(codeResponse),
@@ -60,23 +62,28 @@ const EntryPage = ({ handleRole }) => {
     const getProfileData = async () => {
       if (googleUserData) {
         try {
-          const response = await axios.get(
-            `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleUserData.access_token}`,
-            {
-              headers: {
-                Authorization: `Bearer ${googleUserData.access_token}`,
-                Accept: 'application/json',
-              },
-            }
+          const response = await userService.googleLogin(
+            googleUserData.access_token
           );
-          console.log(response.data);
+          if (response.data.success) {
+            const userData = response.data.user;
+            setToken(response.data.token);
+            setRole(userData.role);
+            const updatedUserData = {
+              ...userData,
+              token: response.data.token,
+            };
+            localStorage.setItem('user', JSON.stringify(updatedUserData));
+            navigate('/', { replace: true });
+          } else {
+            toast.error(response.data.message);
+          }
           setIsLoginWithGoogle(false);
-        } catch (e) {
-          alert('Error while fetching data');
+        } catch (error) {
+          toast.error('Error while fetching data');
         }
       }
     };
-
     getProfileData();
   }, [googleUserData]);
 
@@ -95,22 +102,15 @@ const EntryPage = ({ handleRole }) => {
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    let userRole;
-
-    if (currState === 'Login') {
-      userRole = 'login';
-    } else if (currState === 'Sign Up') {
-      userRole = 'register';
-    }
-    if (data.role === 'admin' && currState === 'Sign Up') {
+    if (data.role === 'admin' && currState === 'register') {
       let code = prompt('Please Enter Admin Code :');
       if (code === 'admin@123') {
-        handleLoginProcess(userRole);
+        handleLoginProcess(currState);
       } else {
         toast.error('Enter valid admin code');
       }
     } else {
-      handleLoginProcess(userRole);
+      handleLoginProcess(currState);
     }
   };
 
@@ -120,16 +120,17 @@ const EntryPage = ({ handleRole }) => {
       const response = await userService.user(userRole, data);
       if (response.data.success) {
         setToken(response.data.token);
-        handleRole(response.data.user.role);
+        setRole(response.data.user.role);
         setUserDataForVerification(response.data.user);
 
-        if (currState === 'Sign Up') {
+        if (currState === 'register') {
           handleSendVerificationEmail(response.data.user);
         }
-
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        localStorage.setItem('role', response.data.user.role);
+        const updatedUserData = {
+          ...response.data.user,
+          token: response.data.token,
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUserData));
       } else {
         toast.error(response.data.message);
       }
@@ -140,9 +141,8 @@ const EntryPage = ({ handleRole }) => {
   };
 
   const handleSendVerificationEmail = async (userData) => {
-    const data = userData ? userData : userDataForVerification;
     try {
-      const response = await userService.sendVerificationEmail(data);
+      const response = await userService.sendVerificationEmail(userData);
       if (response.data.success) {
         toast.success(response.data.message);
       } else {
@@ -153,13 +153,17 @@ const EntryPage = ({ handleRole }) => {
     }
   };
 
-  const handleVerification = async (event) => {
+  const handleVerificationOfToken = async (event) => {
     event.preventDefault();
     setIsFetching(true);
     try {
       const response = await userService.verifyUser(validationToken);
       if (response.data.success) {
-        localStorage.setItem('verified', true);
+        const updatedUserData = {
+          ...JSON.parse(localStorage.getItem('user')),
+          verified: true,
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUserData));
         navigate('/', { replace: true });
       } else {
         toast.error('Invalid OTP');
@@ -218,7 +222,7 @@ const EntryPage = ({ handleRole }) => {
                   justifyContent='center'
                   gap='12px'
                 >
-                  {currState !== 'Login' ? (
+                  {currState !== 'login' ? (
                     <>
                       <Text
                         alignSelf='baseline'
@@ -278,7 +282,7 @@ const EntryPage = ({ handleRole }) => {
                     required
                   />
                 </Flex>
-                {currState === 'Login' ? (
+                {currState === 'login' ? (
                   <Text
                     fontSize='12px'
                     fontWeight='bold'
@@ -302,7 +306,7 @@ const EntryPage = ({ handleRole }) => {
                   justifyContent='center'
                   isLoading={isFetching}
                 >
-                  {currState !== 'Login' ? 'Create Account' : 'Login'}
+                  {currState !== 'login' ? 'Create Account' : 'Login'}
                 </Button>
 
                 <Button
@@ -327,11 +331,11 @@ const EntryPage = ({ handleRole }) => {
                   </Flex>
                 </Button>
 
-                {currState !== 'Login' ? (
+                {currState !== 'login' ? (
                   <Flex fontSize={{ base: '14px', sm: 'unset' }}>
                     Already have an account ?{' '}
                     <Text
-                      onClick={() => setCurrState('Login')}
+                      onClick={() => setCurrState('login')}
                       color='tomato'
                       fontWeight='700'
                       cursor='pointer'
@@ -343,7 +347,7 @@ const EntryPage = ({ handleRole }) => {
                   <Flex fontSize={{ base: '14px', sm: 'unset' }}>
                     Create a new account ?
                     <Text
-                      onClick={() => setCurrState('Sign Up')}
+                      onClick={() => setCurrState('register')}
                       color='tomato'
                       fontWeight='700'
                       cursor='pointer'
@@ -401,10 +405,12 @@ const EntryPage = ({ handleRole }) => {
                 alignSelf='baseline'
                 marginLeft='20px'
                 cursor='pointer'
-                onClick={() => handleSendVerificationEmail()}
+                onClick={() =>
+                  handleSendVerificationEmail(userDataForVerification)
+                }
               >{`Resend verification >`}</Text>
               <Button
-                onClick={handleVerification}
+                onClick={handleVerificationOfToken}
                 border='none'
                 colorScheme='orange'
                 fontWeight='bold'
