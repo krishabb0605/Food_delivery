@@ -167,7 +167,7 @@ const EntryPage = () => {
                   justifyContent='center'
                   gap='12px'
                 >
-                  {currState !== 'login' ? (
+                  {currState !== 'login' && (
                     <>
                       <Text
                         alignSelf='baseline'
@@ -188,8 +188,6 @@ const EntryPage = () => {
                         <option value='admin'>Admin</option>
                       </Select>
                     </>
-                  ) : (
-                    <></>
                   )}
                   <Text alignSelf='baseline' fontSize='12px' color='#6c6c6c'>
                     Email

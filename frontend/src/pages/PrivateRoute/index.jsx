@@ -9,16 +9,20 @@ const PrivateRoute = () => {
   const verified = userData?.verified;
   const userRole = userData?.role === 'user';
 
-  return token && verified ? (
-    userRole ? (
-      <UserContextProvider>
-        <Outlet />
-      </UserContextProvider>
-    ) : (
+  if (!token || !verified) {
+    return <Navigate to='/login' replace />;
+  }
+
+  // Admin user
+  if (!userRole) {
+    return <Outlet />;
+  }
+
+  // Normal user
+  return (
+    <UserContextProvider>
       <Outlet />
-    )
-  ) : (
-    <Navigate to='/login' replace />
+    </UserContextProvider>
   );
 };
 
