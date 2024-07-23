@@ -15,7 +15,7 @@ import { FaUser } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 
 const AdminNavbar = () => {
-  const { userData, logout } = useContext(AuthContext);
+  const { userData, handleLogout } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   const ref = useRef();
 
@@ -85,7 +85,7 @@ const AdminNavbar = () => {
                 gap='10px'
                 cursor='pointer'
                 onClick={() => {
-                  logout(), handleMenu(false);
+                  handleLogout(), handleMenu(false);
                 }}
                 _hover={{ color: 'tomato' }}
               >

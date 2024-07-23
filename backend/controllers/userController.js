@@ -208,7 +208,7 @@ const signInWithGoogle = async (req, res) => {
         },
       }
     );
-    console.log(response.data);
+
     const { email, verified_email, picture } = response.data;
     const existUser = await userModel.findOne({ email });
 

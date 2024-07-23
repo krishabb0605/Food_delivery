@@ -2,15 +2,25 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Flex, Grid, Image, Input, Text } from '@chakra-ui/react';
-import { MdDelete } from 'react-icons/md';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  Icon,
+  Image,
+  Input,
+  Text,
+} from '@chakra-ui/react';
 import empty_cart from '../../assets/empty_cart.png';
+import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 
 const Cart = () => {
   const {
     cartItems,
     foodList,
     removeFromCart,
+    addToCart,
     getTotalCartAmount,
   } = useContext(UserContext);
 
@@ -55,18 +65,18 @@ const Cart = () => {
     <Box mt={{ base: '40px', md: '100px' }}>
       <Box>
         <Grid
-          templateColumns='1fr 1.5fr 1fr 1fr 1fr 0.5fr'
+          templateColumns='1fr 1.5fr 1fr 2fr 1fr '
           gap='8px'
           alignItems='center'
           color='gray'
           fontSize='max(1vw, 12px)'
+          textAlign='center'
         >
           <Text>Items</Text>
           <Text>Title</Text>
           <Text>Price</Text>
           <Text>Quantity</Text>
           <Text>Total</Text>
-          <Text justifySelf='center'>Remove</Text>
         </Grid>
         <br />
         <hr />
@@ -75,30 +85,53 @@ const Cart = () => {
             return (
               <Box key={item._id}>
                 <Grid
-                  templateColumns='1fr 1.5fr 1fr 1fr 1fr 0.5fr'
+                  templateColumns='1fr 1.5fr 1fr 2fr 1fr'
                   gap='8px'
                   alignItems='center'
                   fontSize='max(1vw, 12px)'
                   my='10px'
                   color='black'
+                  textAlign='center'
                 >
                   <Image
                     width='50px'
                     height='40px'
                     src={backendUrl + '/images/' + item.image}
                     alt='item-image'
+                    justifySelf='center'
                   />
                   <Text>{item.name}</Text>
                   <Text>${item.price}</Text>
-                  <Text>{cartItems[item._id]}</Text>
-                  <Text>${item.price * cartItems[item._id]}</Text>
-                  <Text
-                    onClick={() => removeFromCart(item._id)}
+                  <Flex
+                    gap={{ base: '16px', sm: '24px' }}
+                    alignItems='center'
                     justifySelf='center'
-                    cursor='pointer'
                   >
-                    <MdDelete />
-                  </Text>
+                    <Icon
+                      p='4px'
+                      alt='descrease'
+                      bg='#fecfd2'
+                      color='red'
+                      transform='scale(2)'
+                      borderRadius='50%'
+                      as={IoMdRemove}
+                      cursor='pointer'
+                      onClick={() => removeFromCart(item._id)}
+                    />
+                    <Text>{cartItems[item._id]}</Text>
+                    <Icon
+                      p='4px'
+                      alt='increase'
+                      color='green'
+                      transform='scale(2)'
+                      bg='#d5ffd9'
+                      borderRadius='50%'
+                      cursor='pointer'
+                      as={IoMdAdd}
+                      onClick={() => addToCart(item._id)}
+                    />
+                  </Flex>
+                  <Text>${item.price * cartItems[item._id]}</Text>
                 </Grid>
                 <hr />
               </Box>

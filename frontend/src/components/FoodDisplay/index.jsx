@@ -18,7 +18,11 @@ const FoodDisplay = () => {
         rowGap='50px'
       >
         {foodList.map((item, index) => {
-          if (category === '' || category === item.category) {
+          if (
+            category === '' ||
+            category === item.category ||
+            category === item.name
+          ) {
             return (
               <FoodItem
                 key={index}

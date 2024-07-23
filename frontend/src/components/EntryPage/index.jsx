@@ -21,19 +21,23 @@ import {
 import { userService } from '../../services';
 
 const EntryPage = () => {
-  const [isFetching, setIsFetching] = useState(false);
   const [currState, setCurrState] = useState('login');
   const [data, setData] = useState({ role: 'user', email: '', password: '' });
 
-  const [isLoginWithGoogle, setIsLoginWithGoogle] = useState(false);
   const [googleUserData, setGoogleUserData] = useState();
 
   const [validationToken, setValidationToken] = useState();
-  const { setToken, setRole } = useContext(AuthContext);
 
-  const [userDataForVerification, setUserDataForVerification] = useState(
-    JSON.parse(localStorage.getItem('user'))
-  );
+  const {
+    handleLoginProcess,
+    handleSendVerificationEmail,
+    isLoginWithGoogle,
+    setIsLoginWithGoogle,
+    isFetching,
+    setIsFetching,
+  } = useContext(AuthContext);
+
+  const userDataForVerification = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,27 +65,7 @@ const EntryPage = () => {
   useEffect(() => {
     const getProfileData = async () => {
       if (googleUserData) {
-        try {
-          const response = await userService.googleLogin(
-            googleUserData.access_token
-          );
-          if (response.data.success) {
-            const userData = response.data.user;
-            setToken(response.data.token);
-            setRole(userData.role);
-            const updatedUserData = {
-              ...userData,
-              token: response.data.token,
-            };
-            localStorage.setItem('user', JSON.stringify(updatedUserData));
-            navigate('/', { replace: true });
-          } else {
-            toast.error(response.data.message);
-          }
-          setIsLoginWithGoogle(false);
-        } catch (error) {
-          toast.error('Error while fetching data');
-        }
+        handleLoginProcess('google', googleUserData.access_token);
       }
     };
     getProfileData();
@@ -105,51 +89,12 @@ const EntryPage = () => {
     if (data.role === 'admin' && currState === 'register') {
       let code = prompt('Please Enter Admin Code :');
       if (code === 'admin@123') {
-        handleLoginProcess(currState);
+        handleLoginProcess(currState, data);
       } else {
         toast.error('Enter valid admin code');
       }
     } else {
-      handleLoginProcess(currState);
-    }
-  };
-
-  const handleLoginProcess = async (userRole) => {
-    setIsFetching(true);
-    try {
-      const response = await userService.user(userRole, data);
-      if (response.data.success) {
-        setToken(response.data.token);
-        setRole(response.data.user.role);
-        setUserDataForVerification(response.data.user);
-
-        if (currState === 'register') {
-          handleSendVerificationEmail(response.data.user);
-        }
-        const updatedUserData = {
-          ...response.data.user,
-          token: response.data.token,
-        };
-        localStorage.setItem('user', JSON.stringify(updatedUserData));
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error);
-    }
-    setIsFetching(false);
-  };
-
-  const handleSendVerificationEmail = async (userData) => {
-    try {
-      const response = await userService.sendVerificationEmail(userData);
-      if (response.data.success) {
-        toast.success(response.data.message);
-      } else {
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error);
+      handleLoginProcess(currState, data);
     }
   };
 
