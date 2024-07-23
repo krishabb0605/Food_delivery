@@ -2,15 +2,14 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 import { toast } from 'react-toastify';
-import { cartService, categoryService, foodService } from '../services';
+import { cartService, foodService } from '../services';
 
 export const UserContext = createContext();
 
 const UserContextProvider = ({ children }) => {
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
 
   const [foodList, setFoodList] = useState([]);
-  const [categoryList, setCategoryList] = useState([]);
   const [cartItems, setCartItems] = useState({});
 
   const [category, setCategory] = useState('');
@@ -66,9 +65,6 @@ const UserContextProvider = ({ children }) => {
         const foodsData = await foodService.listFood();
         setFoodList(foodsData.data.data);
 
-        const categorieData = await categoryService.listCategory();
-        setCategoryList(categorieData.data.data);
-
         const cartData = await cartService.getCart(token);
         setCartItems(cartData.data.cartData);
       } catch (error) {
@@ -83,7 +79,6 @@ const UserContextProvider = ({ children }) => {
     isFetching,
     category,
     foodList,
-    categoryList,
     cartItems,
     setCategory,
     addToCart,

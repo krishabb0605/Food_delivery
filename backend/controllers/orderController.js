@@ -93,9 +93,17 @@ const verifyOrder = async (req, res) => {
 
     const cardholderName = paymentMethod.billing_details.name;
     const cardholderEmail = paymentMethod.billing_details.email;
-    const last4 = paymentMethod.card.last4;
+    let last4, payment_method_type;
 
-    const cardData = { cardholderName, cardholderEmail, last4 };
+    if (paymentMethod.type === 'card') {
+      last4 = paymentMethod.card.last4;
+    } else {
+      payment_method_type = 'Using Link';
+    }
+
+    const cardData = last4
+      ? { cardholderName, cardholderEmail, last4 }
+      : { cardholderName, cardholderEmail, payment_method_type };
 
     // Update order status based on success flag
     if (success === 'true') {

@@ -281,10 +281,21 @@ const Invoice = ({ order, index }) => {
             gap: '8px',
           }}
         >
-          <Text>A/C Number:</Text>
-          <Text style={{ color: '#AD785C' }}>
-            ********{order.paymentInfo.last4}
-          </Text>
+          {order.paymentInfo.last4 ? (
+            <>
+              <Text>A/C Number:</Text>
+              <Text style={{ color: '#AD785C' }}>
+                ********{order.paymentInfo.last4}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text>Payment Type:</Text>
+              <Text style={{ color: '#AD785C' }}>
+                {order.paymentInfo.payment_method_type}
+              </Text>
+            </>
+          )}
         </View>
 
         <View

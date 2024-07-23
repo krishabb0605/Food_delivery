@@ -39,13 +39,10 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchQuery, setSearchQuery] = useState('');
-  const {
-    setCategory,
-    getTotalCartAmount,
-    isFetching,
-    categoryList,
-  } = useContext(UserContext);
-  const { userData, logout } = useContext(AuthContext);
+  const { setCategory, getTotalCartAmount, isFetching, foodList } = useContext(
+    UserContext
+  );
+  const { userData, handleLogout } = useContext(AuthContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
@@ -58,7 +55,7 @@ const Navbar = () => {
   });
 
   useEffect(() => {
-    categoryList.map((menu) => setMenuOptions((prev) => [...prev, menu.name]));
+    foodList.map((food) => setMenuOptions((prev) => [...prev, food.name]));
     setMenuOptions((prev) => [...prev]);
   }, [isFetching]);
 
@@ -72,6 +69,12 @@ const Navbar = () => {
       return setShowMenu(false);
     }
     setShowMenu(data);
+  };
+
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
+      onClose();
+    }
   };
 
   if (isFetching) {
@@ -225,7 +228,7 @@ const Navbar = () => {
                     gap='10px'
                     cursor='pointer'
                     onClick={() => {
-                      logout(), handleMenu(false);
+                      handleLogout(), handleMenu(false);
                     }}
                     _hover={{ color: 'tomato' }}
                   >
@@ -263,6 +266,7 @@ const Navbar = () => {
                 variant='filled'
                 placeholder='Search...'
                 _focusVisible={{ borderColor: '#ffd5ce' }}
+                onKeyDown={handleEnter}
               />
             </InputGroup>
             <AutoCompleteList>
