@@ -10,7 +10,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
-import { orderService } from '../../services';
+import { OrderService } from '../../services';
 import { toast } from 'react-toastify';
 import empty_order from '../../assets/empty_order.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ const MyOrders = () => {
   const fetchOrders = async () => {
     setFetchData(true);
     try {
-      const response = await orderService.usersOrder(token);
+      const response = await OrderService.usersOrder(token);
 
       const sortedData = response.data.data.sort((a, b) =>
         b.date.localeCompare(a.date)

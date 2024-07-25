@@ -1,19 +1,9 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
 import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Icon,
-  Image,
-  Input,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, Image, Input, Text } from '@chakra-ui/react';
 import empty_cart from '../../assets/empty_cart.png';
-import { IoMdAdd, IoMdRemove } from 'react-icons/io';
+import CartItem from './CartItem.jsx';
 
 const Cart = () => {
   const {
@@ -24,7 +14,6 @@ const Cart = () => {
     getTotalCartAmount,
   } = useContext(UserContext);
 
-  const { backendUrl } = useContext(AuthContext);
   const navigate = useNavigate();
 
   if (getTotalCartAmount() === 0) {
@@ -83,58 +72,13 @@ const Cart = () => {
         {foodList.map((item) => {
           if (cartItems[item._id] > 0) {
             return (
-              <Box key={item._id}>
-                <Grid
-                  templateColumns='1fr 1.5fr 1fr 2fr 1fr'
-                  gap='8px'
-                  alignItems='center'
-                  fontSize='max(1vw, 12px)'
-                  my='10px'
-                  color='black'
-                  textAlign='center'
-                >
-                  <Image
-                    width='50px'
-                    height='40px'
-                    src={backendUrl + '/images/' + item.image}
-                    alt='item-image'
-                    justifySelf='center'
-                  />
-                  <Text>{item.name}</Text>
-                  <Text>${item.price}</Text>
-                  <Flex
-                    gap={{ base: '16px', sm: '24px' }}
-                    alignItems='center'
-                    justifySelf='center'
-                  >
-                    <Icon
-                      p='4px'
-                      alt='descrease'
-                      bg='#fecfd2'
-                      color='red'
-                      transform='scale(2)'
-                      borderRadius='50%'
-                      as={IoMdRemove}
-                      cursor='pointer'
-                      onClick={() => removeFromCart(item._id)}
-                    />
-                    <Text>{cartItems[item._id]}</Text>
-                    <Icon
-                      p='4px'
-                      alt='increase'
-                      color='green'
-                      transform='scale(2)'
-                      bg='#d5ffd9'
-                      borderRadius='50%'
-                      cursor='pointer'
-                      as={IoMdAdd}
-                      onClick={() => addToCart(item._id)}
-                    />
-                  </Flex>
-                  <Text>${item.price * cartItems[item._id]}</Text>
-                </Grid>
-                <hr />
-              </Box>
+              <CartItem
+                key={item._id}
+                item={item}
+                removeFromCart={removeFromCart}
+                addToCart={addToCart}
+                qty={cartItems[item._id]}
+              />
             );
           }
         })}

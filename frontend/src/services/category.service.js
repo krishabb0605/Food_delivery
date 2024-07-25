@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class categoryService {
+export default class CategoryService {
   static async addCategory(categoryData) {
     const response = await axios.post('/api/category/add', categoryData);
     return response;

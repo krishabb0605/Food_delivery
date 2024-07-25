@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
-import {
-  AppDownload,
-  ExploreMenu,
-  FoodDisplay,
-  Header,
-} from '../../components';
+import React from 'react';
+import { AppDownload, ExploreMenu, FoodDisplay, Hero } from '../../components';
 
 const Home = () => {
   return (
     <>
-      <Header />
+      <Hero />
       <ExploreMenu />
       <FoodDisplay />
       <AppDownload />

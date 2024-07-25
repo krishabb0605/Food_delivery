@@ -6,13 +6,13 @@ import FoodDisplay from './FoodDisplay';
 import FoodItem from './FoodItem';
 import Footer from './Footer';
 import ForgotPassword from './ForgotPassword';
-import Header from './Header';
+import Hero from './Hero';
 import InvoiceButton from './InvoiceButton';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
 export {
-  Header,
+  Hero,
   AdminNavbar,
   AppDownload,
   EntryPage,

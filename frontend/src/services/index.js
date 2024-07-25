@@ -1,7 +1,7 @@
-import cartService from './cart.service';
-import categoryService from './category.service';
-import foodService from './food.service';
-import orderService from './order.service';
-import userService from './users.service';
+import CartService from './cart.service';
+import CategoryService from './category.service';
+import FoodService from './food.service';
+import OrderService from './order.service';
+import UserService from './users.service';
 
-export { userService, cartService, foodService, orderService, categoryService };
+export { UserService, CartService, FoodService, OrderService, CategoryService };

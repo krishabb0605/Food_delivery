@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class orderService {
+export default class OrderService {
   static async placeOrder(orderData, token) {
     const response = await axios.post('/api/order/place', orderData, {
       headers: { token },

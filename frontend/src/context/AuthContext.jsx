@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 import axios from 'axios';
-import { userService } from '../services';
+import { UserService } from '../services';
 import { toast } from 'react-toastify';
 
 const backendUrl = API_BASE_URL;
@@ -33,7 +33,7 @@ const AuthContextProvider = ({ children }) => {
     if (currRole !== 'google') {
       setIsFetching(true);
       try {
-        const response = await userService.user(currRole, data);
+        const response = await UserService.user(currRole, data);
         if (response.data.success) {
           setToken(response.data.token);
           setRole(response.data.user.role);
@@ -55,7 +55,7 @@ const AuthContextProvider = ({ children }) => {
       setIsFetching(false);
     } else {
       try {
-        const response = await userService.googleLogin(data);
+        const response = await UserService.googleLogin(data);
         if (response.data.success) {
           const userData = response.data.user;
           setToken(response.data.token);
@@ -78,7 +78,7 @@ const AuthContextProvider = ({ children }) => {
 
   const handleSendVerificationEmail = async (userData) => {
     try {
-      const response = await userService.sendVerificationEmail(userData);
+      const response = await UserService.sendVerificationEmail(userData);
       if (response.data.success) {
         toast.success(response.data.message);
       } else {

@@ -2,17 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import background_mobile from '../../assets/background.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Image,
-  Input,
-  Text,
-} from '@chakra-ui/react';
-import { userService } from '../../services';
+import { Flex, Image } from '@chakra-ui/react';
+import { UserService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
+import SendForgotEmail from './SendForgotEmail.jsx';
+import ResetPassword from './ResetPassword.jsx';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -34,16 +28,6 @@ const ForgotPassword = () => {
     }
   }, [token, localStorage.getItem('user')]);
 
-  const handleEnter = (event, type) => {
-    if (event.key === 'Enter') {
-      if (type === 'forgot') {
-        handleForgotPassword(event);
-      } else {
-        handleResetPassword(event);
-      }
-    }
-  };
-
   const handleForgotPassword = async (event) => {
     event.preventDefault();
     setIsFetching(true);
@@ -53,7 +37,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await userService.forgotPassword(email);
+      const response = await UserService.forgotPassword(email);
       if (response.data.success) {
         toast.success('Password reset email sent');
         navigate('/');
@@ -84,7 +68,7 @@ const ForgotPassword = () => {
     };
 
     try {
-      const response = await userService.resetPassword(data);
+      const response = await UserService.resetPassword(data);
       if (response.data.success) {
         toast.success(response.data.message);
         navigate('/');
@@ -121,126 +105,18 @@ const ForgotPassword = () => {
           w={{ base: '325px', sm: '400px' }}
         >
           {!fetchedEmail ? (
-            <FormControl
-              display='flex'
-              flexDir='column'
-              gap='20px'
-              padding='20px'
-              width='100%'
-              isRequired
-            >
-              <Text fontSize='24px' fontWeight='bold'>
-                Forgot password ?
-              </Text>
-              <FormLabel
-                alignSelf='baseline'
-                fontSize='12px'
-                color='#6c6c6c'
-                htmlFor='email'
-              >
-                Email
-              </FormLabel>
-              <Input
-                type='email'
-                placeholder='contact@gmail.com'
-                name='email'
-                id='email'
-                value={email}
-                bg='rgb(232, 240, 254)'
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(event) => handleEnter(event, 'forgot')}
-                required
-              />
-              <Flex alignItems='center' gap='8px'>
-                <Button
-                  onClick={() => navigate('/login')}
-                  border='none'
-                  borderRadius='4px'
-                  colorScheme='gray'
-                  fontWeight='bold'
-                  cursor='pointer'
-                >
-                  Cancle
-                </Button>
-                <Button
-                  border='none'
-                  colorScheme='orange'
-                  fontWeight='bold'
-                  cursor='pointer'
-                  display='flex'
-                  justifyContent='center'
-                  onClick={handleForgotPassword}
-                  isLoading={isFetching}
-                >
-                  {`Confirm >`}
-                </Button>
-              </Flex>
-            </FormControl>
+            <SendForgotEmail
+              setEmail={setEmail}
+              email={email}
+              handleForgotPassword={handleForgotPassword}
+              isFetching={isFetching}
+            />
           ) : (
-            <FormControl
-              display='flex'
-              flexDir='column'
-              gap='20px'
-              padding='20px'
-              width='100%'
-            >
-              <Text fontSize='24px' fontWeight='bold'>
-                Reset password
-              </Text>
-              <Text
-                alignSelf='baseline'
-                fontSize='12px'
-                color='#6c6c6c'
-                htmlFor='password1'
-              >
-                New password
-              </Text>
-              <Input
-                type='password'
-                placeholder='Enter New password'
-                name='password1'
-                id='password1'
-                bg='rgb(232, 240, 254)'
-                _placeholder={{ fontSize: '14px' }}
-                value={resetPassword.password1}
-                onChange={(e) =>
-                  setResetPassword((data) => ({
-                    ...data,
-                    password1: e.target.value,
-                  }))
-                }
-                required
-              />
-              <Text
-                alignSelf='baseline'
-                fontSize='12px'
-                color='#6c6c6c'
-                htmlFor='password2'
-              >
-                Re-type new password
-              </Text>
-              <Input
-                type='password'
-                placeholder='Re-Enter new password'
-                name='password2'
-                id='password2'
-                bg='rgb(232, 240, 254)'
-                _placeholder={{ fontSize: '14px' }}
-                value={resetPassword.password2}
-                onChange={(e) =>
-                  setResetPassword((data) => ({
-                    ...data,
-                    password2: e.target.value,
-                  }))
-                }
-                onKeyDown={(event) => handleEnter(event, 'reset')}
-                required
-              />
-              <Button
-                colorScheme='orange'
-                onClick={handleResetPassword}
-              >{`Change password >`}</Button>
-            </FormControl>
+            <ResetPassword
+              resetPassword={resetPassword}
+              setResetPassword={setResetPassword}
+              handleResetPassword={handleResetPassword}
+            />
           )}
         </Flex>
         <Image

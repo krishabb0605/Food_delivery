@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class cartService {
+export default class CartService {
   static async addToCart(itemId, token) {
     const response = await axios.post(
       '/api/cart/add',

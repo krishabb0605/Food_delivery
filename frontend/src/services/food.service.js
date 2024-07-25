@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class foodService {
+export default class FoodService {
   static async addFood(foodData) {
     const response = await axios.post('/api/food/add', foodData);
     return response;

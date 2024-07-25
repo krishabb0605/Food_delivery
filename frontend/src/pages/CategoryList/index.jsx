@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { categoryService } from '../../services';
+import { CategoryService } from '../../services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { MdDelete, MdEdit } from 'react-icons/md';
@@ -30,7 +30,7 @@ const CategoryList = () => {
   const fetchCategoryList = async () => {
     setIsFetching(true);
     try {
-      const response = await categoryService.listCategory();
+      const response = await CategoryService.listCategory();
       setCategoryData(response.data.data);
     } catch (error) {
       toast.error(error);
@@ -47,7 +47,7 @@ const CategoryList = () => {
   const handleRemoveCategory = async (categoryID) => {
     setDeletingData([true, categoryID]);
     try {
-      const response = await categoryService.removeCategory(categoryID);
+      const response = await CategoryService.removeCategory(categoryID);
 
       await fetchCategoryList();
       if (response.data.success) {

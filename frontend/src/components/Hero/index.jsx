@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
-const Header = () => {
+const Hero = () => {
   return (
     <Box
       id='header'
@@ -52,4 +52,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Hero;

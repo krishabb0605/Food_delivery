@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class userService {
+export default class UserService {
   static async user(role, userData) {
     const response = await axios.post(`/api/user/${role}`, userData);
     return response;

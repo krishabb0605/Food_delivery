@@ -16,7 +16,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { foodService } from '../../services';
+import { FoodService } from '../../services';
 import { useNavigate } from 'react-router-dom';
 
 const ItemList = () => {
@@ -28,7 +28,7 @@ const ItemList = () => {
 
   const fetchList = async () => {
     try {
-      const response = await foodService.listFood();
+      const response = await FoodService.listFood();
       if (response.data.success) {
         setList(response.data.data);
         setIsLoading(false);
@@ -49,7 +49,7 @@ const ItemList = () => {
   const handleRemoveFood = async (foodId) => {
     setDeletedId(foodId);
     try {
-      const response = await foodService.removeFood(foodId);
+      const response = await FoodService.removeFood(foodId);
 
       await fetchList();
       if (response.data.success) {

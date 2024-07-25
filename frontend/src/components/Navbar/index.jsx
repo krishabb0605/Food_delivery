@@ -39,9 +39,12 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchQuery, setSearchQuery] = useState('');
-  const { setCategory, getTotalCartAmount, isFetching, foodList } = useContext(
-    UserContext
-  );
+  const {
+    setFilterQuery,
+    getTotalCartAmount,
+    isFetching,
+    foodList,
+  } = useContext(UserContext);
   const { userData, handleLogout } = useContext(AuthContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
@@ -60,8 +63,10 @@ const Navbar = () => {
   }, [isFetching]);
 
   useEffect(() => {
-    setCategory(searchQuery);
+    setFilterQuery(searchQuery);
+    navigate('/');
   }, [searchQuery]);
+
   menuOptions = uniq(menuOptions);
 
   const handleMenu = (data) => {
@@ -145,16 +150,14 @@ const Navbar = () => {
             alignItems='center'
             gap={{ base: '16px', sm: '30px', xl: '40px' }}
           >
-            {location.pathname === '/' && (
-              <Icon
-                as={FaSearch}
-                color='#4b537b'
-                alt='seach-icon'
-                cursor='pointer'
-                onClick={onOpen}
-                transform='scale(1.3)'
-              />
-            )}
+            <Icon
+              as={FaSearch}
+              color='#4b537b'
+              alt='seach-icon'
+              cursor='pointer'
+              onClick={onOpen}
+              transform='scale(1.3)'
+            />
             <Box pos='relative'>
               <Link to='/cart'>
                 <Icon

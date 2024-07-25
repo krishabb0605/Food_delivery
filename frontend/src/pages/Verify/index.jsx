@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Flex, Spinner } from '@chakra-ui/react';
-import { orderService } from '../../services';
+import { OrderService } from '../../services';
 import { toast } from 'react-toastify';
 
 const Verify = () => {
@@ -13,7 +13,7 @@ const Verify = () => {
   const verifyPayment = async () => {
     try {
       const sessionId = localStorage.getItem('sessionId');
-      const response = await orderService.verifyOrder(
+      const response = await OrderService.verifyOrder(
         success,
         orderId,
         sessionId

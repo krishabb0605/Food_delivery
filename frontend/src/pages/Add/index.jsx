@@ -14,7 +14,7 @@ import {
   Spinner,
   FormLabel,
 } from '@chakra-ui/react';
-import { categoryService, foodService } from '../../services';
+import { CategoryService, FoodService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -49,7 +49,7 @@ const Add = () => {
   const fetchCategoryList = async () => {
     setIsFetching(true);
     try {
-      const response = await categoryService.listCategory();
+      const response = await CategoryService.listCategory();
       setCategoryData(response.data.data);
     } catch (error) {
       toast.error(error);
@@ -114,9 +114,9 @@ const Add = () => {
     try {
       let response;
       if (itemData.id) {
-        response = await foodService.updateFood(itemData.id, formData);
+        response = await FoodService.updateFood(itemData.id, formData);
       } else {
-        response = await foodService.addFood(formData);
+        response = await FoodService.addFood(formData);
       }
 
       if (response.data.success) {
@@ -158,13 +158,13 @@ const Add = () => {
     try {
       if (addedCategoryData.id) {
         // update data
-        response = await categoryService.updateCategory(
+        response = await CategoryService.updateCategory(
           addedCategoryData.id,
           formData
         );
       } else {
         // add data
-        response = await categoryService.addCategory(formData);
+        response = await CategoryService.addCategory(formData);
       }
 
       fetchCategoryList();

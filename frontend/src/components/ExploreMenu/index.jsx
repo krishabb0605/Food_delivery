@@ -6,7 +6,7 @@ import all_food_logo from '../../assets/All_food_logo.png';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { categoryService } from '../../services';
+import { CategoryService } from '../../services';
 
 const settings = {
   dots: false,
@@ -47,14 +47,14 @@ const settings = {
 
 const ExploreMenu = () => {
   const { backendUrl } = useContext(AuthContext);
-  const { category, setCategory, isFetching } = useContext(UserContext);
+  const { filterQuery, setFilterQuery, isFetching } = useContext(UserContext);
   const [categoryList, setCategoryList] = useState([]);
 
   useEffect(() => {
     const fetchCategoryList = async () => {
       if (!isFetching) {
         try {
-          const response = await categoryService.listCategory();
+          const response = await CategoryService.listCategory();
           setCategoryList(response.data.data);
         } catch (error) {
           toast.error(error);
@@ -87,11 +87,11 @@ const ExploreMenu = () => {
           flexDir='column'
           _focusVisible={{ outline: 'none' }}
           key='all'
-          onClick={() => setCategory('')}
+          onClick={() => setFilterQuery('')}
         >
           <Image
-            border={category === '' ? '4px solid tomato' : ''}
-            padding={category === '' ? '2px' : '0px'}
+            border={filterQuery === '' ? '4px solid tomato' : ''}
+            padding={filterQuery === '' ? '2px' : '0px'}
             src={all_food_logo}
             alt='menu-image'
             width='7.5vw'
@@ -122,12 +122,14 @@ const ExploreMenu = () => {
                 _focusVisible={{ outline: 'none' }}
                 key={index}
                 onClick={() =>
-                  setCategory((prev) => (prev === item.name ? '' : item.name))
+                  setFilterQuery((prev) =>
+                    prev === item.name ? '' : item.name
+                  )
                 }
               >
                 <Image
-                  border={category === item.name ? '4px solid tomato' : ''}
-                  padding={category === item.name ? '2px' : '0px'}
+                  border={filterQuery === item.name ? '4px solid tomato' : ''}
+                  padding={filterQuery === item.name ? '2px' : '0px'}
                   src={`${backendUrl}/images/` + item.image}
                   alt='menu-image'
                   width='7.5vw'

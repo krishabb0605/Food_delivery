@@ -12,7 +12,7 @@ import {
   Step,
   StepSeparator,
 } from '@chakra-ui/react';
-import { orderService } from '../../services';
+import { OrderService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
 import InvoiceButton from '../../components/InvoiceButton';
 
@@ -42,7 +42,7 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
       fetchOrders();
     } else {
       try {
-        let response = await orderService.placeOrder(order, token);
+        let response = await OrderService.placeOrder(order, token);
 
         if (response.data.success) {
           const { session_url, sessionId } = response.data;

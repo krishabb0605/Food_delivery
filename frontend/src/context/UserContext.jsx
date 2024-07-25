@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 import { toast } from 'react-toastify';
-import { cartService, foodService } from '../services';
+import { CartService, FoodService } from '../services';
 
 export const UserContext = createContext();
 
@@ -12,7 +12,7 @@ const UserContextProvider = ({ children }) => {
   const [foodList, setFoodList] = useState([]);
   const [cartItems, setCartItems] = useState({});
 
-  const [category, setCategory] = useState('');
+  const [filterQuery, setFilterQuery] = useState('');
 
   const { pathname } = useLocation();
   const { token } = useContext(AuthContext);
@@ -29,7 +29,7 @@ const UserContextProvider = ({ children }) => {
     }
     if (token) {
       try {
-        await cartService.addToCart(itemId, token);
+        await CartService.addToCart(itemId, token);
       } catch (error) {
         toast.error(error);
       }
@@ -40,7 +40,7 @@ const UserContextProvider = ({ children }) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (token) {
       try {
-        await cartService.removeFromCart(itemId, token);
+        await CartService.removeFromCart(itemId, token);
       } catch (error) {
         toast.error(error);
       }
@@ -62,10 +62,10 @@ const UserContextProvider = ({ children }) => {
     const loadAllData = async () => {
       setIsFetching(true);
       try {
-        const foodsData = await foodService.listFood();
+        const foodsData = await FoodService.listFood();
         setFoodList(foodsData.data.data);
 
-        const cartData = await cartService.getCart(token);
+        const cartData = await CartService.getCart(token);
         setCartItems(cartData.data.cartData);
       } catch (error) {
         toast.error(error);
@@ -77,10 +77,10 @@ const UserContextProvider = ({ children }) => {
 
   const value = {
     isFetching,
-    category,
     foodList,
     cartItems,
-    setCategory,
+    filterQuery,
+    setFilterQuery,
     addToCart,
     removeFromCart,
     getTotalCartAmount,

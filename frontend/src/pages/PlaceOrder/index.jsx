@@ -4,7 +4,7 @@ import { UserContext } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Flex, FormControl, Input, Text } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
-import { orderService } from '../../services';
+import { OrderService } from '../../services';
 
 const PlaceOrder = () => {
   const { getTotalCartAmount, foodList, cartItems } = useContext(UserContext);
@@ -57,7 +57,7 @@ const PlaceOrder = () => {
     };
 
     try {
-      let response = await orderService.placeOrder(orderData, token);
+      let response = await OrderService.placeOrder(orderData, token);
 
       if (response.data.success) {
         const { session_url, sessionId } = response.data;
