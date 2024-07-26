@@ -45,11 +45,23 @@ const Navbar = () => {
     getTotalCartAmount,
     isFetching,
     foodList,
+    wishListItems,
   } = useContext(UserContext);
   const { userData, handleLogout } = useContext(AuthContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
+
+  let [wishListArray, setWishListArray] = useState([]);
+
+  useEffect(() => {
+    setWishListArray([]);
+    for (const [key, value] of Object.entries(wishListItems)) {
+      setWishListArray((prev) => [...prev, value]);
+    }
+  }, [wishListItems]);
+
+  wishListArray = uniq(wishListArray).flat();
 
   const ref = useRef();
   useOutsideClick({
@@ -187,14 +199,26 @@ const Navbar = () => {
 
             <Tooltip label='WishList data'>
               <Box pos='relative'>
-                <Icon
-                  as={FaRegHeart}
-                  color='#4b537b'
-                  alt='seach-icon'
-                  cursor='pointer'
-                  transform='scale(1.3)'
-                  onClick={() => navigate('/wishlist')}
-                />
+                <Link to='/wishlist'>
+                  <Icon
+                    as={FaRegHeart}
+                    color='#4b537b'
+                    alt='seach-icon'
+                    cursor='pointer'
+                    transform='scale(1.3)'
+                  />
+                </Link>
+                {wishListArray?.length > 0 && (
+                  <Box
+                    pos='absolute'
+                    minW='10px'
+                    minH='10px'
+                    bg='tomato'
+                    borderRadius='50%'
+                    top='-3px'
+                    right='-6px'
+                  ></Box>
+                )}
               </Box>
             </Tooltip>
 

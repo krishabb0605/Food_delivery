@@ -1,25 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 import FoodItem from '../FoodItem';
 import { Box, Grid, Text } from '@chakra-ui/react';
-import { AuthContext } from '../../context/AuthContext';
-import { WishListService } from '../../services';
 
 const FoodDisplay = () => {
   const { foodList, filterQuery } = useContext(UserContext);
-  const { token } = useContext(AuthContext);
-  const [listName, setListName] = useState([]);
-
-  useEffect(() => {
-    const getAllData = async () => {
-      const response = await WishListService.getAllData(token);
-      const wishListData = response.data.data;
-      wishListData.forEach((data) =>
-        setListName((prev) => [...prev, data.listName])
-      );
-    };
-    getAllData();
-  }, []);
 
   return (
     <Box mt='30px' id='food-display'>
@@ -38,7 +23,7 @@ const FoodDisplay = () => {
             filterQuery === item.category ||
             filterQuery === item.name
           ) {
-            return <FoodItem key={index} item={item} listName={listName} />;
+            return <FoodItem key={index} item={item} />;
           }
         })}
       </Grid>

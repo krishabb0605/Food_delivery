@@ -5,13 +5,16 @@ import { Box, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react';
 import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import { FaHeart, FaRegStar, FaStar } from 'react-icons/fa';
 import WishListModel from '../WishListModel';
+import { uniq } from 'lodash';
 
-const FoodItem = ({ item, listName }) => {
+const FoodItem = ({ item }) => {
   const { backendUrl } = useContext(AuthContext);
-  const { cartItems, addToCart, removeFromCart, wishListItems } = useContext(
+  let { cartItems, addToCart, removeFromCart, wishListItems } = useContext(
     UserContext
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  let wishListArray = uniq(Object.values(wishListItems).flat());
 
   return (
     <Box
@@ -37,7 +40,7 @@ const FoodItem = ({ item, listName }) => {
           pos='absolute'
           top='12px'
           left='12px'
-          fill={wishListItems?.includes(item._id) ? 'red' : 'white'}
+          fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
           transform='scale(1.2)'
           cursor='pointer'
           onClick={() => onOpen()}
@@ -127,12 +130,7 @@ const FoodItem = ({ item, listName }) => {
           $ <Text fontSize='20px'>{item.price}</Text>
         </Flex>
       </Box>
-      <WishListModel
-        isOpen={isOpen}
-        onClose={onClose}
-        listName={listName}
-        id={item._id}
-      />
+      <WishListModel isOpen={isOpen} onClose={onClose} id={item._id} />
     </Box>
   );
 };

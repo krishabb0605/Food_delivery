@@ -1,34 +1,56 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { UserContext } from '../../context/UserContext';
-import { Button, Flex, Grid, Icon, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Grid,
+  Icon,
+  Text,
+  useDisclosure,
+  useMediaQuery,
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { FaRegHeart } from 'react-icons/fa';
+import { FaListUl, FaRegHeart } from 'react-icons/fa';
 import { MdDeleteForever, MdFileDownloadDone } from 'react-icons/md';
 import WishListItem from './WishListItem.jsx';
 import { toast } from 'react-toastify';
+import ListModel from './ListModel.jsx';
 
 const WishList = () => {
-  const { wishListItems, foodList, addToCart, handlWishList } = useContext(
-    UserContext
+  const {
+    wishListItems,
+    foodList,
+    addToCart,
+    handlWishList,
+    wishListName,
+  } = useContext(UserContext);
+  const [isMobileSize] = useMediaQuery('(max-width: 425px)');
+
+  const [selectedList, setSelectedList] = useState(
+    wishListName.length && wishListName[0]
   );
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const addAllWishListItems = () => {
-    wishListItems.forEach((itemId) => addToCart(itemId));
+    wishListItems[selectedList].forEach((itemId) => addToCart(itemId));
     toast.success('All items added to the cart', {
       position: 'bottom-right',
     });
   };
 
   const removeAllWishListItems = () => {
-    wishListItems.forEach((itemId) => handlWishList(itemId, true));
-    toast.success('All wishList items removed !', {
-      position: 'bottom-right',
-    });
+    wishListItems[selectedList].forEach((itemId) =>
+      handlWishList(itemId, selectedList)
+    );
   };
 
-  if (!wishListItems.length) {
+  const handleWishListName = (list) => {
+    setSelectedList(list);
+  };
+
+  if (!wishListItems[selectedList]?.length) {
     return (
       <Flex
         alignItems='center'
@@ -36,6 +58,13 @@ const WishList = () => {
         flexDir='column'
         gap='60px'
       >
+        {wishListName.length > 1 && (
+          <Button colorScheme='cyan' onClick={onOpen} alignSelf='end'>
+            <Icon as={FaListUl} me='4px' />
+            Choose List
+          </Button>
+        )}
+
         <Text
           color='#da6534'
           fontSize='30px'
@@ -75,22 +104,53 @@ const WishList = () => {
         >
           Continue Ordering
         </Button>
+        <ListModel
+          isOpen={isOpen}
+          onClose={onClose}
+          handleWishListName={handleWishListName}
+          selectedList={selectedList}
+        />
       </Flex>
     );
   }
 
   return (
     <>
-      <Flex gap='12px' alignItems='center' justifyContent='end'>
-        <Button colorScheme='teal' onClick={addAllWishListItems}>
-          Add All items to cart
-          <Icon as={MdFileDownloadDone} ms='6px' transform='scale(1.2)' />
-        </Button>
+      <Flex
+        justifyContent='space-between'
+        alignItems='center'
+        flexDir={{ base: 'column', lg: 'row' }}
+        gap={{ base: '8px', lg: '0' }}
+      >
+        <Flex gap='4px' alignItems='center'>
+          <Text fontWeight='500'>List Name : </Text>
+          <Text fontWeight='bold' fontSize='20px'>
+            {selectedList}
+          </Text>
+        </Flex>
+        <Flex
+          gap='12px'
+          alignItems='center'
+          justifyContent={{ base: 'space-between', lg: 'end' }}
+          width={{ base: '100%', lg: 'auto ' }}
+        >
+          <Button colorScheme='teal' onClick={addAllWishListItems}>
+            {!isMobileSize ? 'Add All items to cart' : 'Add'}
+            <Icon as={MdFileDownloadDone} ms='6px' transform='scale(1.2)' />
+          </Button>
 
-        <Button colorScheme='red' onClick={removeAllWishListItems}>
-          <Icon as={MdDeleteForever} me='4px' />
-          Clear wishList items
-        </Button>
+          <Button colorScheme='red' onClick={removeAllWishListItems}>
+            <Icon as={MdDeleteForever} me='4px' />
+            {!isMobileSize ? 'Clear wishList items' : 'Clear'}
+          </Button>
+
+          {Object.keys(wishListItems).length > 1 && (
+            <Button colorScheme='cyan' onClick={onOpen}>
+              <Icon as={FaListUl} me='4px' />
+              Choose List
+            </Button>
+          )}
+        </Flex>
       </Flex>
 
       <Grid
@@ -100,11 +160,23 @@ const WishList = () => {
         rowGap='50px'
       >
         {foodList.map((item, index) => {
-          if (wishListItems.includes(item._id)) {
-            return <WishListItem key={index} item={item} />;
+          if (wishListItems[selectedList].includes(item._id)) {
+            return (
+              <WishListItem
+                key={index}
+                item={item}
+                selectedList={selectedList}
+              />
+            );
           }
         })}
       </Grid>
+      <ListModel
+        isOpen={isOpen}
+        onClose={onClose}
+        handleWishListName={handleWishListName}
+        selectedList={selectedList}
+      />
     </>
   );
 };

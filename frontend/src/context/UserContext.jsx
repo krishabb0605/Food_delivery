@@ -11,8 +11,9 @@ const UserContextProvider = ({ children }) => {
 
   const [foodList, setFoodList] = useState([]);
   const [cartItems, setCartItems] = useState({});
-  let [wishListItems, setWishListItems] = useState([]);
-  wishListItems = wishListItems.flat();
+  let [wishListItems, setWishListItems] = useState({});
+
+  const [wishListName, setWishListName] = useState([]);
 
   const [filterQuery, setFilterQuery] = useState('');
 
@@ -55,35 +56,48 @@ const UserContextProvider = ({ children }) => {
   };
 
   const handlWishList = async (itemId, listName) => {
-    if (wishListItems.includes(itemId)) {
-      setWishListItems((prev) => prev.filter((item) => item !== itemId));
+    const arrayForWishList = wishListItems[listName]
+      ? [...wishListItems[listName]]
+      : [];
+
+    if (!wishListName.includes(listName)) {
+      setWishListName([...wishListName, listName]);
+    }
+
+    if (arrayForWishList.includes(itemId)) {
+      arrayForWishList.splice(arrayForWishList.indexOf(itemId), 1);
       try {
-        const response = await WishListService.updateCart(
+        const response = await WishListService.updateWishList(
           { itemId, listName },
           token
         );
 
-        toast.success(response.data.message, {
-          position: 'bottom-right',
+        toast.error(response.data.message, {
+          position: 'bottom-center',
         });
       } catch (error) {
         toast.error(error);
       }
     } else {
-      setWishListItems((prev) => [...prev, itemId]);
+      arrayForWishList.push(itemId);
       try {
-        const response = await WishListService.updateCart(
+        const response = await WishListService.updateWishList(
           { itemId, listName },
           token
         );
 
         toast.success(response.data.message, {
-          position: 'bottom-right',
+          position: 'bottom-center',
         });
       } catch (error) {
         toast.error(error);
       }
     }
+
+    setWishListItems((prev) => ({
+      ...prev,
+      [listName]: arrayForWishList,
+    }));
   };
 
   const getTotalCartAmount = () => {
@@ -109,8 +123,15 @@ const UserContextProvider = ({ children }) => {
 
         const response = await WishListService.getAllData(token);
         const wishListData = response.data.data;
+
+        const newData = {};
+        wishListData.forEach(({ listName, wishList }) => {
+          newData[listName] = wishList;
+        });
+        setWishListItems(newData);
+
         wishListData.forEach((data) =>
-          setWishListItems((prev) => [...prev, data.wishList])
+          setWishListName((prev) => [...prev, data.listName])
         );
       } catch (error) {
         toast.error(error);
@@ -131,6 +152,9 @@ const UserContextProvider = ({ children }) => {
     getTotalCartAmount,
     handlWishList,
     wishListItems,
+    wishListName,
+    setWishListName,
+    setWishListItems,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

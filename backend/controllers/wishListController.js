@@ -75,4 +75,42 @@ const getAllData = async (req, res) => {
   }
 };
 
-export { handleWishList, getWishList, getAllData };
+const renameListName = async (req, res) => {
+  try {
+    // update list name by finding matching userid and list name
+    await wishListModel.findOneAndUpdate(
+      {
+        userId: req.body.userId,
+        listName: req.body.oldListName,
+      },
+      {
+        listName: req.body.newListName,
+      }
+    );
+
+    res.json({
+      success: true,
+      message: 'List name updated ...',
+    });
+  } catch (error) {
+    return res.json({ success: false, message: 'Error' });
+  }
+};
+
+const removeList = async (req, res) => {
+  try {
+    await wishListModel.findOneAndDelete({
+      userId: req.body.userId,
+      listName: req.body.listName,
+    });
+
+    res.json({
+      success: true,
+      message: `${req.body.listName} list deleted !`,
+    });
+  } catch (error) {
+    return res.json({ success: false, message: 'Error' });
+  }
+};
+
+export { handleWishList, getWishList, getAllData, removeList, renameListName };

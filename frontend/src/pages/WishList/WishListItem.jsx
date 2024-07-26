@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 import { AuthContext } from '../../context/AuthContext';
 import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
-import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import { FaHeart, FaRegStar, FaStar } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+import { uniq } from 'lodash';
 
-const WishListItem = ({ item }) => {
+const WishListItem = ({ item, selectedList }) => {
   const { backendUrl } = useContext(AuthContext);
   const { addToCart, handlWishList, wishListItems } = useContext(UserContext);
+  let wishListArray = uniq(Object.values(wishListItems).flat());
 
   return (
     <Box
@@ -34,10 +34,10 @@ const WishListItem = ({ item }) => {
           pos='absolute'
           top='12px'
           left='12px'
-          fill={wishListItems?.includes(item._id) ? 'red' : 'white'}
+          fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
           transform='scale(1.2)'
           cursor='pointer'
-          onClick={() => handlWishList(item._id)}
+          onClick={() => handlWishList(item._id, selectedList)}
           style={{
             filter: 'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
           }}
