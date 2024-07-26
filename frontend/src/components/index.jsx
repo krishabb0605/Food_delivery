@@ -10,6 +10,7 @@ import Hero from './Hero';
 import InvoiceButton from './InvoiceButton';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import WishListModel from './WishListModel';
 
 export {
   Hero,
@@ -24,4 +25,5 @@ export {
   Sidebar,
   Navbar,
   InvoiceButton,
+  WishListModel,
 };

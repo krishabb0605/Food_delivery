@@ -14,6 +14,7 @@ import {
   PlaceOrder,
   PrivateRoute,
   Verify,
+  WishList,
 } from './pages';
 import { AuthContext } from './context/AuthContext';
 
@@ -31,6 +32,7 @@ const App = () => {
             <Route element={<Navbar />}>
               <Route index element={<Home />} />
               <Route path='/cart' element={<Cart />} />
+              <Route path='/wishlist' element={<WishList />} />
               <Route path='/order' element={<PlaceOrder />} />
               <Route path='/verify' element={<Verify />} />
               <Route path='/myorders' element={<MyOrders />} />

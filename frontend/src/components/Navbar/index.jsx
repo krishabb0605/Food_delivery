@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import food_logo from '../../assets/food_logo.png';
-import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
 import Footer from '../Footer';
 import { UserContext } from '../../context/UserContext';
 import { AuthContext } from '../../context/AuthContext';
-import { FaUser } from 'react-icons/fa';
+import { FaRegHeart, FaUser } from 'react-icons/fa';
 import { IoCart } from 'react-icons/io5';
 import { FaSearch } from 'react-icons/fa';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
@@ -22,6 +22,7 @@ import {
   ModalOverlay,
   Spinner,
   Text,
+  Tooltip,
   useDisclosure,
   useOutsideClick,
 } from '@chakra-ui/react';
@@ -49,7 +50,6 @@ const Navbar = () => {
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const ref = useRef();
   useOutsideClick({
@@ -64,7 +64,9 @@ const Navbar = () => {
 
   useEffect(() => {
     setFilterQuery(searchQuery);
-    navigate('/');
+    if (searchQuery) {
+      navigate('/');
+    }
   }, [searchQuery]);
 
   menuOptions = uniq(menuOptions);
@@ -158,27 +160,43 @@ const Navbar = () => {
               onClick={onOpen}
               transform='scale(1.3)'
             />
-            <Box pos='relative'>
-              <Link to='/cart'>
+
+            <Tooltip label='Cart data'>
+              <Box pos='relative'>
+                <Link to='/cart'>
+                  <Icon
+                    as={IoCart}
+                    alt='basket-icon'
+                    color='#4b537b'
+                    transform='scale(1.5)'
+                  />
+                </Link>
+                {getTotalCartAmount() !== 0 && (
+                  <Box
+                    pos='absolute'
+                    minW='10px'
+                    minH='10px'
+                    bg='tomato'
+                    borderRadius='50%'
+                    top='-8px'
+                    right='-8px'
+                  ></Box>
+                )}
+              </Box>
+            </Tooltip>
+
+            <Tooltip label='WishList data'>
+              <Box pos='relative'>
                 <Icon
-                  as={IoCart}
-                  alt='basket-icon'
+                  as={FaRegHeart}
                   color='#4b537b'
-                  transform='scale(1.5)'
+                  alt='seach-icon'
+                  cursor='pointer'
+                  transform='scale(1.3)'
+                  onClick={() => navigate('/wishlist')}
                 />
-              </Link>
-              {getTotalCartAmount() !== 0 && (
-                <Box
-                  pos='absolute'
-                  minW='10px'
-                  minH='10px'
-                  bg='tomato'
-                  borderRadius='50%'
-                  top='-8px'
-                  right='-8px'
-                ></Box>
-              )}
-            </Box>
+              </Box>
+            </Tooltip>
 
             <Box pos='relative' ref={ref}>
               {userData && !userData.avtar ? (

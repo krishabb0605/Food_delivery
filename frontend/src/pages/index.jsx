@@ -10,6 +10,8 @@ import Orders from './Orders';
 import PlaceOrder from './PlaceOrder';
 import PrivateRoute from './PrivateRoute';
 import Verify from './Verify';
+import WishList from './WishList';
+
 export {
   Add,
   Cart,
@@ -23,4 +25,5 @@ export {
   Verify,
   CategoryList,
   PrivateRoute,
+  WishList,
 };

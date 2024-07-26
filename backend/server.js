@@ -6,6 +6,7 @@ import userRouter from './routes/userRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/orderRoute.js';
 import categoryRouter from './routes/categoryRoute.js';
+import wishListRouter from './routes/wishListRoute.js';
 import 'dotenv/config';
 
 // App config
@@ -25,7 +26,7 @@ app.use('/api/user', userRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/category', categoryRouter);
-
+app.use('/api/wishlist', wishListRouter);
 // for get image
 app.use('/images', express.static('uploads'));
 
