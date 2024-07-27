@@ -47,4 +47,15 @@ export default class WishListService {
     );
     return response;
   }
+
+  static async removeAllListData(listName, token) {
+    const response = await axios.post(
+      '/api/wishlist/remove-all',
+      { listName },
+      {
+        headers: { token },
+      }
+    );
+    return response;
+  }
 }

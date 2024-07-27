@@ -4,6 +4,7 @@ import {
   getAllData,
   getWishList,
   handleWishList,
+  removeAllListData,
   removeList,
   renameListName,
 } from '../controllers/wishListController.js';
@@ -15,5 +16,6 @@ wishListRouter.post('/get', authMiddleware, getWishList);
 wishListRouter.post('/all', authMiddleware, getAllData);
 wishListRouter.post('/rename', authMiddleware, renameListName);
 wishListRouter.post('/remove', authMiddleware, removeList);
+wishListRouter.post('/remove-all', authMiddleware, removeAllListData);
 
 export default wishListRouter;

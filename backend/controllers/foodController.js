@@ -12,6 +12,7 @@ const addFood = async (req, res) => {
     description: req.body.description,
     price: req.body.price,
     category: req.body.category,
+    ingredients: req.body.ingredients,
     image: image_filename,
   });
 
@@ -69,6 +70,7 @@ const updateFood = async (req, res) => {
       food.description = req.body.description;
       food.price = req.body.price;
       food.category = req.body.category;
+      food.ingredients = req.body.ingredients;
     }
 
     await food.save();

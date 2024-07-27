@@ -15,15 +15,19 @@ import { MdDeleteForever, MdFileDownloadDone } from 'react-icons/md';
 import WishListItem from './WishListItem.jsx';
 import { toast } from 'react-toastify';
 import ListModel from './ListModel.jsx';
+import { AuthContext } from '../../context/AuthContext.jsx';
+import WishListService from '../../services/wishlist.service.js';
 
 const WishList = () => {
   const {
     wishListItems,
     foodList,
     addToCart,
-    handlWishList,
     wishListName,
+    setWishListItems,
   } = useContext(UserContext);
+  const { token } = useContext(AuthContext);
+
   const [isMobileSize] = useMediaQuery('(max-width: 425px)');
 
   const [selectedList, setSelectedList] = useState(
@@ -40,10 +44,23 @@ const WishList = () => {
     });
   };
 
-  const removeAllWishListItems = () => {
-    wishListItems[selectedList].forEach((itemId) =>
-      handlWishList(itemId, selectedList)
-    );
+  const removeAllWishListItems = async () => {
+    try {
+      setWishListItems((prev) => ({
+        ...prev,
+        [selectedList]: [],
+      }));
+
+      const response = await WishListService.removeAllListData(
+        selectedList,
+        token
+      );
+
+      toast.error(response.data.message);
+    } catch (e) {
+      toast.error('Error while deleting all items');
+    }
+    wishListItems[selectedList];
   };
 
   const handleWishListName = (list) => {

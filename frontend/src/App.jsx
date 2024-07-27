@@ -2,7 +2,13 @@ import React, { useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router-dom';
-import { AdminNavbar, EntryPage, ForgotPassword, Navbar } from './components';
+import {
+  AdminNavbar,
+  EntryPage,
+  FoodDetail,
+  ForgotPassword,
+  Navbar,
+} from './components';
 import {
   Add,
   Cart,
@@ -32,6 +38,7 @@ const App = () => {
             <Route element={<Navbar />}>
               <Route index element={<Home />} />
               <Route path='/cart' element={<Cart />} />
+              <Route path='/food-detail' element={<FoodDetail />} />
               <Route path='/wishlist' element={<WishList />} />
               <Route path='/order' element={<PlaceOrder />} />
               <Route path='/verify' element={<Verify />} />

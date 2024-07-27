@@ -1,6 +1,6 @@
 import React from 'react';
 
-import food_logo from '../../assets/food_logo.png'
+import food_logo from '../../assets/food_logo.png';
 import { Flex, Grid, Icon, Image, Text } from '@chakra-ui/react';
 import { FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
@@ -22,7 +22,7 @@ const Footer = () => {
         templateColumns={{ base: 'repeat(1,1fr)', sm: '2fr 1fr 1fr' }}
         gap='80px'
       >
-        <Flex flexDir='column' alignItems='start' gap='20px'>
+        <Flex flexDir='column' alignItems='start' gap='20px' userSelect='none'>
           <Image
             src={food_logo}
             alt='logo'
@@ -46,7 +46,7 @@ const Footer = () => {
           </Flex>
         </Flex>
 
-        <Flex flexDir='column' alignItems='start' gap='20px'>
+        <Flex flexDir='column' alignItems='start' gap='20px' userSelect='none'>
           <Text fontSize='24px' color='white'>
             COMPANY
           </Text>
@@ -66,7 +66,7 @@ const Footer = () => {
           </ul>
         </Flex>
 
-        <Flex flexDir='column' alignItems='start' gap='20px'>
+        <Flex flexDir='column' alignItems='start' gap='20px' userSelect='none'>
           <Text fontSize='24px' color='white'>
             GET IN TOUCH
           </Text>

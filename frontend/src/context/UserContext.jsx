@@ -66,38 +66,34 @@ const UserContextProvider = ({ children }) => {
 
     if (arrayForWishList.includes(itemId)) {
       arrayForWishList.splice(arrayForWishList.indexOf(itemId), 1);
-      try {
-        const response = await WishListService.updateWishList(
-          { itemId, listName },
-          token
-        );
-
-        toast.error(response.data.message, {
-          position: 'bottom-center',
-        });
-      } catch (error) {
-        toast.error(error);
-      }
     } else {
       arrayForWishList.push(itemId);
-      try {
-        const response = await WishListService.updateWishList(
-          { itemId, listName },
-          token
-        );
-
-        toast.success(response.data.message, {
-          position: 'bottom-center',
-        });
-      } catch (error) {
-        toast.error(error);
-      }
     }
 
     setWishListItems((prev) => ({
       ...prev,
       [listName]: arrayForWishList,
     }));
+
+    try {
+      const response = await WishListService.updateWishList(
+        { itemId, listName },
+        token
+      );
+      const message = response.data.message;
+
+      message.includes('add')
+        ? toast.success(message, {
+            position: 'bottom-center',
+            autoClose: 1000,
+          })
+        : toast.error(message, {
+            position: 'bottom-center',
+            autoClose: 1000,
+          });
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const getTotalCartAmount = () => {

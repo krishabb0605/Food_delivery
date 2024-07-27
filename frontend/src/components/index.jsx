@@ -2,6 +2,7 @@ import AdminNavbar from './AdminNavbar';
 import AppDownload from './AppDownload';
 import EntryPage from './EntryPage';
 import ExploreMenu from './ExploreMenu';
+import FoodDetail from './FoodDetail';
 import FoodDisplay from './FoodDisplay';
 import FoodItem from './FoodItem';
 import Footer from './Footer';
@@ -26,4 +27,5 @@ export {
   Navbar,
   InvoiceButton,
   WishListModel,
+  FoodDetail,
 };

@@ -77,7 +77,6 @@ const getAllData = async (req, res) => {
 
 const renameListName = async (req, res) => {
   try {
-    // update list name by finding matching userid and list name
     await wishListModel.findOneAndUpdate(
       {
         userId: req.body.userId,
@@ -113,4 +112,30 @@ const removeList = async (req, res) => {
   }
 };
 
-export { handleWishList, getWishList, getAllData, removeList, renameListName };
+const removeAllListData = async (req, res) => {
+  try {
+    await wishListModel.findOneAndUpdate(
+      {
+        userId: req.body.userId,
+        listName: req.body.listName,
+      },
+      { wishList: [] }
+    );
+
+    res.json({
+      success: true,
+      message: `Remove all list data !`,
+    });
+  } catch (error) {
+    return res.json({ success: false, message: 'Error while removing data' });
+  }
+};
+
+export {
+  handleWishList,
+  getWishList,
+  getAllData,
+  removeList,
+  renameListName,
+  removeAllListData,
+};

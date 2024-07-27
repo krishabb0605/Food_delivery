@@ -17,6 +17,7 @@ import {
 import { CategoryService, FoodService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CreatableSelect from 'react-select/creatable';
 
 const Add = () => {
   const { backendUrl } = useContext(AuthContext);
@@ -28,12 +29,14 @@ const Add = () => {
   const [image, setImage] = useState(false);
 
   const [isCategory, setIsCategory] = useState(false);
+
   const [itemData, setItemData] = useState({
     id: false,
     name: '',
     description: '',
     price: '',
     category: 'Salad',
+    ingredients: [],
   });
 
   const [addedCategoryData, setAddedCategoryData] = useState({
@@ -41,6 +44,8 @@ const Add = () => {
     name: '',
     image: false,
   });
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
 
   const { state } = useLocation();
   const location = useLocation();
@@ -101,6 +106,7 @@ const Add = () => {
     formData.append('description', itemData.description);
     formData.append('price', Number(itemData.price));
     formData.append('category', itemData.category);
+    formData.append('ingredients', itemData.ingredients);
 
     setAddingData(true);
 
@@ -182,6 +188,21 @@ const Add = () => {
     }
     setAddingData(false);
   };
+
+  const handleChange = (options) => {
+    setSelectedOptions(options);
+  };
+
+  useEffect(() => {
+    setIngredients([]);
+    selectedOptions.map((data) =>
+      setIngredients((prev) => [...prev, data.value])
+    );
+  }, [selectedOptions]);
+
+  useEffect(() => {
+    setItemData((prev) => ({ ...prev, ingredients }));
+  }, [ingredients]);
 
   if (isFetching) {
     return (
@@ -266,6 +287,7 @@ const Add = () => {
           h='calc(100vh - 208px)'
           overflow='auto'
           style={{ scrollbarWidth: 'thin' }}
+          pl='4px'
           isRequired
         >
           <Flex flexDir='column' gap='20px'>
@@ -293,6 +315,7 @@ const Add = () => {
               required
             />
           </Flex>
+
           <Flex width='max(40%,280px)' flexDir='column' gap='20px'>
             <FormLabel>Item name</FormLabel>
             <Input
@@ -306,53 +329,64 @@ const Add = () => {
               required
             />
           </Flex>
-          <Flex flexDir='column' gap='20px'>
-            <Flex flexDir='column' gap='20px' width='max(40%,280px)'>
-              <FormLabel>Item Description</FormLabel>
-              <Textarea
-                p='10px'
-                name='description'
-                rows='6'
-                placeholder='Write Content here'
+
+          <Flex flexDir='column' gap='20px' width='max(40%,280px)'>
+            <FormLabel>Item Description</FormLabel>
+            <Textarea
+              p='10px'
+              name='description'
+              rows='6'
+              placeholder='Write Content here'
+              onChange={onChangeHandler}
+              value={itemData.description}
+              borderColor='#0000004d'
+              required
+            ></Textarea>
+          </Flex>
+
+          <Flex flexDir='column' gap='20px' width='max(40%,280px)'>
+            <FormLabel>Item ingredients</FormLabel>
+            <CreatableSelect
+              onChange={handleChange}
+              value={selectedOptions}
+              isMulti
+            />
+          </Flex>
+
+          <Flex gap='30px'>
+            <Flex flexDir='column' gap='20px'>
+              <FormLabel>Item category</FormLabel>
+              <Select
+                name='category'
+                value={itemData.category}
                 onChange={onChangeHandler}
-                value={itemData.description}
+                maxW='120px'
+                borderColor='#0000004d'
+              >
+                {categoryData.map((data) => (
+                  <option value={data.name} key={data.name}>
+                    {data.name}
+                  </option>
+                ))}
+              </Select>
+            </Flex>
+
+            <Flex flexDir='column' gap='20px'>
+              <FormLabel>Item price</FormLabel>
+              <Input
+                maxW='120px'
+                p='10px'
+                type='number'
+                name='price'
+                onChange={onChangeHandler}
+                value={itemData.price}
+                placeholder='$20'
                 borderColor='#0000004d'
                 required
-              ></Textarea>
-            </Flex>
-            <Flex gap='30px'>
-              <Flex flexDir='column' gap='20px'>
-                <FormLabel>Item category</FormLabel>
-                <Select
-                  name='category'
-                  value={itemData.category}
-                  onChange={onChangeHandler}
-                  maxW='120px'
-                  borderColor='#0000004d'
-                >
-                  {categoryData.map((data) => (
-                    <option value={data.name} key={data.name}>
-                      {data.name}
-                    </option>
-                  ))}
-                </Select>
-              </Flex>
-              <Flex flexDir='column' gap='20px'>
-                <FormLabel>Item price</FormLabel>
-                <Input
-                  maxW='120px'
-                  p='10px'
-                  type='number'
-                  name='price'
-                  onChange={onChangeHandler}
-                  value={itemData.price}
-                  placeholder='$20'
-                  borderColor='#0000004d'
-                  required
-                />
-              </Flex>
+              />
             </Flex>
           </Flex>
+
           <Button
             onClick={handleItemData}
             maxW='120px'

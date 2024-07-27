@@ -6,6 +6,7 @@ import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import { FaHeart, FaRegStar, FaStar } from 'react-icons/fa';
 import WishListModel from '../WishListModel';
 import { uniq } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 const FoodItem = ({ item }) => {
   const { backendUrl } = useContext(AuthContext);
@@ -13,6 +14,7 @@ const FoodItem = ({ item }) => {
     UserContext
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   let wishListArray = uniq(Object.values(wishListItems).flat());
 
@@ -33,6 +35,8 @@ const FoodItem = ({ item }) => {
           h='194px'
           borderRadius='15px 15px 0px 0px'
           userSelect='none'
+          cursor='pointer'
+          onClick={() => navigate('/food-detail', { state: { item } })}
         />
 
         <Icon

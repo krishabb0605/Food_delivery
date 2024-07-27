@@ -8,6 +8,7 @@ const foodSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   image: { type: String, required: true },
   category: { type: String, required: true },
+  ingredients: { type: Array, required: true },
 });
 
 // creating model
