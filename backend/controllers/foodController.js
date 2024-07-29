@@ -12,7 +12,7 @@ const addFood = async (req, res) => {
     description: req.body.description,
     price: req.body.price,
     category: req.body.category,
-    ingredients: req.body.ingredients,
+    ingredients: req.body.ingredients.split(','),
     image: image_filename,
   });
 
@@ -41,13 +41,12 @@ const listFood = async (req, res) => {
 
 const removeFood = async (req, res) => {
   try {
-    const food = await foodModel.findById(req.body.id);
-
+    const food = await foodModel.findById(req.params.id);
     // delete image from folder
     fs.unlink(`uploads/${food.image}`, () => {});
 
     // in mongodb it delete
-    await foodModel.findByIdAndDelete(req.body.id);
+    await foodModel.findByIdAndDelete(req.params.id);
 
     res.json({ success: true, message: 'Food removed' });
   } catch (error) {
@@ -70,7 +69,7 @@ const updateFood = async (req, res) => {
       food.description = req.body.description;
       food.price = req.body.price;
       food.category = req.body.category;
-      food.ingredients = req.body.ingredients;
+      food.ingredients = req.body.ingredients.split(',');
     }
 
     await food.save();

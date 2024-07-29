@@ -7,6 +7,7 @@ import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/orderRoute.js';
 import categoryRouter from './routes/categoryRoute.js';
 import wishListRouter from './routes/wishListRoute.js';
+import emailRouter from './routes/emailRoute.js';
 import 'dotenv/config';
 
 // App config
@@ -21,12 +22,14 @@ app.use(cors());
 connectDB();
 
 // API endpoint
-app.use('/api/food', foodRouter);
-app.use('/api/user', userRouter);
-app.use('/api/cart', cartRouter);
-app.use('/api/order', orderRouter);
-app.use('/api/category', categoryRouter);
-app.use('/api/wishlist', wishListRouter);
+app.use('/users', userRouter);
+app.use('/email', emailRouter);
+app.use('/orders', orderRouter);
+app.use('/foodItems', foodRouter);
+app.use('/cartItems', cartRouter);
+app.use('/wishlistItems', wishListRouter);
+app.use('/categories', categoryRouter);
+
 // for get image
 app.use('/images', express.static('uploads'));
 

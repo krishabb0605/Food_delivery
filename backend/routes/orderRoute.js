@@ -10,10 +10,10 @@ import {
 
 const orderRouter = express.Router();
 
-orderRouter.post('/place', authMiddleWare, placeOrder);
+orderRouter.get('/', listOrder);
+orderRouter.get('/order', authMiddleWare, usersOrder);
+orderRouter.post('/', authMiddleWare, placeOrder);
 orderRouter.post('/verify', verifyOrder);
-orderRouter.post('/userOrders', authMiddleWare, usersOrder);
-orderRouter.get('/list', listOrder);
 orderRouter.post('/status', updateStatus);
 
 export default orderRouter;

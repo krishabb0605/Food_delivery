@@ -22,9 +22,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // send the data to server use post request
-foodRouter.post('/add', upload.single('image'), addFood);
-foodRouter.get('/list', listFood);
-foodRouter.post('/remove', removeFood);
-foodRouter.post('/update/:id', upload.single('image'), updateFood);
+foodRouter.get('/', listFood);
+foodRouter.post('/', upload.single('image'), addFood);
+foodRouter.post('/:id', upload.single('image'), updateFood);
+foodRouter.delete('/:id', removeFood);
 
 export default foodRouter;

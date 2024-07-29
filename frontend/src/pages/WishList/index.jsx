@@ -51,10 +51,12 @@ const WishList = () => {
         [selectedList]: [],
       }));
 
-      const response = await WishListService.removeAllListData(
-        selectedList,
-        token
-      );
+      const listData = {
+        listName: selectedList,
+        dataToBeUpdated: { wishList: [] },
+      };
+
+      const response = await WishListService.updateListData(listData, token);
 
       toast.error(response.data.message);
     } catch (e) {
@@ -161,7 +163,7 @@ const WishList = () => {
             {!isMobileSize ? 'Clear wishList items' : 'Clear'}
           </Button>
 
-          {Object.keys(wishListItems).length > 1 && (
+          {wishListName.length > 1 && (
             <Button colorScheme='cyan' onClick={onOpen}>
               <Icon as={FaListUl} me='4px' />
               Choose List

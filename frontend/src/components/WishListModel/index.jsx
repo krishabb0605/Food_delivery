@@ -44,11 +44,15 @@ const WishListModel = ({ isOpen, onClose, id }) => {
       });
     }
 
-    if (createListName) {
-      handlWishList(id, createListName.toUpperCase());
-      setCreateListName('');
-      setIsCreateList(false);
-      onClose();
+    handlWishList(id, createListName.toUpperCase());
+    setCreateListName('');
+    setIsCreateList(false);
+    onClose();
+  };
+
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
+      handleNewList(event);
     }
   };
 
@@ -135,6 +139,7 @@ const WishListModel = ({ isOpen, onClose, id }) => {
               <Input
                 value={createListName}
                 onChange={(e) => setCreateListName(e.target.value)}
+                onKeyDown={handleEnter}
               />
             </FormControl>
           </DrawerBody>

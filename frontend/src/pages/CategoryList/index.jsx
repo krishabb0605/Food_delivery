@@ -48,8 +48,8 @@ const CategoryList = () => {
     setDeletingData([true, categoryID]);
     try {
       const response = await CategoryService.removeCategory(categoryID);
+      setCategoryData((prev) => prev.filter((data) => data._id !== categoryID));
 
-      await fetchCategoryList();
       if (response.data.success) {
         toast.success(response.data.message);
       } else {

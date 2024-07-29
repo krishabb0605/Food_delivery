@@ -72,13 +72,22 @@ const Add = () => {
       const image = `${backendUrl}/images/` + state.image;
       if (state.type === 'item') {
         setIsCategory(false);
+        const data = state.ingredients ? state.ingredients : [];
         setItemData({
           id: state._id,
           name: state.name,
           description: state.description,
           price: state.price,
           category: state.category,
+          ingredients: data,
         });
+        setIngredients(data);
+        let ingredientsData = data;
+        let newIngredientsData = ingredientsData.map((data) => ({
+          value: data,
+          label: data,
+        }));
+        setSelectedOptions(newIngredientsData);
         setImage(image);
       } else {
         setIsCategory(true);
@@ -131,7 +140,9 @@ const Add = () => {
           description: '',
           price: '',
           category: 'Salad',
+          ingredients: [],
         });
+        setSelectedOptions([]);
         setImage(false);
         toast.success(response.data.message);
       } else {
@@ -173,7 +184,7 @@ const Add = () => {
         response = await CategoryService.addCategory(formData);
       }
 
-      fetchCategoryList();
+      setCategoryData((prev) => [...prev, addedCategoryData]);
       if (response.data.success) {
         setAddedCategoryData({
           name: '',

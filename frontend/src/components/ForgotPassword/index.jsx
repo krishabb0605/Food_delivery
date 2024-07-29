@@ -3,7 +3,7 @@ import background_mobile from '../../assets/background.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Flex, Image } from '@chakra-ui/react';
-import { UserService } from '../../services';
+import { EmailService, UserService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
 import SendForgotEmail from './SendForgotEmail.jsx';
 import ResetPassword from './ResetPassword.jsx';
@@ -37,7 +37,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await UserService.forgotPassword(email);
+      const response = await EmailService.forgotPassword(email);
       if (response.data.success) {
         toast.success('Password reset email sent');
         navigate('/');

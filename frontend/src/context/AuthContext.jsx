@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 import axios from 'axios';
-import { UserService } from '../services';
+import { EmailService, UserService } from '../services';
 import { toast } from 'react-toastify';
 
 const backendUrl = API_BASE_URL;
@@ -78,7 +78,7 @@ const AuthContextProvider = ({ children }) => {
 
   const handleSendVerificationEmail = async (userData) => {
     try {
-      const response = await UserService.sendVerificationEmail(userData);
+      const response = await EmailService.sendVerificationEmail(userData);
       if (response.data.success) {
         toast.success(response.data.message);
       } else {

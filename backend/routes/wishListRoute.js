@@ -1,21 +1,17 @@
 import express from 'express';
 import authMiddleware from '../middleware/auth.js';
 import {
+  deleteList,
   getAllData,
-  getWishList,
   handleWishList,
-  removeAllListData,
-  removeList,
-  renameListName,
+  updateListName,
 } from '../controllers/wishListController.js';
 
 const wishListRouter = express.Router();
 
-wishListRouter.post('/update', authMiddleware, handleWishList);
-wishListRouter.post('/get', authMiddleware, getWishList);
-wishListRouter.post('/all', authMiddleware, getAllData);
-wishListRouter.post('/rename', authMiddleware, renameListName);
-wishListRouter.post('/remove', authMiddleware, removeList);
-wishListRouter.post('/remove-all', authMiddleware, removeAllListData);
+wishListRouter.get('/', authMiddleware, getAllData);
+wishListRouter.post('/', authMiddleware, handleWishList);
+wishListRouter.post('/update', authMiddleware, updateListName);
+wishListRouter.delete('/:list', authMiddleware, deleteList);
 
 export default wishListRouter;

@@ -132,6 +132,7 @@ const usersOrder = async (req, res) => {
     return res.json({ success: false, message: 'Error' });
   }
 };
+
 // listing orders for admine pannel
 const listOrder = async (req, res) => {
   try {
@@ -147,7 +148,7 @@ const listOrder = async (req, res) => {
 
 const updateStatus = async (req, res) => {
   try {
-    await orderModel.findByIdAndUpdate(req.body.orderId, {
+    await orderModel.findByIdAndUpdate(req.body.id, {
       status: req.body.status,
     });
     res.json({ success: true, message: 'Status updated' });

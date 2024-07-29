@@ -2,60 +2,30 @@ import axios from 'axios';
 
 export default class WishListService {
   static async updateWishList(itemData, token) {
-    const response = await axios.post('/api/wishlist/update', itemData, {
+    const response = await axios.post('/wishlistItems', itemData, {
       headers: { token },
     });
     return response;
   }
 
-  static async getWishList(listName, token) {
-    const response = await axios.post(
-      '/api/wishlist/get',
-      { listName },
-      {
-        headers: { token },
-      }
-    );
-    return response;
-  }
-
   static async getAllData(token) {
-    const response = await axios.post(
-      '/api/wishlist/all',
-      {},
-      {
-        headers: { token },
-      }
-    );
+    const response = await axios.get('/wishlistItems', {
+      headers: { token },
+    });
     return response;
   }
 
-  static async renameList(data, token) {
-    const response = await axios.post('/api/wishlist/rename', data, {
+  static async updateListData(listData, token) {
+    const response = await axios.post('/wishlistItems/update', listData, {
       headers: { token },
     });
     return response;
   }
 
   static async removeList(listName, token) {
-    const response = await axios.post(
-      '/api/wishlist/remove',
-      { listName },
-      {
-        headers: { token },
-      }
-    );
-    return response;
-  }
-
-  static async removeAllListData(listName, token) {
-    const response = await axios.post(
-      '/api/wishlist/remove-all',
-      { listName },
-      {
-        headers: { token },
-      }
-    );
+    const response = await axios.delete(`/wishlistItems/${listName}`, {
+      headers: { token },
+    });
     return response;
   }
 }

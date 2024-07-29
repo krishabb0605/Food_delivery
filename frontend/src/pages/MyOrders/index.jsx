@@ -37,10 +37,8 @@ const MyOrders = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      fetchOrders();
-    }
-  }, [token]);
+    fetchOrders();
+  }, []);
 
   if (fetchData) {
     return (

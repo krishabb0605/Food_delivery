@@ -57,30 +57,6 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
     }
   };
 
-  const handleShare = async (blob) => {
-    if (navigator.share) {
-      try {
-        if (blob) {
-          const file = new File([blob], 'invoice.pdf', {
-            type: 'application/pdf',
-          });
-          await navigator.share({
-            title: 'Invoice',
-            text: 'Kindly find attached invoice',
-            files: [file],
-          });
-          toast.success('Invoice shared successfully!');
-        } else {
-          toast.error('No blob available');
-        }
-      } catch (error) {
-        toast.error('Error while sharing ');
-      }
-    } else {
-      toast.error('Web Share API not supported');
-    }
-  };
-
   return (
     <Box key={index}>
       <Box

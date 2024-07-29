@@ -51,7 +51,8 @@ const ItemList = () => {
     try {
       const response = await FoodService.removeFood(foodId);
 
-      await fetchList();
+      setList((prev) => prev.filter((data) => data._id !== foodId));
+
       if (response.data.success) {
         toast.success(response.data.message);
       } else {

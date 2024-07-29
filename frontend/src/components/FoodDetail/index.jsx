@@ -8,8 +8,10 @@ import {
   Heading,
   Icon,
   Image,
+  ListItem,
   Stack,
   Text,
+  UnorderedList,
 } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -51,6 +53,7 @@ const FoodDetail = () => {
         position='relative'
         overflow='hidden'
         backgroundImage={`url(${backendUrl + '/images/' + item.image})`}
+        cursor='pointer'
         backgroundSize='180%'
         backgroundPosition={backgroundPosition}
         onMouseMove={handleMouseMove}
@@ -81,6 +84,15 @@ const FoodDetail = () => {
           <Flex alignItems='center' gap='4px'>
             <Text fontWeight='600'>Price : </Text>
             <Text>{item.price}</Text>
+          </Flex>
+
+          <Flex gap='20px'>
+            <Text fontWeight='600'>Ingredients : </Text>
+            <UnorderedList>
+              {item.ingredients.map((ingredient, index) => {
+                return <ListItem key={index}>{ingredient}</ListItem>;
+              })}
+            </UnorderedList>
           </Flex>
         </CardBody>
 

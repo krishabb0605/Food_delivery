@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import google_icon from '../../assets/google.svg';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({
   onChangeHandler,
@@ -24,6 +25,7 @@ const Login = ({
       handleLogin(event);
     }
   };
+  const navigate = useNavigate();
 
   return (
     <Flex

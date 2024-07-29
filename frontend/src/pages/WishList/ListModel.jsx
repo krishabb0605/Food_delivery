@@ -16,7 +16,7 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
-import { indexOf, uniq } from 'lodash';
+import { uniq } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { CiMenuKebab } from 'react-icons/ci';
@@ -45,15 +45,21 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
     setNewName(renameList[1]);
   }, [renameList]);
 
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
+      handleRenameList();
+    }
+  };
+
   const handleRenameList = async () => {
     try {
       if (wishListName.includes(newName.toUpperCase())) {
         return toast.error('Please try something else');
       }
 
-      const data = {
-        oldListName: renameList[1],
-        newListName: newName.toUpperCase(),
+      const listData = {
+        listName: renameList[1],
+        dataToBeUpdated: { listName: newName.toUpperCase() },
       };
 
       //   rename in wishlist names array
@@ -75,7 +81,7 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
       }
 
       setIsLoading(true);
-      const response = await WishListService.renameList(data, token);
+      const response = await WishListService.updateListData(listData, token);
       if (response.data.success) {
         toast.success(response.data.message);
       } else {
@@ -95,7 +101,10 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
 
       if (selectedList === list) {
         const index = wishListName.indexOf(list);
-        handleWishListName(wishListName[index + 1]);
+        const nextListName = wishListName[index + 1]
+          ? wishListName[index + 1]
+          : wishListName[index - 1];
+        handleWishListName(nextListName);
         wishListName.length < 2 && onClose();
       }
       const response = await WishListService.removeList(list, token);
@@ -152,7 +161,6 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
                         fill={selectedList === list ? 'red' : 'white'}
                         transform='scale(1.2)'
                         cursor='pointer'
-                        _hover={{ fill: 'red' }}
                         style={{
                           filter:
                             'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
@@ -247,6 +255,7 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
               <Input
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={handleEnter}
               />
             </FormControl>
           </DrawerBody>

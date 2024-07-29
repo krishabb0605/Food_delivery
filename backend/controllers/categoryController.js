@@ -39,13 +39,13 @@ const listCategory = async (req, res) => {
 
 const removeCateogry = async (req, res) => {
   try {
-    const category = await categoryModel.findById(req.body.id);
+    const category = await categoryModel.findById(req.params.id);
 
     // delete image from folder
     fs.unlink(`uploads/${category.image}`, () => {});
 
     // in mongodb it delete
-    await categoryModel.findByIdAndDelete(req.body.id);
+    await categoryModel.findByIdAndDelete(req.params.id);
 
     res.json({ success: true, message: 'Category removed' });
   } catch (error) {

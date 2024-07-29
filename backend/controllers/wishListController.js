@@ -44,22 +44,6 @@ const handleWishList = async (req, res) => {
   }
 };
 
-const getWishList = async (req, res) => {
-  try {
-    const wishListData = await wishListModel.findOne({
-      userId: req.body.userId,
-      listName: req.body.listName,
-    });
-
-    res.json({
-      success: true,
-      wishList: wishListData.wishList,
-    });
-  } catch (error) {
-    return res.json({ success: false, message: 'Error' });
-  }
-};
-
 const getAllData = async (req, res) => {
   try {
     const wishListData = await wishListModel.find({
@@ -75,67 +59,41 @@ const getAllData = async (req, res) => {
   }
 };
 
-const renameListName = async (req, res) => {
+const updateListName = async (req, res) => {
+  const { userId, listName, dataToBeUpdated } = req.body;
+
   try {
     await wishListModel.findOneAndUpdate(
       {
-        userId: req.body.userId,
-        listName: req.body.oldListName,
+        userId,
+        listName,
       },
-      {
-        listName: req.body.newListName,
-      }
+      dataToBeUpdated
     );
 
     res.json({
       success: true,
-      message: 'List name updated ...',
+      message: 'List Data updated ...',
     });
   } catch (error) {
     return res.json({ success: false, message: 'Error' });
   }
 };
 
-const removeList = async (req, res) => {
+const deleteList = async (req, res) => {
   try {
     await wishListModel.findOneAndDelete({
       userId: req.body.userId,
-      listName: req.body.listName,
+      listName: req.params.list,
     });
 
     res.json({
       success: true,
-      message: `${req.body.listName} list deleted !`,
+      message: `${req.params.list} list deleted !`,
     });
   } catch (error) {
     return res.json({ success: false, message: 'Error' });
   }
 };
 
-const removeAllListData = async (req, res) => {
-  try {
-    await wishListModel.findOneAndUpdate(
-      {
-        userId: req.body.userId,
-        listName: req.body.listName,
-      },
-      { wishList: [] }
-    );
-
-    res.json({
-      success: true,
-      message: `Remove all list data !`,
-    });
-  } catch (error) {
-    return res.json({ success: false, message: 'Error while removing data' });
-  }
-};
-
-export {
-  handleWishList,
-  getWishList,
-  getAllData,
-  removeList,
-  renameListName,
-  removeAllListData,
-};
+export { handleWishList, getAllData, deleteList, updateListName };
