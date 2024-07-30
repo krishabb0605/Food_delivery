@@ -26,6 +26,7 @@ import { IoMdArrowRoundBack } from 'react-icons/io';
 import { WishListService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { GiAbstract066 } from 'react-icons/gi';
 
 const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
   let { wishListName, setWishListName, setWishListItems } = useContext(
@@ -99,17 +100,20 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
     try {
       setWishListName((prev) => prev.filter((listName) => listName !== list));
 
+      onClose();
       if (selectedList === list) {
         const index = wishListName.indexOf(list);
         const nextListName = wishListName[index + 1]
           ? wishListName[index + 1]
           : wishListName[index - 1];
         handleWishListName(nextListName);
-        wishListName.length < 2 && onClose();
       }
       const response = await WishListService.removeList(list, token);
       if (response.data.success) {
-        toast.success(response.data.message, { position: 'top-center' });
+        toast.success(response.data.message, {
+          position: 'top-center',
+          autoClose: 3000,
+        });
       } else {
         toast.error(response.data.message);
       }
@@ -130,7 +134,7 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
 
           <DrawerBody>
             {wishListName &&
-              wishListName.map((list) => {
+              wishListName.map((list, index) => {
                 return (
                   <Flex
                     cursor='pointer'
@@ -146,10 +150,11 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
                     }}
                   >
                     <Flex alignItems='center' gap='30px'>
-                      <Image
-                        src='https://picsum.photos/200/200'
-                        w='40px'
-                        h='40px'
+                      <Icon
+                        as={GiAbstract066}
+                        color={index % 2 === 0 ? 'coral' : '#953738'}
+                        w='30px'
+                        h='30px'
                       />
 
                       <Text>{list}</Text>

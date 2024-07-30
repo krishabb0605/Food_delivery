@@ -57,12 +57,50 @@ const WishList = () => {
       };
 
       const response = await WishListService.updateListData(listData, token);
-
-      toast.error(response.data.message);
+      const toastId = toast.error(
+        <Flex alignItems='center'>
+          {response.data.message}
+          <Button
+            colorScheme='red'
+            borderRadius='20px'
+            ml='12px'
+            onClick={() => {
+              toast.dismiss(toastId),
+                handleUndo(selectedList, wishListItems[selectedList]);
+            }}
+          >
+            Undo
+          </Button>
+        </Flex>,
+        {
+          position: 'top-center',
+          closeButton: false,
+        }
+      );
     } catch (e) {
       toast.error('Error while deleting all items');
     }
-    wishListItems[selectedList];
+  };
+
+  const handleUndo = async (listName, wishList) => {
+    try {
+      setWishListItems((prev) => ({
+        ...prev,
+        [listName]: wishList,
+      }));
+
+      const listData = {
+        listName,
+        dataToBeUpdated: { wishList },
+      };
+      await WishListService.updateListData(listData, token);
+
+      toast.success('Items restored successfully', {
+        position: 'top-center',
+      });
+    } catch (e) {
+      toast.error('Error while restoring items');
+    }
   };
 
   const handleWishListName = (list) => {

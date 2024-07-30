@@ -13,6 +13,7 @@ import {
   Add,
   Cart,
   CategoryList,
+  Error404,
   Home,
   ItemList,
   MyOrders,
@@ -53,6 +54,7 @@ const App = () => {
             </Route>
           )}
         </Route>
+        <Route path='*' element={<Error404 />} />
       </Routes>
     </>
   );

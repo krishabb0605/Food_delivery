@@ -7,10 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // placing user order from frontend
 const placeOrder = async (req, res) => {
-  let frontend_url = 'https://fooddelivery-mern.netlify.app';
-  if (process.env.ENV !== 'production') {
-    frontend_url = 'http://localhost:5173';
-  }
+  let frontend_url = process.env.FRONTEND_URL;
 
   try {
     let itemData;

@@ -38,20 +38,18 @@ const FoodItem = ({ item }) => {
           cursor='pointer'
           onClick={() => navigate('/food-detail', { state: { item } })}
         />
-
-        <Icon
-          as={FaHeart}
-          pos='absolute'
-          top='12px'
-          left='12px'
-          fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
-          transform='scale(1.2)'
-          cursor='pointer'
-          onClick={() => onOpen()}
-          style={{
-            filter: 'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
-          }}
-        />
+        <Box pos='absolute' top='2px' left='6px' p='8px 4px'>
+          <Icon
+            as={FaHeart}
+            fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
+            transform='scale(1.2)'
+            cursor='pointer'
+            onClick={() => onOpen()}
+            style={{
+              filter: 'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
+            }}
+          />
+        </Box>
 
         {!cartItems[item._id] ? (
           <Icon

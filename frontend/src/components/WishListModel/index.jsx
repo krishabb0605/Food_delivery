@@ -21,6 +21,7 @@ import { FaHeart } from 'react-icons/fa';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { UserContext } from '../../context/UserContext';
 import { toast } from 'react-toastify';
+import { GiAbstract066 } from 'react-icons/gi';
 
 const WishListModel = ({ isOpen, onClose, id }) => {
   let { handlWishList, wishListName, wishListItems } = useContext(UserContext);
@@ -68,7 +69,7 @@ const WishListModel = ({ isOpen, onClose, id }) => {
 
           <DrawerBody>
             {wishListName &&
-              wishListName.map((list) => {
+              wishListName.map((list, index) => {
                 return (
                   <Flex
                     cursor='pointer'
@@ -84,10 +85,11 @@ const WishListModel = ({ isOpen, onClose, id }) => {
                     }}
                   >
                     <Flex alignItems='center' gap='30px'>
-                      <Image
-                        src='https://picsum.photos/200/200'
-                        w='40px'
-                        h='40px'
+                      <Icon
+                        as={GiAbstract066}
+                        color={index % 2 === 0 ? 'coral' : '#953738'}
+                        w='30px'
+                        h='30px'
                       />
                       <Text>{list}</Text>
                     </Flex>

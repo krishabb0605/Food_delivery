@@ -37,13 +37,22 @@ const Orders = () => {
 
   const statusHandler = async (event, orderId) => {
     try {
+      // update in set orders
+      const updatedOrders = orders.map((order) => {
+        if (order._id === orderId) {
+          order.status = event.target.value;
+        }
+        return order;
+      });
+      setOrders(updatedOrders);
+
       const response = await OrderService.updateStatus(
         orderId,
         event.target.value
       );
 
       if (response.data.success) {
-        fetchAllOrders();
+        toast.success(response.data.message);
       } else {
         toast.error('Error while fetching order list');
       }

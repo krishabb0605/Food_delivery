@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import food_logo from '../../assets/food_logo.png';
-import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import Footer from '../Footer';
 import { UserContext } from '../../context/UserContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -17,6 +17,7 @@ import {
   Image,
   InputGroup,
   InputLeftElement,
+  Link,
   Modal,
   ModalContent,
   ModalOverlay,
@@ -116,9 +117,13 @@ const Navbar = () => {
           width='90%'
           margin='auto'
         >
-          <Link to='/'>
-            <Image src={food_logo} alt='logo' width='90px' height='75px' />
-          </Link>
+          <Image
+            src={food_logo}
+            alt='logo'
+            width='90px'
+            height='75px'
+            onClick={() => navigate('/')}
+          />
 
           <Flex
             gap='20px'
@@ -128,36 +133,42 @@ const Navbar = () => {
           >
             <Link
               to='/'
-              style={{ color: '#808080' }}
+              color='#808080'
               className={menu === 'home' ? 'active' : ''}
-              onClick={() => setMenu('home')}
+              _hover={{ textDecoration: 'none' }}
+              onClick={() => {
+                setMenu('home'), navigate('/');
+              }}
             >
               Home
             </Link>
-            <a
+            <Link
               href='#explore-menu'
               className={menu === 'menu' ? 'active' : ''}
-              style={{ color: '#808080' }}
+              _hover={{ textDecoration: 'none' }}
+             color='#808080'
               onClick={() => setMenu('menu')}
             >
               Menu
-            </a>
-            <a
+            </Link>
+            <Link
               href='#app-download'
-              style={{ color: '#808080' }}
+             color='#808080'
               className={menu === 'mobile-app' ? 'active' : ''}
+              _hover={{ textDecoration: 'none' }}
               onClick={() => setMenu('mobile-app')}
             >
               Mobile app
-            </a>
-            <a
+            </Link>
+            <Link
               href='#footer'
-              style={{ color: '#808080' }}
+              color='#808080'
               className={menu === 'contact-us' ? 'active' : ''}
+              _hover={{ textDecoration: 'none' }}
               onClick={() => setMenu('contact-us')}
             >
               Contact us
-            </a>
+            </Link>
           </Flex>
 
           <Flex
@@ -173,7 +184,7 @@ const Navbar = () => {
               transform='scale(1.3)'
             />
 
-            <Tooltip label='Cart data'>
+            <Tooltip label='Cart'>
               <Box pos='relative'>
                 <Link to='/cart'>
                   <Icon
@@ -197,7 +208,7 @@ const Navbar = () => {
               </Box>
             </Tooltip>
 
-            <Tooltip label='WishList data'>
+            <Tooltip label='WishList'>
               <Box pos='relative'>
                 <Link to='/wishlist'>
                   <Icon

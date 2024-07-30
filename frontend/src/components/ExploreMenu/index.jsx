@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Flex, Image, Text } from '@chakra-ui/react';
+import { Flex, Image, Spinner, Text } from '@chakra-ui/react';
 import { UserContext } from '../../context/UserContext';
 import { AuthContext } from '../../context/AuthContext';
 import all_food_logo from '../../assets/All_food_logo.png';
@@ -47,22 +47,31 @@ const settings = {
 
 const ExploreMenu = () => {
   const { backendUrl } = useContext(AuthContext);
-  const { filterQuery, setFilterQuery, isFetching } = useContext(UserContext);
+  const [isFetching, setIsFetching] = useState(false);
+  const { filterQuery, setFilterQuery } = useContext(UserContext);
   const [categoryList, setCategoryList] = useState([]);
 
   useEffect(() => {
     const fetchCategoryList = async () => {
-      if (!isFetching) {
-        try {
-          const response = await CategoryService.listCategory();
-          setCategoryList(response.data.data);
-        } catch (error) {
-          toast.error(error);
-        }
+      setIsFetching(true);
+      try {
+        const response = await CategoryService.listCategory();
+        setCategoryList(response.data.data);
+      } catch (error) {
+        toast.error(error);
       }
+      setIsFetching(false);
     };
     fetchCategoryList();
   }, []);
+
+  if (isFetching) {
+    return (
+      <Flex alignItems='center' justifyContent='center'>
+        <Spinner size='sm' />
+      </Flex>
+    );
+  }
 
   return (
     <Flex flexDir='column' gap='20px' id='explore-menu'>

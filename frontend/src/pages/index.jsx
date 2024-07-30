@@ -1,6 +1,7 @@
 import Add from './Add';
 import Cart from './Cart';
 import CategoryList from './CategoryList';
+import Error404 from './Error404';
 import Home from './Home';
 import Invoice from './Invoice';
 import ItemList from './ItemList';
@@ -26,4 +27,5 @@ export {
   CategoryList,
   PrivateRoute,
   WishList,
+  Error404,
 };

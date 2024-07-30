@@ -16,10 +16,8 @@ const forgotPassword = async (req, res) => {
     return res.json({ success: false, message: `User doesn't exist` });
   }
 
-  let frontend_url = 'https://fooddelivery-mern.netlify.app';
-  if (process.env.ENV !== 'production') {
-    frontend_url = 'http://localhost:5173';
-  }
+  let frontend_url = process.env.FRONTEND_URL;
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
