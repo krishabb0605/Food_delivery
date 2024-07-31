@@ -29,20 +29,20 @@ const WishListItem = ({ item, selectedList }) => {
           userSelect='none'
         />
 
-        <Icon
-          as={FaHeart}
-          pos='absolute'
-          top='12px'
-          left='12px'
-          fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
-          transform='scale(1.2)'
-          cursor='pointer'
-          onClick={() => handlWishList(item._id, selectedList)}
-          style={{
-            filter: 'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
-          }}
-        />
+        <Box pos='absolute' top='0' p='10px'>
+          <Icon
+            as={FaHeart}
+            fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
+            transform='scale(1.2)'
+            cursor='pointer'
+            onClick={() => handlWishList(item._id, selectedList)}
+            style={{
+              filter: 'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
+            }}
+          />
+        </Box>
       </Box>
+
       <Box p='16px'>
         <Flex justifyContent='space-between' alignItems='center' mb='10px'>
           <Text

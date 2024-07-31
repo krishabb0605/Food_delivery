@@ -122,6 +122,7 @@ const Navbar = () => {
             alt='logo'
             width='90px'
             height='75px'
+            cursor='pointer'
             onClick={() => navigate('/')}
           />
 
@@ -132,7 +133,7 @@ const Navbar = () => {
             display={{ base: 'none', sm: 'flex' }}
           >
             <Link
-              to='/'
+              href='#root'
               color='#808080'
               className={menu === 'home' ? 'active' : ''}
               _hover={{ textDecoration: 'none' }}
@@ -146,14 +147,14 @@ const Navbar = () => {
               href='#explore-menu'
               className={menu === 'menu' ? 'active' : ''}
               _hover={{ textDecoration: 'none' }}
-             color='#808080'
+              color='#808080'
               onClick={() => setMenu('menu')}
             >
               Menu
             </Link>
             <Link
               href='#app-download'
-             color='#808080'
+              color='#808080'
               className={menu === 'mobile-app' ? 'active' : ''}
               _hover={{ textDecoration: 'none' }}
               onClick={() => setMenu('mobile-app')}
@@ -186,14 +187,14 @@ const Navbar = () => {
 
             <Tooltip label='Cart'>
               <Box pos='relative'>
-                <Link to='/cart'>
-                  <Icon
-                    as={IoCart}
-                    alt='basket-icon'
-                    color='#4b537b'
-                    transform='scale(1.5)'
-                  />
-                </Link>
+                <Icon
+                  as={IoCart}
+                  alt='basket-icon'
+                  color='#4b537b'
+                  transform='scale(1.5)'
+                  cursor='pointer'
+                  onClick={() => navigate('/cart')}
+                />
                 {getTotalCartAmount() !== 0 && (
                   <Box
                     pos='absolute'
@@ -210,15 +211,14 @@ const Navbar = () => {
 
             <Tooltip label='WishList'>
               <Box pos='relative'>
-                <Link to='/wishlist'>
-                  <Icon
-                    as={FaRegHeart}
-                    color='#4b537b'
-                    alt='seach-icon'
-                    cursor='pointer'
-                    transform='scale(1.3)'
-                  />
-                </Link>
+                <Icon
+                  as={FaRegHeart}
+                  color='#4b537b'
+                  alt='seach-icon'
+                  cursor='pointer'
+                  transform='scale(1.3)'
+                  onClick={() => navigate('/wishlist')}
+                />
                 {wishListArray?.length > 0 && (
                   <Box
                     pos='absolute'
@@ -258,7 +258,7 @@ const Navbar = () => {
                   flexDir='column'
                   right='0'
                   zIndex='1'
-                  bg='#fff2ed'
+                  bg='#ffffff'
                   padding='12px 25px'
                   borderRadius='4px'
                   border='1px solid tomato'
@@ -321,7 +321,7 @@ const Navbar = () => {
               <AutoCompleteInput
                 variant='filled'
                 placeholder='Search...'
-                _focusVisible={{ borderColor: '#ffd5ce' }}
+                _focusVisible={{ borderColor: 'inherit' }}
                 onKeyDown={handleEnter}
               />
             </InputGroup>

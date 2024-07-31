@@ -66,7 +66,7 @@ const ForgotPassword = () => {
       email: fetchedEmail,
       password: resetPassword.password1,
     };
-
+    setIsFetching(true);
     try {
       const response = await UserService.resetPassword(data);
       if (response.data.success) {
@@ -78,6 +78,7 @@ const ForgotPassword = () => {
     } catch (error) {
       toast.error(error);
     }
+    setIsFetching(false);
   };
 
   return (
@@ -116,6 +117,7 @@ const ForgotPassword = () => {
               resetPassword={resetPassword}
               setResetPassword={setResetPassword}
               handleResetPassword={handleResetPassword}
+              isFetching={isFetching}
             />
           )}
         </Flex>

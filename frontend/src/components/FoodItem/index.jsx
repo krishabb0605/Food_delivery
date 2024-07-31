@@ -38,7 +38,7 @@ const FoodItem = ({ item }) => {
           cursor='pointer'
           onClick={() => navigate('/food-detail', { state: { item } })}
         />
-        <Box pos='absolute' top='2px' left='6px' p='8px 4px'>
+        <Box pos='absolute' top='0' p='10px'>
           <Icon
             as={FaHeart}
             fill={wishListArray?.includes(item._id) ? 'red' : 'white'}

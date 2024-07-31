@@ -187,7 +187,7 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
                             flexDir='column'
                             right='16px'
                             zIndex='1'
-                            bg='#fff2ed'
+                            bg='#ffffff'
                             padding='12px 25px'
                             borderRadius='4px'
                             border='1px solid #e3dad8'

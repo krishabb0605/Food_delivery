@@ -5,6 +5,7 @@ const ResetPassword = ({
   resetPassword,
   setResetPassword,
   handleResetPassword,
+  isFetching,
 }) => {
   const handleEnter = (event) => {
     if (event.key === 'Enter') {
@@ -75,6 +76,7 @@ const ResetPassword = ({
       <Button
         colorScheme='orange'
         onClick={handleResetPassword}
+        isLoading={isFetching}
       >{`Change password >`}</Button>
     </FormControl>
   );

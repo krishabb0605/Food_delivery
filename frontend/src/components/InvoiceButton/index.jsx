@@ -36,9 +36,9 @@ const InvoiceButton = ({ order, index }) => {
     }
   };
 
-  if (instance.loading) {
-    return <Spinner size='sm' />;
-  }
+  // if (instance.loading) {
+  //   return <Spinner size='sm' />;
+  // }
 
   if (instance.error) return <Box>Something went wrong: {instance.error}</Box>;
 
@@ -62,7 +62,7 @@ const InvoiceButton = ({ order, index }) => {
           <IoMdDownload />
         </a>
       </Flex>
-      {!isMobileSize && (
+      {isMobileSize && (
         <Flex
           cursor='pointer'
           bg='white'
