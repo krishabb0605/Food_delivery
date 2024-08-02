@@ -7,6 +7,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { CategoryService } from '../../services';
+import { toast } from 'react-toastify';
 
 const settings = {
   dots: false,

@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { FaHeart, FaRegStar, FaStar } from 'react-icons/fa';
 import { uniq } from 'lodash';
+import { toast } from 'react-toastify';
 
 const WishListItem = ({ item, selectedList }) => {
   const { backendUrl } = useContext(AuthContext);
@@ -82,7 +83,7 @@ const WishListItem = ({ item, selectedList }) => {
           </Flex>
           <Button
             onClick={() => {
-              addToCart(item._id, true);
+              addToCart(item._id), toast.success('Item added to cart.');
             }}
           >
             Add to cart

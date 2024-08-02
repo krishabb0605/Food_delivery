@@ -161,6 +161,7 @@ const MyOrder = ({ index, order, totalData, fetchOrders }) => {
             borderRadius='4px'
             cursor='pointer'
             mt='18px'
+            mb='8px'
             h='26px'
           >
             {!order.paymentInfo ? 'Proceed to payment' : 'Track Order'}

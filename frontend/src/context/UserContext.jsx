@@ -24,36 +24,30 @@ const UserContextProvider = ({ children }) => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const addToCart = async (itemId, isSuccess) => {
+  const addToCart = async (itemId) => {
     if (!cartItems[itemId]) {
       setCartItems((prev) => ({ ...prev, [itemId]: 1 }));
     } else {
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
-    if (token) {
-      try {
-        await CartService.addToCart(itemId, token);
-        if (isSuccess) {
-          toast.success('Item added to the cart.', {
-            position: 'bottom-right',
-          });
-        }
-      } catch (error) {
-        toast.error(error);
-      }
-    }
   };
 
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-    if (token) {
-      try {
-        await CartService.removeFromCart(itemId, token);
-      } catch (error) {
-        toast.error(error);
-      }
-    }
   };
+
+  useEffect(() => {
+    if (Object.keys(cartItems).length > 0) {
+      const updateCartData = async () => {
+        try {
+          await CartService.updateCart(token, { cartData: cartItems });
+        } catch (error) {
+          toast.error(error);
+        }
+      };
+      updateCartData();
+    }
+  }, [cartItems]);
 
   const handlWishList = async (itemId, listName) => {
     const arrayForWishList = wishListItems[listName]
@@ -111,14 +105,14 @@ const UserContextProvider = ({ children }) => {
     const loadAllData = async () => {
       setIsFetching(true);
       try {
-        const foodsData = await FoodService.listFood();
-        setFoodList(foodsData.data.data);
+        const foodsDataResponse = await FoodService.listFood();
+        setFoodList(foodsDataResponse.data.data);
 
-        const cartData = await CartService.getCart(token);
-        setCartItems(cartData.data.cartData);
+        const cartsDataResponse = await CartService.getCart(token);
+        setCartItems(cartsDataResponse.data.cartData);
 
-        const response = await WishListService.getAllData(token);
-        const wishListData = response.data.data;
+        const wishlistDatasresponse = await WishListService.getAllData(token);
+        const wishListData = wishlistDatasresponse.data.data;
 
         const newData = {};
         wishListData.forEach(({ listName, wishList }) => {
