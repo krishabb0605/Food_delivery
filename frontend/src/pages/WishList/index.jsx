@@ -65,8 +65,8 @@ const WishList = () => {
             borderRadius='20px'
             ml='12px'
             onClick={() => {
-              toast.dismiss(toastId),
-                handleUndo(selectedList, wishListItems[selectedList]);
+              toast.dismiss(toastId);
+              handleUndo(selectedList, wishListItems[selectedList]);
             }}
           >
             Undo

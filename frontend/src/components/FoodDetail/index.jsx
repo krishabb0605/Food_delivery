@@ -51,7 +51,7 @@ const FoodDetail = () => {
 
   return (
     <Card
-      direction={{ base: 'column', sm: 'row' }}
+      direction={{ base: 'column', md: 'row' }}
       overflow='hidden'
       variant='outline'
     >
@@ -63,7 +63,7 @@ const FoodDetail = () => {
             overflow='hidden'
             backgroundImage={`url(${backendUrl + '/images/' + item.image})`}
             cursor='pointer'
-            backgroundSize='180%'
+            backgroundSize={{ base: '100%', sm: '180%' }}
             backgroundPosition={backgroundPosition}
             onMouseMove={handleMouseMove}
             _hover={{ img: { opacity: 0 } }}

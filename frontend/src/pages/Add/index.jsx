@@ -18,12 +18,19 @@ import { CategoryService, FoodService } from '../../services';
 import { AuthContext } from '../../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CreatableSelect from 'react-select/creatable';
+import { uniqBy } from 'lodash';
 
 const Add = () => {
   const { backendUrl } = useContext(AuthContext);
 
   const [isFetching, setIsFetching] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
+  const [ingredientsList, setIngredientsList] = useState([]);
+
+  const ingredientsListLowerCase = ingredientsList.map((obj) => ({
+    ...obj,
+    value: obj.value.toLowerCase(),
+  }));
 
   const [addingData, setAddingData] = useState(false);
   const [image, setImage] = useState(false);
@@ -54,8 +61,14 @@ const Add = () => {
   const fetchCategoryList = async () => {
     setIsFetching(true);
     try {
-      const response = await CategoryService.listCategory();
-      setCategoryData(response.data.data);
+      const categoryResponse = await CategoryService.listCategory();
+      setCategoryData(categoryResponse.data.data);
+      const foodResponse = await FoodService.listFood();
+      foodResponse.data.data.map((list) =>
+        list.ingredients.map((value) =>
+          setIngredientsList((prev) => [...prev, { value, label: value }])
+        )
+      );
     } catch (error) {
       toast.error(error);
     }
@@ -358,8 +371,17 @@ const Add = () => {
           <Flex flexDir='column' gap='20px' width='max(40%,280px)'>
             <FormLabel>Item ingredients</FormLabel>
             <CreatableSelect
+              options={uniqBy(ingredientsListLowerCase, 'value')}
               onChange={handleChange}
               value={selectedOptions}
+              styles={{
+                menuList: (provided) => ({
+                  ...provided,
+                  maxHeight: '240px',
+                  overflowY: 'auto',
+                }),
+              }}
+              menuPlacement='auto'
               isMulti
             />
           </Flex>
