@@ -35,18 +35,24 @@ const UserContextProvider = ({ children }) => {
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
   };
-
+                 
   useEffect(() => {
-    if (Object.keys(cartItems).length > 0) {
-      const updateCartData = async () => {
+    const data = localStorage.getItem('cartData');
+
+    const updateCartData = async () => {
+      if (Object.keys(cartItems).length > 0) {
+        if (data === JSON.stringify(cartItems)) {
+          localStorage.removeItem('cartData');
+          return;
+        }
         try {
           await CartService.updateCart(token, { cartData: cartItems });
         } catch (error) {
           toast.error(error);
         }
-      };
-      updateCartData();
-    }
+      }
+    };
+    updateCartData();
   }, [cartItems]);
 
   const handlWishList = async (itemId, listName) => {
@@ -109,6 +115,10 @@ const UserContextProvider = ({ children }) => {
         setFoodList(foodsDataResponse.data.data);
 
         const cartsDataResponse = await CartService.getCart(token);
+        localStorage.setItem(
+          'cartData',
+          JSON.stringify(cartsDataResponse.data.cartData)
+        );
         setCartItems(cartsDataResponse.data.cartData);
 
         const wishlistDatasresponse = await WishListService.getAllData(token);

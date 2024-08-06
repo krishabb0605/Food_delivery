@@ -133,7 +133,7 @@ const Add = () => {
     setAddingData(true);
 
     for (const [key, value] of Object.entries(itemData)) {
-      if (value === '' || image === false) {
+      if (value === '' || image === false || value.length < 1) {
         setAddingData(false);
         return toast.error('Fill all details');
       }

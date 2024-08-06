@@ -118,7 +118,7 @@ const ItemList = () => {
               alt='Food-Image'
             />
 
-            <Stack>
+            <Stack flex='1'>
               <CardBody py='0'>
                 <Tooltip label={item.name}>
                   <Heading
