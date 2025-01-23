@@ -19,6 +19,7 @@ const AuthContextProvider = ({ children }) => {
 
   const [token, setToken] = useState(JSON.parse(userJsonData)?.token);
   const [role, setRole] = useState(JSON.parse(userJsonData)?.role);
+  const [avtar, setAvtar] = useState(JSON.parse(userJsonData)?.avtar);
 
   const navigate = useNavigate();
 
@@ -38,9 +39,11 @@ const AuthContextProvider = ({ children }) => {
           setToken(response.data.token);
           setRole(response.data.user.role);
 
-          if (currRole === 'register') {
-            handleSendVerificationEmail(response.data.user);
+          if (response.data.user.avtar) {
+            handleAvtar(response.data.user.avtar);
           }
+
+          setUserData(updatedUserData);
           const updatedUserData = {
             ...response.data.user,
             token: response.data.token,
@@ -89,11 +92,18 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const handleAvtar = (data) => {
+    setAvtar(data);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('user');
-
+    localStorage.removeItem('avtar');
+    setRole('user');
     setToken('');
-    navigate('/login');
+    navigate('/');
+    setAvtar(null);
+    setUserData(null);
   };
 
   const value = {
@@ -110,6 +120,8 @@ const AuthContextProvider = ({ children }) => {
     isLoginWithGoogle,
     setIsLoginWithGoogle,
     handleSendVerificationEmail,
+    avtar,
+    handleAvtar,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -7,13 +7,25 @@ import { FaHeart, FaRegStar, FaStar } from 'react-icons/fa';
 import WishListModel from '../WishListModel';
 import { uniq } from 'lodash';
 import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../ConfirmModal';
 
 const FoodItem = ({ item }) => {
-  const { backendUrl } = useContext(AuthContext);
+  const { backendUrl, token } = useContext(AuthContext);
   let { cartItems, addToCart, removeFromCart, wishListItems } = useContext(
     UserContext
   );
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isWishlistOpen,
+    onOpen: onWishlistOpen,
+    onClose: onWishlistClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isConfirmOpen,
+    onOpen: onConfirmOpen,
+    onClose: onConfirmClose,
+  } = useDisclosure();
+
   const navigate = useNavigate();
 
   let wishListArray = uniq(Object.values(wishListItems).flat());
@@ -44,7 +56,7 @@ const FoodItem = ({ item }) => {
             fill={wishListArray?.includes(item._id) ? 'red' : 'white'}
             transform='scale(1.2)'
             cursor='pointer'
-            onClick={() => onOpen()}
+            onClick={!token ? onConfirmOpen : onWishlistOpen}
             style={{
               filter: 'drop-shadow(rgba(0, 0, 0, 0.75) 0px 0px 12px)',
             }}
@@ -61,7 +73,9 @@ const FoodItem = ({ item }) => {
             right='15px'
             cursor='pointer'
             borderRadius='50%'
-            onClick={() => addToCart(item._id)}
+            onClick={() => {
+              !token ? onConfirmOpen() : addToCart(item._id);
+            }}
             as={IoMdAdd}
             alt='white'
           />
@@ -132,7 +146,12 @@ const FoodItem = ({ item }) => {
           $ <Text fontSize='20px'>{item.price}</Text>
         </Flex>
       </Box>
-      <WishListModel isOpen={isOpen} onClose={onClose} id={item._id} />
+      <WishListModel
+        isOpen={isWishlistOpen}
+        onClose={onWishlistClose}
+        id={item._id}
+      />
+      <ConfirmModal isOpen={isConfirmOpen} onClose={onConfirmClose} />
     </Box>
   );
 };

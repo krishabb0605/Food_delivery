@@ -2,29 +2,32 @@ import {
   Button,
   Flex,
   FormControl,
-  Input,
-  Select,
-  Text,
   Image,
+  Input,
+  Text,
 } from '@chakra-ui/react';
 import google_icon from '../../assets/google.svg';
-import React from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
-const Register = ({
+const Login = ({
   onChangeHandler,
   data,
   handleLogin,
-  isFetching,
-  isLoginWithGoogle,
-  setIsLoginWithGoogle,
   googleLogin,
   setCurrState,
 }) => {
+  const { isLoginWithGoogle, setIsLoginWithGoogle, isFetching } = useContext(
+    AuthContext
+  );
+
   const handleEnter = (event) => {
     if (event.key === 'Enter') {
       handleLogin(event);
     }
   };
+  const navigate = useNavigate();
 
   return (
     <Flex
@@ -34,7 +37,7 @@ const Register = ({
       w={{ base: '325px', sm: '400px' }}
     >
       <Text fontSize='24px' fontWeight='bold'>
-        Register
+        Login
       </Text>
       <FormControl
         display='flex'
@@ -50,24 +53,6 @@ const Register = ({
           justifyContent='center'
           gap='12px'
         >
-          <Text
-            alignSelf='baseline'
-            fontSize='12px'
-            color='#6c6c6c'
-            htmlFor='role'
-          >
-            Role
-          </Text>
-          <Select
-            name='role'
-            id='role'
-            onChange={onChangeHandler}
-            value={data.role}
-            bg='rgb(232, 240, 254)'
-          >
-            <option value='user'>User</option>
-            <option value='admin'>Admin</option>
-          </Select>
           <Text alignSelf='baseline' fontSize='12px' color='#6c6c6c'>
             Email
           </Text>
@@ -104,6 +89,16 @@ const Register = ({
             required
           />
         </Flex>
+        <Text
+          fontSize='12px'
+          fontWeight='bold'
+          color='tomato'
+          alignSelf='end'
+          cursor='pointer'
+          onClick={() => navigate('/forgot-password')}
+        >
+          Forgot password ?
+        </Text>
 
         <Button
           onClick={handleLogin}
@@ -115,7 +110,7 @@ const Register = ({
           justifyContent='center'
           isLoading={isFetching}
         >
-          Create Account
+          Login
         </Button>
 
         <Button
@@ -136,14 +131,14 @@ const Register = ({
         </Button>
 
         <Flex fontSize={{ base: '14px', sm: 'unset' }}>
-          Already have an account ?{' '}
+          Create a new account ?
           <Text
-            onClick={() => setCurrState('login')}
+            onClick={() => setCurrState('register')}
             color='tomato'
             fontWeight='700'
             cursor='pointer'
           >
-            Login here
+            Click here
           </Text>
         </Flex>
       </FormControl>
@@ -151,4 +146,4 @@ const Register = ({
   );
 };
 
-export default Register;
+export default Login;

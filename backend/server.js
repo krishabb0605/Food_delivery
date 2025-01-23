@@ -22,13 +22,13 @@ app.use(cors());
 connectDB();
 
 // API endpoint
-app.use('/users', userRouter);
-app.use('/email', emailRouter);
-app.use('/orders', orderRouter);
-app.use('/foodItems', foodRouter);
-app.use('/cartItems', cartRouter);
-app.use('/wishlistItems', wishListRouter);
-app.use('/categories', categoryRouter);
+app.use('/api/user', userRouter);
+app.use('/api/email', emailRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/foods', foodRouter);
+app.use('/api/cart', cartRouter);
+app.use('/api/wishlists', wishListRouter);
+app.use('/api/categories', categoryRouter);
 
 // for get image
 app.use('/images', express.static('uploads'));

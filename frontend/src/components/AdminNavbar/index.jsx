@@ -15,7 +15,7 @@ import { FaUser } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 
 const AdminNavbar = () => {
-  const { userData, handleLogout } = useContext(AuthContext);
+  const { avtar, backendUrl, handleLogout } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   const ref = useRef();
 
@@ -47,7 +47,16 @@ const AdminNavbar = () => {
         </Link>
 
         <Box pos='relative' ref={ref}>
-          {userData && !userData.avtar ? (
+          {avtar && avtar ? (
+            <Image
+              src={`${backendUrl}/images/` + avtar}
+              h='50px'
+              w='50px'
+              borderRadius='50%'
+              onClick={() => handleMenu(true)}
+              cursor='pointer'
+            />
+          ) : (
             <Icon
               width='40px'
               as={FaUser}
@@ -56,14 +65,6 @@ const AdminNavbar = () => {
               transform='scale(2)'
               cursor='pointer'
               onClick={() => handleMenu(true)}
-            />
-          ) : (
-            <Image
-              src={userData.avtar}
-              h='50px'
-              borderRadius='50%'
-              onClick={() => handleMenu(true)}
-              cursor='pointer'
             />
           )}
           {showMenu && (

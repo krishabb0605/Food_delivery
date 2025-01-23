@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   Box,
@@ -12,11 +12,13 @@ import {
 } from '@chakra-ui/react';
 import { OrderService } from '../../services';
 import OrderItem from './OrderItem.jsx';
+import { AuthContext } from '../../context/AuthContext.jsx';
 
 const tabs = ['Food Processing', 'Out for delivery', 'Delivered'];
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { token } = useContext(AuthContext);
 
   const fetchAllOrders = async () => {
     try {
@@ -62,8 +64,10 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    fetchAllOrders();
-  }, []);
+    if (token) {
+      fetchAllOrders();
+    }
+  }, [token]);
 
   if (isLoading) {
     return (

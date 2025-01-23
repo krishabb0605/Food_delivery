@@ -9,7 +9,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { IoMdAdd } from 'react-icons/io';
-import { FaListUl } from 'react-icons/fa';
+import { FaListUl, FaUser } from 'react-icons/fa';
 import { IoReceiptOutline } from 'react-icons/io5';
 
 const Sidebar = () => {
@@ -22,6 +22,7 @@ const Sidebar = () => {
     { icon: IoMdAdd, name: 'Add Items', state: '/add' },
     { icon: FaListUl, name: 'List Items', state: '/item' },
     { icon: FaListUl, name: 'List categories', state: '/category' },
+    { icon: FaUser, name: 'Profile', state: '/profile' },
   ];
 
   useEffect(() => {

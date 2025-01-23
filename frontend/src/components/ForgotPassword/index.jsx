@@ -54,12 +54,10 @@ const ForgotPassword = () => {
   const handleResetPassword = async (event) => {
     event.preventDefault();
     if (resetPassword.password1.length < 8) {
-      toast.error('Passwords length must be atleast 8 characters');
-      return;
+      return toast.error('Passwords length must be atleast 8 characters');
     }
     if (resetPassword.password1 !== resetPassword.password2) {
-      toast.error('Passwords did not match');
-      return;
+      return toast.error('Passwords did not match');
     }
 
     const data = {

@@ -35,12 +35,12 @@ const UserContextProvider = ({ children }) => {
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
   };
-                 
+
   useEffect(() => {
     const data = localStorage.getItem('cartData');
 
     const updateCartData = async () => {
-      if (Object.keys(cartItems).length > 0) {
+      if (Object.keys(cartItems).length > 0 && token) {
         if (data === JSON.stringify(cartItems)) {
           localStorage.removeItem('cartData');
           return;
@@ -109,37 +109,46 @@ const UserContextProvider = ({ children }) => {
 
   useEffect(() => {
     const loadAllData = async () => {
+      const data = JSON.parse(localStorage.getItem('user'));
+      if (token && data && data.role === 'admin') {
+        return;
+      }
+
       setIsFetching(true);
       try {
         const foodsDataResponse = await FoodService.listFood();
         setFoodList(foodsDataResponse.data.data);
+        setCartItems({});
+        setWishListItems({});
+        setWishListName([]);
+        if (token) {
+          const cartsDataResponse = await CartService.getCart(token);
+          localStorage.setItem(
+            'cartData',
+            JSON.stringify(cartsDataResponse.data.cartData)
+          );
+          setCartItems(cartsDataResponse.data.cartData);
 
-        const cartsDataResponse = await CartService.getCart(token);
-        localStorage.setItem(
-          'cartData',
-          JSON.stringify(cartsDataResponse.data.cartData)
-        );
-        setCartItems(cartsDataResponse.data.cartData);
+          const wishlistDatasresponse = await WishListService.getAllData(token);
+          const wishListData = wishlistDatasresponse.data.data;
 
-        const wishlistDatasresponse = await WishListService.getAllData(token);
-        const wishListData = wishlistDatasresponse.data.data;
+          const newData = {};
+          wishListData.forEach(({ listName, wishList }) => {
+            newData[listName] = wishList;
+          });
+          setWishListItems(newData);
 
-        const newData = {};
-        wishListData.forEach(({ listName, wishList }) => {
-          newData[listName] = wishList;
-        });
-        setWishListItems(newData);
-
-        wishListData.forEach((data) =>
-          setWishListName((prev) => [...prev, data.listName])
-        );
+          wishListData.forEach((data) =>
+            setWishListName((prev) => [...prev, data.listName])
+          );
+        }
       } catch (error) {
         toast.error(error);
       }
       setIsFetching(false);
     };
     loadAllData();
-  }, []);
+  }, [token]);
 
   const value = {
     isFetching,

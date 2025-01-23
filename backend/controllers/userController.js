@@ -4,9 +4,25 @@ import bycrpt from 'bcrypt';
 import validator from 'validator';
 import 'dotenv/config';
 import axios from 'axios';
+import fs from 'fs';
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
+};
+
+const getData = async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.json({ success: false, message: 'User does not exist' });
+    }
+
+    res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error });
+  }
 };
 
 const loginUser = async (req, res) => {
@@ -31,7 +47,7 @@ const loginUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { role, password, email } = req.body;
+  const { role, password, email, name } = req.body;
 
   try {
     const exists = await userModel.findOne({ email });
@@ -59,6 +75,7 @@ const registerUser = async (req, res) => {
     const newUser = new userModel({
       role: role,
       email: email,
+      userName: name,
       password: hashedPassword,
       verified: false,
       verificationToken: Math.floor(Math.random() * 900000) + 100000,
@@ -100,7 +117,16 @@ const verifyUser = async (req, res) => {
 };
 
 const updatePassword = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, oldPassword } = req.body;
+
+  if (oldPassword) {
+    const user = await userModel.findOne({ email });
+
+    const isValidPassword = await bycrpt.compare(oldPassword, user.password);
+    if (!isValidPassword) {
+      return res.json({ success: false, message: 'Invalid old password' });
+    }
+  }
 
   try {
     const user = await userModel.findOne({ email });
@@ -126,6 +152,29 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const updateProfileData = async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    const userData = await userModel.findById(userId);
+    if (req.file) {
+      if (userData.avtar) {
+        fs.unlink(`uploads/${userData.avtar}`, () => {});
+      }
+      userData.avtar = req.file.filename;
+    }
+    if (req.body.name) {
+      userData.userName = req.body.name;
+    }
+
+    await userData.save();
+    res.json({ success: true, message: 'User data updated' });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: 'Error while updating data' });
+  }
+};
+
 const signInWithGoogle = async (req, res) => {
   const { access_token } = req.body;
   try {
@@ -139,7 +188,7 @@ const signInWithGoogle = async (req, res) => {
       }
     );
 
-    const { email, verified_email, picture } = response.data;
+    const { email, verified_email, name } = response.data;
     const existUser = await userModel.findOne({ email });
 
     if (existUser) {
@@ -153,10 +202,10 @@ const signInWithGoogle = async (req, res) => {
       const newUser = new userModel({
         role: 'user',
         email,
+        userName: name,
         password: hashedPassword,
         verified: verified_email,
         verificationToken: '',
-        avtar: picture,
       });
 
       const user = await newUser.save();
@@ -170,9 +219,11 @@ const signInWithGoogle = async (req, res) => {
 };
 
 export {
+  getData,
   loginUser,
   registerUser,
   verifyUser,
   updatePassword,
+  updateProfileData,
   signInWithGoogle,
 };

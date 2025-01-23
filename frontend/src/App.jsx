@@ -2,13 +2,7 @@ import React, { useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router-dom';
-import {
-  AdminNavbar,
-  EntryPage,
-  FoodDetail,
-  ForgotPassword,
-  Navbar,
-} from './components';
+import { AdminNavbar, FoodDetail, ForgotPassword, Navbar } from './components';
 import {
   Add,
   Cart,
@@ -20,6 +14,7 @@ import {
   Orders,
   PlaceOrder,
   PrivateRoute,
+  Profile,
   Verify,
   WishList,
 } from './pages';
@@ -33,9 +28,20 @@ const App = () => {
       <ToastContainer />
       <Routes>
         <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/login' element={<EntryPage />} />
+
         <Route element={<PrivateRoute />}>
-          {role === 'user' ? (
+          {role === 'admin' ? (
+            <Route element={<AdminNavbar />}>
+              <Route index element={<Orders />} />
+              <Route path='/add' element={<Add />} />
+              <Route path='/item' element={<ItemList />} />
+              <Route path='/category' element={<CategoryList />} />
+              <Route
+                path='/profile'
+                element={<Profile tabProps={{ width: '82%', mt: '20px' }} />}
+              />
+            </Route>
+          ) : (
             <Route element={<Navbar />}>
               <Route index element={<Home />} />
               <Route path='/cart' element={<Cart />} />
@@ -44,13 +50,7 @@ const App = () => {
               <Route path='/order' element={<PlaceOrder />} />
               <Route path='/verify' element={<Verify />} />
               <Route path='/myorders' element={<MyOrders />} />
-            </Route>
-          ) : (
-            <Route element={<AdminNavbar />}>
-              <Route index element={<Orders />} />
-              <Route path='/add' element={<Add />} />
-              <Route path='/item' element={<ItemList />} />
-              <Route path='/category' element={<CategoryList />} />
+              <Route path='/profile' element={<Profile />} />
             </Route>
           )}
         </Route>

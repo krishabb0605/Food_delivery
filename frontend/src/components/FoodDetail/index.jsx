@@ -12,6 +12,7 @@ import {
   Stack,
   Text,
   UnorderedList,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -19,13 +20,19 @@ import { AuthContext } from '../../context/AuthContext';
 import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import { UserContext } from '../../context/UserContext';
 import { useState } from 'react';
+import ConfirmModal from '../ConfirmModal';
 
 const FoodDetail = () => {
   const location = useLocation();
   const item = location.state?.item;
-  const { backendUrl } = useContext(AuthContext);
+  const { backendUrl, token } = useContext(AuthContext);
   const { addToCart, removeFromCart, cartItems } = useContext(UserContext);
   const [backgroundPosition, setBackgroundPosition] = useState('0% 0%');
+  const {
+    isOpen: isConfirmOpen,
+    onOpen: onConfirmOpen,
+    onClose: onConfirmClose,
+  } = useDisclosure();
   const navigate = useNavigate();
 
   const itemQuantity = cartItems[item?._id] || 0;
@@ -134,13 +141,16 @@ const FoodDetail = () => {
                   borderRadius='50%'
                   cursor='pointer'
                   as={IoMdAdd}
-                  onClick={() => addToCart(item._id)}
+                  onClick={() => {
+                    !token ? onConfirmOpen() : addToCart(item._id);
+                  }}
                 />
               </Flex>
             </CardFooter>
           </Stack>
         </>
       )}
+      <ConfirmModal isOpen={isConfirmOpen} onClose={onConfirmClose} />
     </Card>
   );
 };

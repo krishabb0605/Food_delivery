@@ -99,6 +99,11 @@ const ListModel = ({ isOpen, onClose, handleWishListName, selectedList }) => {
   const handleDeleteList = async (list) => {
     try {
       setWishListName((prev) => prev.filter((listName) => listName !== list));
+      setWishListItems((prev) => {
+        const updatedItems = { ...prev };
+        delete updatedItems[list];
+        return updatedItems;
+      });
 
       onClose();
       if (selectedList === list) {

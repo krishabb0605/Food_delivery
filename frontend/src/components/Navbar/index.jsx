@@ -9,18 +9,15 @@ import { IoCart } from 'react-icons/io5';
 import { FaSearch } from 'react-icons/fa';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { MdLogout } from 'react-icons/md';
+import { FaUserPen } from 'react-icons/fa6';
 
 import {
   Box,
+  Button,
   Flex,
   Icon,
   Image,
-  InputGroup,
-  InputLeftElement,
   Link,
-  Modal,
-  ModalContent,
-  ModalOverlay,
   Spinner,
   Text,
   Tooltip,
@@ -29,17 +26,25 @@ import {
 } from '@chakra-ui/react';
 import { uniq } from 'lodash';
 
-import {
-  AutoComplete,
-  AutoCompleteInput,
-  AutoCompleteItem,
-  AutoCompleteList,
-} from '@choc-ui/chakra-autocomplete';
+import SearchModal from './SearchModal';
+import EntryPageModal from '../EntryPageModal';
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
   const [showMenu, setShowMenu] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onSearchOpen,
+    onClose: onSearchClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isLoginOpen,
+    onOpen: onLoginOpen,
+    onClose: onLoginClose,
+  } = useDisclosure();
+
   const [searchQuery, setSearchQuery] = useState('');
   const {
     setFilterQuery,
@@ -48,7 +53,7 @@ const Navbar = () => {
     foodList,
     wishListItems,
   } = useContext(UserContext);
-  const { userData, handleLogout } = useContext(AuthContext);
+  const { avtar, handleLogout, backendUrl, token } = useContext(AuthContext);
 
   let [menuOptions, setMenuOptions] = useState([]);
   const navigate = useNavigate();
@@ -83,19 +88,6 @@ const Navbar = () => {
   }, [searchQuery]);
 
   menuOptions = uniq(menuOptions);
-
-  const handleMenu = (data) => {
-    if (showMenu) {
-      return setShowMenu(false);
-    }
-    setShowMenu(data);
-  };
-
-  const handleEnter = (event) => {
-    if (event.key === 'Enter') {
-      onClose();
-    }
-  };
 
   if (isFetching) {
     return (
@@ -181,7 +173,7 @@ const Navbar = () => {
               color='#4b537b'
               alt='seach-icon'
               cursor='pointer'
-              onClick={onOpen}
+              onClick={onSearchOpen}
               transform='scale(1.3)'
             />
 
@@ -234,23 +226,30 @@ const Navbar = () => {
             </Tooltip>
 
             <Box pos='relative' ref={ref}>
-              {userData && !userData.avtar ? (
-                <Icon
-                  as={FaUser}
-                  alt='profile'
-                  color='#4b537b'
-                  transform='scale(1.3)'
-                  cursor='pointer'
-                  onClick={() => handleMenu(true)}
-                />
+              {token ? (
+                avtar ? (
+                  <Image
+                    src={`${backendUrl}/images/` + avtar}
+                    h='50px'
+                    w='50px'
+                    borderRadius='50%'
+                    onClick={() => setShowMenu(true)}
+                    cursor='pointer'
+                  />
+                ) : (
+                  <Icon
+                    as={FaUser}
+                    alt='profile'
+                    color='#4b537b'
+                    transform='scale(1.3)'
+                    cursor='pointer'
+                    onClick={() => setShowMenu(true)}
+                  />
+                )
               ) : (
-                <Image
-                  src={userData.avtar}
-                  h='50px'
-                  borderRadius='50%'
-                  onClick={() => handleMenu(true)}
-                  cursor='pointer'
-                />
+                <Button colorScheme='orange' onClick={() => onLoginOpen()}>
+                  Login
+                </Button>
               )}
               {showMenu && (
                 <Flex
@@ -270,7 +269,21 @@ const Navbar = () => {
                     gap='10px'
                     cursor='pointer'
                     onClick={() => {
-                      navigate('/myorders'), handleMenu(false);
+                      navigate('/profile'), setShowMenu(false);
+                    }}
+                    _hover={{ color: 'tomato' }}
+                  >
+                    <Icon as={FaUserPen} alt='bag' color='#fc6965' />
+                    <Text>Profile</Text>
+                  </Flex>
+                  <hr />
+
+                  <Flex
+                    alignItems='center'
+                    gap='10px'
+                    cursor='pointer'
+                    onClick={() => {
+                      navigate('/myorders'), setShowMenu(false);
                     }}
                     _hover={{ color: 'tomato' }}
                   >
@@ -284,7 +297,7 @@ const Navbar = () => {
                     gap='10px'
                     cursor='pointer'
                     onClick={() => {
-                      handleLogout(), handleMenu(false);
+                      handleLogout(), setShowMenu(false);
                     }}
                     _hover={{ color: 'tomato' }}
                   >
@@ -305,41 +318,14 @@ const Navbar = () => {
       <Box>
         <Footer />
       </Box>
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={onSearchClose}
+        setSearchQuery={setSearchQuery}
+        menuOptions={menuOptions}
+      />
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <AutoComplete rollNavigation onChange={(e) => setSearchQuery(e)}>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents='none'
-                color='inherit'
-                fontSize='1.2em'
-              >
-                <Icon as={FaSearch} color='gray.300' />
-              </InputLeftElement>
-              <AutoCompleteInput
-                variant='filled'
-                placeholder='Search...'
-                _focusVisible={{ borderColor: 'inherit' }}
-                onKeyDown={handleEnter}
-              />
-            </InputGroup>
-            <AutoCompleteList>
-              {menuOptions.map((option, oid) => (
-                <AutoCompleteItem
-                  key={`option-${oid}`}
-                  value={option}
-                  textTransform='capitalize'
-                  onClick={onClose}
-                >
-                  {option}
-                </AutoCompleteItem>
-              ))}
-            </AutoCompleteList>
-          </AutoComplete>
-        </ModalContent>
-      </Modal>
+      <EntryPageModal onClose={onLoginClose} isOpen={isLoginOpen} />
     </Box>
   );
 };

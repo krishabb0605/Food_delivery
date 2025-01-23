@@ -1,6 +1,6 @@
 import AdminNavbar from './AdminNavbar';
 import AppDownload from './AppDownload';
-import EntryPage from './EntryPage';
+import EntryPageModal from './EntryPageModal';
 import ExploreMenu from './ExploreMenu';
 import FoodDetail from './FoodDetail';
 import FoodDisplay from './FoodDisplay';
@@ -9,15 +9,16 @@ import Footer from './Footer';
 import ForgotPassword from './ForgotPassword';
 import Hero from './Hero';
 import InvoiceButton from './InvoiceButton';
+import MyDetails from './MyDetails';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import UpdatePassword from './UpdatePassword';
 import WishListModel from './WishListModel';
-
 export {
   Hero,
   AdminNavbar,
   AppDownload,
-  EntryPage,
+  EntryPageModal,
   ExploreMenu,
   FoodDisplay,
   FoodItem,
@@ -28,4 +29,6 @@ export {
   InvoiceButton,
   WishListModel,
   FoodDetail,
+  MyDetails,
+  UpdatePassword,
 };

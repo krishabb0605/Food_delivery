@@ -10,6 +10,7 @@ import MyOrders from './MyOrders';
 import Orders from './Orders';
 import PlaceOrder from './PlaceOrder';
 import PrivateRoute from './PrivateRoute';
+import Profile from './Profile';
 import Verify from './Verify';
 import WishList from './WishList';
 
@@ -28,4 +29,5 @@ export {
   PrivateRoute,
   WishList,
   Error404,
+  Profile,
 };

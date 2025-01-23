@@ -56,7 +56,7 @@ const SendForgotEmail = ({
       />
       <Flex alignItems='center' gap='8px'>
         <Button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           border='none'
           borderRadius='4px'
           colorScheme='gray'

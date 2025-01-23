@@ -5,16 +5,10 @@ import { AuthContext } from '../../context/AuthContext';
 
 const PrivateRoute = () => {
   const { userData } = useContext(AuthContext);
-  const token = userData?.token;
-  const verified = userData?.verified;
   const userRole = userData?.role === 'user';
 
-  if (!token || !verified) {
-    return <Navigate to='/login' replace />;
-  }
-
   // Admin user
-  if (!userRole) {
+  if (userData && !userRole) {
     return <Outlet />;
   }
 

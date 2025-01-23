@@ -37,8 +37,11 @@ const MyOrders = () => {
   };
 
   useEffect(() => {
+    if (!token) {
+      return navigate('/');
+    }
     fetchOrders();
-  }, []);
+  }, [token]);
 
   if (fetchData) {
     return (
