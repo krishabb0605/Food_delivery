@@ -36,6 +36,20 @@ $ git clone https://github.com/krishabb0605/Food_delivery.git
 You need client and server runs concurrently in different terminal session, in order to make them talk to each other
 
 # Client-side usage (PORT : 5173)
+
+## ENV Variables
+
+Make Sure to Create a .env file in root directory and add appropriate variables in order to use the app.
+
+**Essential Variables**
+
+- VITE_CLIENT_ID= "****"         // clientId to login with google using GoogleOAuthProvider
+- VITE_API_BASE_URL= "http://localhost:4001"         // Backend url related to frontend , Default run on (http://localhost:4001) 
+
+_fill each filed with your info respectively_
+
+### Start
+
 ```terminal
 $ cd frontend          // Go to frontend folder
 $ yarn # or npm install    // Install packages
@@ -71,7 +85,9 @@ Make Sure to Create a .env file in root directory and add appropriate variables 
 - JWT_SECRET = " "         // Secure secret key for JSON Web Tokens.
 - MONGO_URL = " "         // MongoDB connection URL for database access.
 - ENV = "Development"         // If backend is running locally set ENV as Development otherwise set as Production 
-- PORT= "4001"         // Backend API listening port number , Default run on port 4001 
+- EMAIL_USERNAME= "xyz@gmail.com"         // email address- FROM, for sending order receipt
+- EMAIL_PASSWORD= "****"         // email password- pass key related to email
+- FRONTEND_URL= "http://localhost:5173"         // Frontend url add in backend , Default run on (http://localhost:5173) 
 
 _fill each filed with your info respectively_
 
