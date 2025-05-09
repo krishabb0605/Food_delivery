@@ -43,11 +43,12 @@ const AuthContextProvider = ({ children }) => {
             handleAvtar(response.data.user.avtar);
           }
 
-          setUserData(updatedUserData);
           const updatedUserData = {
             ...response.data.user,
             token: response.data.token,
           };
+          setUserData(updatedUserData);
+
           localStorage.setItem('user', JSON.stringify(updatedUserData));
         } else {
           toast.error(response.data.message);

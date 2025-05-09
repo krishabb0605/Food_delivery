@@ -116,7 +116,7 @@ const FoodItem = ({ item }) => {
           </Flex>
         )}
       </Box>
-      <Box p='16px'>
+      <Box p='16px' pb='4px'>
         <Flex justifyContent='space-between' alignItems='center' mb='10px'>
           <Text
             fontSize='16px'
@@ -142,7 +142,7 @@ const FoodItem = ({ item }) => {
           </Flex>
         </Flex>
         <Text color='#676767'>{item.description}</Text>
-        <Flex gap='4px' color='tomato' fontWeight='500' my='10px'>
+        <Flex gap='4px' color='tomato' fontWeight='500' mt='10px'>
           $ <Text fontSize='20px'>{item.price}</Text>
         </Flex>
       </Box>
